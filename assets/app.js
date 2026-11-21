@@ -7,14 +7,14 @@ const T = {
         saved: "Brief reçu. Référence", keep: "Conservez ce lien privé : c'est votre seul accès au dossier (nous ne l'envoyons pas par e-mail). Toute personne qui le possède peut lire le dossier.",
         copy: "Copier le lien", copied: "Copié", open: "Ouvrir mon dossier", support_ok: "Message reçu. Réponse sous 2 jours ouvrés à l'adresse indiquée.",
         notfound: "Dossier introuvable ou lien incomplet. Vérifiez le lien reçu après l'envoi du brief.", none: "Aucun fichier pour l'instant.", pay: "Payer", paying: "Redirection vers Stripe…",
-        paydis: "Le paiement s'ouvrira ici dès que le devis sera prêt.", msgok: "Message envoyé.", up: "Envoyer", upok: "Fichier envoyé.", uperr: "Fichier refusé (formats : PDF, Word, Excel, CSV, TXT, images ; 15 Mo max).",
+        paydis: "Le paiement s'ouvrira ici dès que le devis sera prêt.", indic: "(prix de la formule — devis à venir)", msgok: "Message envoyé.", up: "Envoyer", upok: "Fichier envoyé.", uperr: "Fichier refusé (formats : PDF, Word, Excel, CSV, TXT, images ; 15 Mo max).",
         states: { received: "Brief reçu", qualified: "Brief qualifié", quoted: "Devis disponible", paid: "Payé", in_production: "En production", in_review: "En relecture", delivered: "Livré", correction: "Correction en cours", closed: "Clos", rejected: "Non retenu", cancelled: "Annulé" } },
   en: { sending: "Sending…", fix: "Please fix the highlighted fields.", rate: "Too many requests from your connection. Please try again in an hour.", net: "Cannot connect. Your input is kept; please retry.",
         required: "Required.", email: "Invalid email address.", consent: "Please agree to the processing of your data for this brief.",
         saved: "Brief received. Reference", keep: "Keep this private link: it is your only access to the project (we do not email it). Anyone holding it can read the project.",
         copy: "Copy link", copied: "Copied", open: "Open my project", support_ok: "Message received. We reply within 2 business days to the address given.",
         notfound: "Project not found or incomplete link. Check the link you received after sending the brief.", none: "No files yet.", pay: "Pay", paying: "Redirecting to Stripe…",
-        paydis: "Payment opens here once the quote is ready.", msgok: "Message sent.", up: "Upload", upok: "File uploaded.", uperr: "File rejected (PDF, Word, Excel, CSV, TXT, images; 15 MB max).",
+        paydis: "Payment opens here once the quote is ready.", indic: "(package price — quote to follow)", msgok: "Message sent.", up: "Upload", upok: "File uploaded.", uperr: "File rejected (PDF, Word, Excel, CSV, TXT, images; 15 MB max).",
         states: { received: "Brief received", qualified: "Brief qualified", quoted: "Quote ready", paid: "Paid", in_production: "In production", in_review: "In review", delivered: "Delivered", correction: "Correction in progress", closed: "Closed", rejected: "Not accepted", cancelled: "Cancelled" } },
 }[L];
 const $ = (s, r = document) => r.querySelector(s);
@@ -94,7 +94,7 @@ if (dos) {
     const d = await r.json();
     $("#d-ref").textContent = d.ref; $("#d-state").textContent = T.states[d.status] || d.status;
     $("#d-next").textContent = d.next_step || "";
-    $("#d-amount").textContent = d.amount_due ? fmt(d.amount_due.amount_cents, d.amount_due.currency) : "—";
+    $("#d-amount").textContent = d.amount_due ? fmt(d.amount_due.amount_cents, d.amount_due.currency) + (d.status === "quoted" || d.status === "paid" ? "" : " " + T.indic) : "—";
     const pay = $("#d-pay"); pay.disabled = !d.payable; $("#d-paynote").textContent = d.payable ? "" : T.paydis;
     $("#d-events").innerHTML = d.events.map((e) => `<li><time>${esc(e.created_at.slice(0, 16).replace("T", " "))}</time>${esc(e.kind === "status" ? (T.states[e.body] || e.body) : e.body)}</li>`).join("");
     $("#d-files").innerHTML = d.files.length ? d.files.map((f) => `<li><span>${esc(f.label)} <span class=ext>v${f.version}</span></span>${f.url ? `<a href="${esc(f.url)}" rel=noopener>↓</a>` : ""}</li>`).join("") : `<li>${esc(T.none)}</li>`;
