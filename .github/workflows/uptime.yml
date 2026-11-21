@@ -1,0 +1,21 @@
+# Daily availability check of the public pages and the brief API. Also keeps the free Supabase project active.
+# A failed run makes GitHub notify the repository owner by e-mail.
+name: uptime
+on:
+  schedule: [{ cron: "17 6 * * *" }]
+  workflow_dispatch:
+permissions: {}
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Public pages
+        run: |
+          for p in "" signaldesk/ localoom/ flowpatch/ careerlift/ en/; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "https://warrior360cmd.github.io/atlas-studio/$p"); echo "$p $code"; test "$code" = 200
+          done
+      - name: API reaches database (unknown dossier must answer 404, not 5xx)
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" -H "x-dossier-token: uptime-check-not-a-real-token" \
+            "https://zkglztkplmzktemdjgnr.supabase.co/functions/v1/dossier?ref=UP-0000-0000"); echo "dossier $code"; test "$code" = 404
