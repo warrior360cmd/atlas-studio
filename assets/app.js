@@ -120,3 +120,18 @@ if (dos) {
   });
   load();
 }
+
+// ---- demo films: play once when half visible, pause when it leaves; never autoplay under reduced motion ----
+document.querySelectorAll(".film").forEach((fig) => {
+  const v = fig.querySelector("video"), b = fig.querySelector(".film-btn"), [lPlay, lPause, lReplay] = b.dataset.l.split("|");
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const sync = () => { b.textContent = v.ended ? lReplay : v.paused ? lPlay : lPause; b.setAttribute("aria-pressed", String(!v.paused)); };
+  let userPaused = false;
+  b.addEventListener("click", () => { if (v.paused || v.ended) { userPaused = false; v.play(); } else { userPaused = true; v.pause(); } });
+  ["play", "pause", "ended"].forEach((ev) => v.addEventListener(ev, sync));
+  if (still || !("IntersectionObserver" in window)) return;
+  new IntersectionObserver(([en]) => {
+    if (en.isIntersecting && en.intersectionRatio >= 0.5) { if (!userPaused && !v.ended) v.play().catch(() => {}); }
+    else if (!v.paused) v.pause();
+  }, { threshold: [0, 0.5] }).observe(fig);
+});

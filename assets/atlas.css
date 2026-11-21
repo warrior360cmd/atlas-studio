@@ -1,5 +1,5 @@
 /* ATLAS house page: black and white, the four brands carry the colour. */
-:root{--paper:#fff;--paper-2:#f2f2f0;--sheet:#fff;--ink:#111;--muted:#4b4b4b;--line:#dcdcdc;--accent:#111;--band:#111;--on-band:#fff;--band-line:#3a3a3a;
+:root{--bg:#fff;--ink:#111;--paper:#fff;--paper-2:#f2f2f0;--sheet:#fff;--ink:#111;--muted:#4b4b4b;--line:#dcdcdc;--accent:#111;--band:#111;--on-band:#fff;--band-line:#3a3a3a;
   --fd:"Mona Sans",system-ui,sans-serif;--fu:"Mona Sans",system-ui,sans-serif;--fm:"Mona Sans",system-ui,sans-serif;
   --btn-bg:#111;--btn-ink:#fff;--focus:#2556c4;--sel:#111;--sheet-ink:#111;--sheet-btn:#111;--sheet-btn-ink:#fff;--nav-font:600 .98rem/1.2 var(--fu)}
 .house{padding:clamp(40px,5vw,72px) 0 clamp(36px,4vw,56px)}
