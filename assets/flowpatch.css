@@ -1,52 +1,7 @@
-/* FlowPatch — registered-mail form, acknowledgement card, postmarks. Contract: .impeccable/surfaces/site-dist-flowpatch-index-html.md */
-:root{--bg:#e3efe4;--ink:#141a2e;--accent:#2f3473;--line:#2f3473;--paper:#f5faf4;--pink:#f3c4cc;--held:#8f1d33;--okc:#1d6a3b;
-  --fd:"Barlow SC","Arial Narrow",sans-serif;--fu:"Barlow SC","Arial Narrow",sans-serif;--fm:"Red Hat Mono",ui-monospace,monospace;
-  --btn-bg:#2f3473;--btn-ink:#fff;--focus:#c2185b;--sel:#2f3473;--field:#fff;--field-line:#2f3473;--sheet:#f5faf4;--sheet-btn:#2f3473;--sheet-btn-ink:#fff;--sheet-ink:#141a2e;
-  --nav-font:600 1.02rem/1.2 var(--fu);--btn-font:700 1.08rem/1 var(--fu);--bad:#a01733}
-body{font-size:1.12rem;background-color:var(--bg);background-image:linear-gradient(rgba(47,52,115,.07) 1px,transparent 1px);background-size:100% 32px}
-.site-h nav a{text-transform:uppercase;letter-spacing:.05em}
-.nav-cta{min-height:40px;padding:8px 16px}
-.mono{font-family:var(--fm)}
-.form-sheet{background:var(--paper);border:2px solid var(--accent);margin:26px 0 clamp(56px,8vw,96px);display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);
-  grid-template-areas:"strip strip" "objet ar" "sign ar" "prices ar";box-shadow:0 26px 40px -30px rgba(20,26,46,.55)}
-.strip{grid-area:strip;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 24px;padding:12px 20px;border-bottom:2px solid var(--accent);font:700 .82rem/1.2 var(--fu);letter-spacing:.16em;color:var(--accent)}
-.strip .no{font:600 1rem var(--fm);letter-spacing:.06em}
-.bar{height:34px;width:auto;color:var(--ink)}
-.box{padding:18px 22px 22px;border-bottom:1px solid var(--accent)}
-.lbl{font:700 .74rem/1 var(--fu);letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
-.objet{grid-area:objet;border-bottom:0}
-.objet h1{font:800 clamp(2.3rem,5vw,4.4rem)/.94 var(--fd);text-transform:uppercase;margin-top:10px;max-width:15ch}
-.objet .lead{margin-top:16px;font-size:1.2rem;line-height:1.45;max-width:46ch}
-.prices{grid-area:prices;display:grid;grid-template-columns:1fr 1fr}
-.price+.price{border-left:1px solid var(--accent)}
-.price .amt{font:700 1.6rem/1.1 var(--fm);margin:8px 0 6px;color:var(--accent)}
-.price p{font-size:1rem;line-height:1.4}.price .dl{margin-top:8px;font-size:.92rem}
-.sign{grid-area:sign;padding-top:4px}.sign .cta{margin-top:12px}.prices{border-bottom:0}
-.ar{grid-area:ar;background:var(--pink);border-left:2px solid var(--accent);padding:30px 22px 22px;-webkit-mask:radial-gradient(circle at 8px 0,transparent 6px,#000 6.5px) 0 0/16px 100% repeat-x;mask:radial-gradient(circle at 8px 0,transparent 6px,#000 6.5px) 0 0/16px 100% repeat-x}
-.ar h2{font:800 1.35rem/1.05 var(--fd);text-transform:uppercase;color:#2a0c14}
-.track{list-style:none;padding:0;margin-top:16px}
-.track li{display:grid;grid-template-columns:74px 1fr;gap:14px;align-items:center;padding:10px 0;border-bottom:1px dashed rgba(47,52,115,.5);font-size:1rem;line-height:1.35;color:#24121a}
-.pm{width:72px;height:72px;color:var(--accent);transform:rotate(-9deg);font-family:var(--fm)}
-.st.held .pm{color:var(--held);transform:rotate(6deg)}
-.st.held strong{color:var(--held)}
-.st.wait{color:#3a2430}.st.wait .pm{color:#4d3a44}
-.ar-note{margin-top:14px;font:600 .9rem/1.35 var(--fu);color:#2a0c14}
-.blk h2{font:800 clamp(2.1rem,4.4vw,3.4rem)/.95 var(--fd);text-transform:uppercase}
-.fp-sample,.tail-a,.tail-c{background:var(--paper);border-top:2px solid var(--accent)}
-.sample-t,.note-en{margin:-12px 0 24px}
-.fp-sample h3{font:700 1.25rem/1.1 var(--fd);text-transform:uppercase;margin-bottom:14px}
-.tests{list-style:none;padding:0}
-.tests li{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px dotted var(--accent)}
-.tests .ok{font:700 .85rem var(--fm);color:var(--okc);border:2px solid var(--okc);padding:1px 8px;border-radius:999px;transform:rotate(-4deg)}
-.slips li{border-bottom:1px dotted var(--accent)}
-.deliver{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));border:2px solid var(--accent);background:var(--paper)}
-.deliver li{padding:16px 20px;border-bottom:1px solid var(--accent)}
-.options{margin-top:24px;max-width:72ch}
-.steps,.needs{padding-left:1.3em}.steps li,.needs li{padding:7px 0}
-.tail-b{background:var(--accent);color:#eef0fb;--line:#6f75b8;--focus:#ffb3c4}
-.site-f{background:var(--ink);color:#cfd3e6}
-.page-h h1{font:800 clamp(2.4rem,5.6vw,4.4rem)/.94 var(--fd);text-transform:uppercase}
-.sheet{border:2px solid var(--accent)}
-.state{display:inline-block;border:2px solid var(--accent);border-radius:999px;padding:3px 10px;font:700 .85rem var(--fm);color:var(--accent);transform:rotate(-3deg)}
-@media (max-width:900px){.form-sheet{grid-template-columns:1fr;grid-template-areas:"strip" "objet" "sign" "ar" "prices"}.ar{border-left:0;border-bottom:1px solid var(--accent)}}
-@media (max-width:520px){.prices{grid-template-columns:1fr}.price+.price{border-left:0;border-top:1px solid var(--accent)}.box{padding:16px}}
+/* FlowPatch tokens: indigo field, raspberry for anything held, mint paper. */
+:root{--paper:#f4f7f5;--paper-2:#e7eeea;--sheet:#fff;--ink:#181c3f;--muted:#4a5068;--line:#d5dcd9;--accent:#c2185b;--accent-ink:#a3144c;
+  --field:#2f3473;--on-field:#f2f3fb;--on-field-2:#c8cbea;--field-line:#4f55a0;--accent-on-field:#ffb3cc;
+  --fd:"Barlow SC","Arial Narrow",sans-serif;--fu:"Barlow SC",system-ui,sans-serif;--fm:"Red Hat Mono",monospace;
+  --btn-bg:#2f3473;--btn-ink:#fff;--focus:#c2185b;--sel:#2f3473;--field-ink:#181c3f;--sheet-ink:#181c3f;--sheet-btn:#2f3473;--sheet-btn-ink:#fff;
+  --h1w:800;--h2w:800;--h1t:-.02em;--r:4px;--radius:4px;--nav-font:600 1rem/1.2 var(--fu);--btn-font:700 1.02rem/1 var(--fu)}
+body{font-size:1.1rem}
