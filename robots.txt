@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /*/dossier.html
+Sitemap: https://warrior360cmd.github.io/atlas-studio/sitemap.xml

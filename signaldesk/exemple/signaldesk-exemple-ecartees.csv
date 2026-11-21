@@ -1,0 +1,5 @@
+﻿id,name,domain,status,reason
+SD-DEMO-011,Cave des Pentes (2e domaine),cave-des-pentes-lyon.example,doublon retiré,"Doublon de SD-DEMO-001 : même SIREN fictif et même adresse. Règle : 1 entité = 1 ligne, domaine principal conservé."
+SD-DEMO-012,Le Cep Lyonnais,ceplyonnais.example,remplacée,Source déterminante indisponible (HTTP 404 le 2026-11-20) ; remplacée par SD-DEMO-007.
+SD-DEMO-013,Réseau Caves du Rhône (franchisé),franchise-rhone.example,exclu,Exclusion convenue : point de vente d'un réseau.
+SD-DEMO-014,Vins de l'Ardèche Verte,ardeche-verte.example,non confirmé,"Indépendance non confirmée (mentions légales absentes) ; hors volume vendu, gardée en « à confirmer »."

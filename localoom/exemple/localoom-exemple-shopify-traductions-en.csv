@@ -1,0 +1,18 @@
+﻿Type,Identification,Field,Locale,Market,Status,Default content,Translated content
+PRODUCT,mug-gres-emaille,title,en,,,Mug en grès émaillé tourné à la main — 300 ml,Hand-thrown glazed stoneware mug — 300 ml
+PRODUCT,mug-gres-emaille,body_html,en,,,"<p>Un mug de 300 ml tourné à la main à Limoges, en grès émaillé. Deux teintes : Sable et Nuit.</p><ul><li>Contenance : 300 ml</li><li>Hauteur : 9,5 cm</li><li>Passe au lave-vaisselle et au micro-ondes</li></ul><p>Chaque pièce étant tournée à la main, de légères variations de forme et d'émail sont normales.</p>","<p>A 300 ml mug, hand-thrown in Limoges, France, in glazed stoneware. Two colours: Sand and Night.</p><ul><li>Capacity: 300 ml</li><li>Height: 9.5 cm</li><li>Dishwasher and microwave safe</li></ul><p>As each piece is hand-thrown, slight variations in shape and glaze are normal.</p>"
+PRODUCT,mug-gres-emaille,meta_title,en,,,Mug en grès émaillé fait main 300 ml | Terre & Trame,Hand-thrown glazed stoneware mug 300 ml | Terre & Trame
+PRODUCT,mug-gres-emaille,meta_description,en,,,"Mug 300 ml en grès émaillé, tourné à la main à Limoges. Teintes Sable ou Nuit. Lave-vaisselle et micro-ondes.","300 ml glazed stoneware mug, hand-thrown in Limoges, France. Sand or Night. Dishwasher and microwave safe."
+PRODUCT_OPTION_VALUE,mug-gres-emaille,name,en,,,Sable,Sand
+PRODUCT_OPTION_VALUE,mug-gres-emaille,name,en,,,Nuit,Night
+PRODUCT,assiettes-plates-lot-4,title,en,,,"Assiettes plates en grès à filet doré — lot de 4, Ø 26 cm","Gold-rim stoneware dinner plates — set of 4, Ø 26 cm"
+PRODUCT,assiettes-plates-lot-4,body_html,en,,,"<p>Quatre assiettes plates de 26 cm de diamètre, en grès émaillé tourné à la main à Limoges, soulignées d'un filet doré.</p><ul><li>Diamètre : 26 cm</li><li>Passe au lave-vaisselle</li><li>Ne pas utiliser au micro-ondes (filet doré)</li></ul>","<p>Four 26 cm dinner plates in glazed stoneware, hand-thrown in Limoges, France, finished with a gold rim.</p><ul><li>Diameter: 26 cm</li><li>Dishwasher safe</li><li>Not microwave safe (gold rim)</li></ul>"
+PRODUCT,assiettes-plates-lot-4,meta_title,en,,,Lot de 4 assiettes en grès à filet doré Ø 26 cm | Terre & Trame,Set of 4 gold-rim stoneware plates Ø 26 cm | Terre & Trame
+PRODUCT,assiettes-plates-lot-4,meta_description,en,,,"4 assiettes plates Ø 26 cm en grès émaillé fait main, filet doré. Lave-vaisselle ; micro-ondes interdit.","4 hand-thrown glazed stoneware dinner plates, Ø 26 cm, gold rim. Dishwasher safe; not microwave safe."
+PRODUCT_OPTION_VALUE,assiettes-plates-lot-4,name,en,,,Lot de 4,Set of 4
+PRODUCT,vase-cannele,title,en,,,Vase cannelé en faïence émaillée — 18 cm ou 24 cm,Fluted glazed earthenware vase — 18 cm or 24 cm
+PRODUCT,vase-cannele,body_html,en,,,"<p>Un vase aux cannelures verticales, en faïence émaillée, étanche. Deux tailles : petit (18 cm) et grand (24 cm).</p><ul><li>Hauteur : 18 cm (petit) ou 24 cm (grand)</li><li>Étanche</li><li>Entretien : lavage à la main recommandé</li></ul>","<p>A vase with vertical flutes, in glazed earthenware, watertight. Two sizes: small (18 cm) and large (24 cm).</p><ul><li>Height: 18 cm (small) or 24 cm (large)</li><li>Watertight</li><li>Care: hand washing recommended</li></ul>"
+PRODUCT,vase-cannele,meta_title,en,,,Vase cannelé en faïence émaillée 18 ou 24 cm | Terre & Trame,Fluted glazed earthenware vase 18 or 24 cm | Terre & Trame
+PRODUCT,vase-cannele,meta_description,en,,,"Vase cannelé étanche en faïence émaillée, en 18 cm ou 24 cm de haut. Lavage à la main recommandé.","Watertight fluted vase in glazed earthenware, 18 cm or 24 cm tall. Hand washing recommended."
+PRODUCT_OPTION_VALUE,vase-cannele,name,en,,,Petit,Small
+PRODUCT_OPTION_VALUE,vase-cannele,name,en,,,Grand,Large

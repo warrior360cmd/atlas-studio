@@ -1,0 +1,17 @@
+﻿handle,attribut,valeur_source,provenance,valeur_retenue,decision
+mug-gres-emaille,matière,grès émaillé,F,grès émaillé,
+mug-gres-emaille,contenance_ml,300,F,300,
+mug-gres-emaille,hauteur_cm,9.5,F,9.5,
+mug-gres-emaille,lave_vaisselle,oui,F,oui,
+mug-gres-emaille,micro_ondes,oui,F,oui,
+mug-gres-emaille,fabrication,tourné à la main à Limoges (FR),F,tourné à la main à Limoges (FR),
+assiettes-plates-lot-4,matière,grès émaillé,F,grès émaillé,
+assiettes-plates-lot-4,diametre_cm,26,F,26,
+assiettes-plates-lot-4,lave_vaisselle,oui,F,oui,
+assiettes-plates-lot-4,micro_ondes,non — filet doré,F,non,Ancienne fiche erronée ; filet doré : micro-ondes interdit (fiche fournisseur)
+assiettes-plates-lot-4,fabrication,tourné à la main à Limoges (FR),F,tourné à la main à Limoges (FR),
+vase-cannele,matière,faïence émaillée,F,faïence émaillée,
+vase-cannele,hauteur_cm_petit,18,F,18,
+vase-cannele,hauteur_cm_grand,"[24, 25]",F/S conflit,24,Client : fiche fournisseur fait foi (mesure 24 cm) — réponse du 2026-11-19
+vase-cannele,etanche,oui,F,oui,
+vase-cannele,lave_vaisselle,,absent,,"Client : inconnu → ne rien affirmer, recommander le lavage à la main"
