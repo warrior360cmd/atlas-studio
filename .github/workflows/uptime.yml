@@ -12,8 +12,10 @@ jobs:
     steps:
       - name: Public pages
         run: |
-          for p in "" signaldesk/ localoom/ flowpatch/ careerlift/ en/; do
-            code=$(curl -s -o /dev/null -w "%{http_code}" "https://atlas-studio-orpin.vercel.app/$p"); echo "$p $code"; test "$code" = 200
+          for u in https://atlas-studio-orpin.vercel.app/ https://atlas-studio-orpin.vercel.app/en/ \
+                   https://signaldesk-b2b.vercel.app/signaldesk/ https://localoom-catalogues.vercel.app/localoom/ \
+                   https://flowpatch-automation.vercel.app/flowpatch/ https://careerlift-cv.vercel.app/careerlift/en/; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "$u"); echo "$u $code"; test "$code" = 200
           done
       - name: API reaches database (unknown dossier must answer 404, not 5xx)
         run: |
