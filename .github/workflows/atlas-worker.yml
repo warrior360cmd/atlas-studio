@@ -1,5 +1,5 @@
 # ATLAS automation: every hour, publish fixed-price quotes, and start the Kaggle GPU worker only when paid dossiers wait.
-# Needs repository secrets ATLAS_WORKER_TOKEN, KAGGLE_USERNAME, KAGGLE_KEY. The worker source stays private on Kaggle (pulled, not stored here).
+# Needs repository secrets ATLAS_WORKER_TOKEN and KAGGLE_API_TOKEN. The worker source stays private on Kaggle (pulled, not stored here).
 name: atlas-worker
 on:
   schedule: [{ cron: "17 * * * *" }]
@@ -23,9 +23,9 @@ jobs:
           echo "paid=$paid" >> "$GITHUB_OUTPUT"; echo "paid dossiers: $paid"
       - name: Start Kaggle worker if needed
         if: steps.q.outputs.paid != '0'
-        env: { KAGGLE_USERNAME: "${{ secrets.KAGGLE_USERNAME }}", KAGGLE_KEY: "${{ secrets.KAGGLE_KEY }}" }
+        env: { KAGGLE_API_TOKEN: "${{ secrets.KAGGLE_API_TOKEN }}" }
         run: |
-          pip install -q kaggle
+          pip install -q kaggle==2.2.5
           st=$(kaggle kernels status raphaellokadjo/atlas-worker 2>&1 || true); echo "$st"
           if echo "$st" | grep -qE "RUNNING|QUEUED"; then echo "worker already running"; exit 0; fi
           kaggle kernels pull raphaellokadjo/atlas-worker -p w -m
