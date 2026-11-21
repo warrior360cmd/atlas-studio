@@ -13,7 +13,7 @@ jobs:
       - name: Public pages
         run: |
           for p in "" signaldesk/ localoom/ flowpatch/ careerlift/ en/; do
-            code=$(curl -s -o /dev/null -w "%{http_code}" "https://warrior360cmd.github.io/atlas-studio/$p"); echo "$p $code"; test "$code" = 200
+            code=$(curl -s -o /dev/null -w "%{http_code}" "https://atlas-studio-orpin.vercel.app/$p"); echo "$p $code"; test "$code" = 200
           done
       - name: API reaches database (unknown dossier must answer 404, not 5xx)
         run: |
