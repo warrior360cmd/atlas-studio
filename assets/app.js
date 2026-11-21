@@ -42,6 +42,9 @@ function validate(form) {
 const brief = $("form#brief");
 if (brief) {
   const key = "atlas-idem-" + brief.dataset.brand;
+  const pre = new URLSearchParams(location.search).get("offer"); // plan card CTA → brief.html?offer=<key>
+  const r = pre && [...brief.querySelectorAll("input[name=offer]")].find((x) => x.value === pre);
+  if (r) r.checked = true;
   brief.addEventListener("submit", async (ev) => {
     ev.preventDefault();
     const st = $("#brief-status"), btn = brief.querySelector("button[type=submit]");
@@ -129,6 +132,9 @@ document.querySelectorAll(".film").forEach((fig) => {
   let userPaused = false;
   b.addEventListener("click", () => { if (v.paused || v.ended) { userPaused = false; v.play(); } else { userPaused = true; v.pause(); } });
   ["play", "pause", "ended"].forEach((ev) => v.addEventListener(ev, sync));
+  const bar = document.createElement("span"); bar.className = "film-bar"; bar.setAttribute("aria-hidden", "true"); fig.querySelector(".film-frame").append(bar);
+  const tick = () => { bar.style.transform = `scaleX(${v.duration ? v.currentTime / v.duration : 0})`; if (!v.paused && !v.ended) requestAnimationFrame(tick); };
+  v.addEventListener("play", () => requestAnimationFrame(tick)); v.addEventListener("seeked", tick); v.addEventListener("ended", tick);
   if (still || !("IntersectionObserver" in window)) return;
   new IntersectionObserver(([en]) => {
     if (en.isIntersecting && en.intersectionRatio >= 0.5) { if (!userPaused && !v.ended) v.play().catch(() => {}); }
