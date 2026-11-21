@@ -1,6 +1,6 @@
 /* CareerLift tokens: pencil-blue field, set-type serif, cool paper. */
 :root{--paper:#f4f5f2;--paper-2:#e9ebe6;--sheet:#fff;--ink:#14161a;--muted:#4d525b;--line:#d8dad4;--accent:#2556c4;--accent-ink:#1e48a8;
-  --field:#2556c4;--on-field:#f6f8ff;--on-field-2:#d6e0fb;--field-line:#5b80d6;--accent-on-field:#fff;
+  --band:#2556c4;--on-band:#f6f8ff;--on-band-2:#d6e0fb;--band-line:#5b80d6;--accent-on-band:#fff;
   --fd:"Source Serif",Georgia,serif;--fu:"Atkinson Next",system-ui,sans-serif;--fm:"Atkinson Next",system-ui,sans-serif;
   --btn-bg:#14161a;--btn-ink:#fff;--focus:#2556c4;--sel:#2556c4;--field-ink:#14161a;--sheet-ink:#14161a;--sheet-btn:#14161a;--sheet-btn-ink:#fff;
   --h1w:600;--h2w:600;--h1t:-.02em;--r:2px;--radius:2px;--nav-font:600 .98rem/1.2 var(--fu);--btn-font:700 1rem/1 var(--fu)}

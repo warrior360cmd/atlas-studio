@@ -1,6 +1,6 @@
 /* SignalDesk tokens: navy ink, a red kept for the observed fact, cool paper. */
 :root{--paper:#f6f7f9;--paper-2:#eceef2;--sheet:#fff;--ink:#14213a;--muted:#4a5468;--line:#d7dbe3;--accent:#d3261c;--accent-ink:#b81f17;
-  --field:#14213a;--on-field:#f4f6fa;--on-field-2:#c5cddc;--field-line:#33415d;--accent-on-field:#ff8e86;
+  --band:#14213a;--on-band:#f4f6fa;--on-band-2:#c5cddc;--band-line:#33415d;--accent-on-band:#ff8e86;
   --fd:"Sofia C","Arial Narrow",sans-serif;--fu:"Sofia Sans",system-ui,sans-serif;--fm:"Courier Prime",monospace;
   --btn-bg:#14213a;--btn-ink:#fff;--focus:#d3261c;--sel:#14213a;--field-ink:#14213a;--sheet-ink:#14213a;--sheet-btn:#14213a;--sheet-btn-ink:#fff;
   --h1w:800;--h2w:800;--r:6px;--radius:6px;--nav-font:600 .98rem/1.2 var(--fu);--btn-font:700 1rem/1 var(--fu)}

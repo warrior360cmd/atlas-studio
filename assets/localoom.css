@@ -1,6 +1,6 @@
 /* Localoom tokens: gallery green field, brass, porcelain paper. */
 :root{--paper:#f5f6f3;--paper-2:#e9ece7;--sheet:#fff;--ink:#14302d;--muted:#4b5f5b;--line:#d5dcd7;--accent:#a9823a;--accent-ink:#7a5a1c;
-  --field:#1d4d4a;--on-field:#f3f1ea;--on-field-2:#c9d8d2;--field-line:#3c6a66;--accent-on-field:#e3c27a;
+  --band:#1d4d4a;--on-band:#f3f1ea;--on-band-2:#c9d8d2;--band-line:#3c6a66;--accent-on-band:#e3c27a;
   --fd:"Familjen",system-ui,sans-serif;--fu:"Familjen",system-ui,sans-serif;--fm:"Spline Mono",monospace;
   --btn-bg:#1d4d4a;--btn-ink:#fff;--focus:#a9823a;--sel:#1d4d4a;--field-ink:#14302d;--sheet-ink:#14302d;--sheet-btn:#1d4d4a;--sheet-btn-ink:#fff;
   --h1w:600;--h2w:600;--h1t:-.035em;--r:2px;--radius:2px;--nav-font:500 1rem/1.2 var(--fu);--btn-font:600 1rem/1 var(--fu)}

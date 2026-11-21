@@ -1,6 +1,6 @@
 /* FlowPatch tokens: indigo field, raspberry for anything held, mint paper. */
 :root{--paper:#f4f7f5;--paper-2:#e7eeea;--sheet:#fff;--ink:#181c3f;--muted:#4a5068;--line:#d5dcd9;--accent:#c2185b;--accent-ink:#a3144c;
-  --field:#2f3473;--on-field:#f2f3fb;--on-field-2:#c8cbea;--field-line:#4f55a0;--accent-on-field:#ffb3cc;
+  --band:#2f3473;--on-band:#f2f3fb;--on-band-2:#c8cbea;--band-line:#4f55a0;--accent-on-band:#ffb3cc;
   --fd:"Barlow SC","Arial Narrow",sans-serif;--fu:"Barlow SC",system-ui,sans-serif;--fm:"Red Hat Mono",monospace;
   --btn-bg:#2f3473;--btn-ink:#fff;--focus:#c2185b;--sel:#2f3473;--field-ink:#181c3f;--sheet-ink:#181c3f;--sheet-btn:#2f3473;--sheet-btn-ink:#fff;
   --h1w:800;--h2w:800;--h1t:-.02em;--r:4px;--radius:4px;--nav-font:600 1rem/1.2 var(--fu);--btn-font:700 1.02rem/1 var(--fu)}
