@@ -1,3 +1,61 @@
-User-agent: *
+User-agent: GPTBot
+Allow: /
 Disallow: /*/dossier.html
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /*/dossier.html
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /*/dossier.html
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /*/dossier.html
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /*/dossier.html
+
+User-agent: Claude-User
+Allow: /
+Disallow: /*/dossier.html
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /*/dossier.html
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /*/dossier.html
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /*/dossier.html
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /*/dossier.html
+
+User-agent: Bingbot
+Allow: /
+Disallow: /*/dossier.html
+
+User-agent: Googlebot
+Allow: /
+Disallow: /*/dossier.html
+
+User-agent: DuckAssistBot
+Allow: /
+Disallow: /*/dossier.html
+
+User-agent: MistralAI-User
+Allow: /
+Disallow: /*/dossier.html
+
+User-agent: *
+Allow: /
+Disallow: /*/dossier.html
+
 Sitemap: https://atlas-studio-orpin.vercel.app/sitemap.xml
