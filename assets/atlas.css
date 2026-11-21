@@ -1,6 +1,6 @@
 /* ATLAS Studio — one house, four collections. Contract: .impeccable/surfaces/site-dist-index-html.md */
 :root{--bg:#fff;--ink:#111;--accent:#111;--line:#d4d4d4;--fd:"Mona Sans",system-ui,sans-serif;--fu:"Mona Sans",system-ui,sans-serif;--fm:"Mona Sans",system-ui,sans-serif;
-  --btn-bg:#111;--btn-ink:#fff;--focus:#2556c4;--sel:#111;--sheet:#fff;--sheet-ink:#111;--field:#fff;--nav-font:600 .98rem/1.2 var(--fu)}
+  --btn-bg:#111;--btn-ink:#fff;--focus:#2556c4;--sel:#111;--sheet:#fff;--sheet-btn:#111;--sheet-btn-ink:#fff;--sheet-ink:#111;--field:#fff;--nav-font:600 .98rem/1.2 var(--fu)}
 body{font-stretch:100%}
 .site-h{border-bottom:1px solid #111}
 .house{padding:clamp(32px,4.5vw,64px) 0 0}

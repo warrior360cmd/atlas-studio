@@ -1,7 +1,7 @@
 /* SignalDesk — evidence tags, tamper tape, stamp ink. Contract: .impeccable/surfaces/site-dist-signaldesk-index-html.md */
 :root{--bg:#dfe3e1;--ink:#14181d;--accent:#d3261c;--line:#97a19d;--ink2:#1c2740;--manila:#e8d79c;--tray:#c3cac7;--paper:#f4f5f2;
   --fd:"Sofia XC","Arial Narrow",sans-serif;--fu:"Sofia C","Arial Narrow",sans-serif;--fm:"Courier Prime","Courier New",monospace;
-  --btn-bg:#1c2740;--btn-ink:#fff;--focus:#d3261c;--sel:#1c2740;--field:#fff;--field-line:#1c2740;--sheet:#f4f5f2;--sheet-ink:#14181d;
+  --btn-bg:#1c2740;--btn-ink:#fff;--focus:#d3261c;--sel:#1c2740;--field:#fff;--field-line:#1c2740;--sheet:#f4f5f2;--sheet-btn:#1c2740;--sheet-btn-ink:#fff;--sheet-ink:#14181d;
   --nav-font:700 1.02rem/1.2 var(--fu);--btn-font:800 1.08rem/1 var(--fu);--bad:#a3160f}
 body{font-size:1.125rem}
 .site-h{border-bottom:2px solid var(--ink2)}

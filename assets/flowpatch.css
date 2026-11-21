@@ -1,7 +1,7 @@
 /* FlowPatch — registered-mail form, acknowledgement card, postmarks. Contract: .impeccable/surfaces/site-dist-flowpatch-index-html.md */
 :root{--bg:#e3efe4;--ink:#141a2e;--accent:#2f3473;--line:#2f3473;--paper:#f5faf4;--pink:#f3c4cc;--held:#8f1d33;--okc:#1d6a3b;
   --fd:"Barlow SC","Arial Narrow",sans-serif;--fu:"Barlow SC","Arial Narrow",sans-serif;--fm:"Red Hat Mono",ui-monospace,monospace;
-  --btn-bg:#2f3473;--btn-ink:#fff;--focus:#c2185b;--sel:#2f3473;--field:#fff;--field-line:#2f3473;--sheet:#f5faf4;--sheet-ink:#141a2e;
+  --btn-bg:#2f3473;--btn-ink:#fff;--focus:#c2185b;--sel:#2f3473;--field:#fff;--field-line:#2f3473;--sheet:#f5faf4;--sheet-btn:#2f3473;--sheet-btn-ink:#fff;--sheet-ink:#141a2e;
   --nav-font:600 1.02rem/1.2 var(--fu);--btn-font:700 1.08rem/1 var(--fu);--bad:#a01733}
 body{font-size:1.12rem;background-color:var(--bg);background-image:linear-gradient(rgba(47,52,115,.07) 1px,transparent 1px);background-size:100% 32px}
 .site-h nav a{text-transform:uppercase;letter-spacing:.05em}

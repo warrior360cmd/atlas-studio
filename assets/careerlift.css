@@ -1,7 +1,7 @@
 /* CareerLift — galley proof on the press table, blue-pencil marks. Contract: .impeccable/surfaces/site-dist-careerlift-index-html.md */
 :root{--bg:#2b2f36;--ink:#eef0ec;--accent:#9db8ff;--paper:#f1f2ee;--type:#14161a;--pencil:#2556c4;--line:rgba(238,240,236,.25);
   --fd:"Source Serif",Georgia,serif;--fu:"Atkinson Next",system-ui,sans-serif;--fm:"Atkinson Next",system-ui,sans-serif;
-  --btn-bg:#f1f2ee;--btn-ink:#14161a;--focus:#9db8ff;--sel:#2556c4;--sheet:#f1f2ee;--sheet-ink:#14161a;--field:#fff;--field-line:#14161a;
+  --btn-bg:#f1f2ee;--btn-ink:#14161a;--focus:#9db8ff;--sel:#2556c4;--sheet:#f1f2ee;--sheet-ink:#14161a;--sheet-btn:#14161a;--sheet-btn-ink:#f1f2ee;--field:#fff;--field-line:#14161a;
   --nav-font:600 1rem/1.2 var(--fu);--btn-font:700 1.02rem/1 var(--fu);--radius:2px;--bad:#b3261e}
 .mono{font-variant-numeric:tabular-nums;font-weight:700}
 .nav-cta{min-height:40px;padding:8px 16px}

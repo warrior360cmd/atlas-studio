@@ -1,7 +1,7 @@
 /* Localoom — gallery wall, plinth, bilingual cartel, brass plates. Contract: .impeccable/surfaces/site-dist-localoom-index-html.md */
 :root{--bg:#1d4d4a;--ink:#f3efe4;--accent:#e3c27a;--line:rgba(243,239,228,.3);--wall2:#dce5e0;--ink-d:#11302d;--stone:#d6cfbf;--cartel:#fbfaf6;--brass:#ad8740;
   --fd:"Familjen",system-ui,sans-serif;--fu:"Familjen",system-ui,sans-serif;--fm:"Spline Mono",ui-monospace,monospace;
-  --btn-bg:#f3efe4;--btn-ink:#11302d;--focus:#e3c27a;--sel:#e3c27a;--sel-ink:#11302d;--sheet:#fbfaf6;--sheet-ink:#11302d;--field:#fff;--field-line:#11302d;
+  --btn-bg:#f3efe4;--btn-ink:#11302d;--focus:#e3c27a;--sel:#e3c27a;--sel-ink:#11302d;--sheet:#fbfaf6;--sheet-ink:#11302d;--sheet-btn:#11302d;--sheet-btn-ink:#fbfaf6;--field:#fff;--field-line:#11302d;
   --nav-font:500 1rem/1.2 var(--fu);--btn-font:600 1.02rem/1 var(--fu);--radius:3px;--bad:#9b2a1f}
 body{background:radial-gradient(120% 70% at 78% 8%,rgba(255,255,255,.09),transparent 60%),var(--bg)}
 .mono{font-family:var(--fm);font-size:.84em}
