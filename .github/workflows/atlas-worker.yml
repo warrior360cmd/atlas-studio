@@ -15,18 +15,20 @@ jobs:
         id: q
         env: { TOKEN: "${{ secrets.ATLAS_WORKER_TOKEN }}" }
         run: |
-          if [ -z "$TOKEN" ]; then echo "ATLAS_WORKER_TOKEN not set yet"; echo "paid=0" >> "$GITHUB_OUTPUT"; exit 0; fi
+          if [ -z "$TOKEN" ]; then echo "ATLAS_WORKER_TOKEN not set yet"; echo "run=no" >> "$GITHUB_OUTPUT"; exit 0; fi
           API=https://zkglztkplmzktemdjgnr.supabase.co/functions/v1/worker
           call() { curl -sf -X POST "$API" -H "content-type: application/json" -H "x-worker-token: $TOKEN" -d "$1"; }
-          call '{"action":"autoquote"}' | jq -c .
+          # the repository is public, so are its logs: never print refs or order counts
+          call '{"action":"autoquote"}' > /dev/null
           paid=$(call '{"action":"pending"}' | jq -r .paid)
-          echo "paid=$paid" >> "$GITHUB_OUTPUT"; echo "paid dossiers: $paid"
+          if [ "$paid" -gt 0 ]; then echo "run=yes" >> "$GITHUB_OUTPUT"; else echo "run=no" >> "$GITHUB_OUTPUT"; fi
+          echo "tick done"
       - name: Start Kaggle worker if needed
-        if: steps.q.outputs.paid != '0'
+        if: steps.q.outputs.run == 'yes'
         env: { KAGGLE_API_TOKEN: "${{ secrets.KAGGLE_API_TOKEN }}" }
         run: |
           pip install -q kaggle==2.2.5
-          st=$(kaggle kernels status raphaellokadjo/atlas-worker 2>&1 || true); echo "$st"
-          if echo "$st" | grep -qE "RUNNING|QUEUED"; then echo "worker already running"; exit 0; fi
-          kaggle kernels pull raphaellokadjo/atlas-worker -p w -m
-          kaggle kernels push -p w --accelerator NvidiaTeslaT4
+          st=$(kaggle kernels status raphaellokadjo/atlas-worker 2>&1 || true)
+          if echo "$st" | grep -qE "RUNNING|QUEUED"; then echo "worker busy"; exit 0; fi
+          kaggle kernels pull raphaellokadjo/atlas-worker -p w -m > /dev/null
+          kaggle kernels push -p w --accelerator NvidiaTeslaT4 > /dev/null && echo "worker started"

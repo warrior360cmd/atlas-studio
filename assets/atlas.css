@@ -21,3 +21,5 @@
 .site-f{border-top:1px solid #111}
 @media (max-width:900px){.brands{grid-template-columns:1fr}}
 @media (max-width:560px){.brand a{grid-template-columns:1fr;min-height:0}.brand .doc{max-width:200px;justify-self:start;transform:rotate(2deg) translateY(20px)}}
+.hub-faq h2{font:800 clamp(1.8rem,3.2vw,2.6rem)/1.02 var(--fd);font-stretch:112%;letter-spacing:-.02em;margin-bottom:22px}
+.hub-faq details{max-width:72ch}
