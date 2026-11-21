@@ -1,25 +1,27 @@
-<!doctype html><html lang="fr" data-brand="careerlift"><head><meta name="robots" content="noindex"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html><html lang="fr" data-brand="careerlift" class="k-inner"><head><meta name="robots" content="noindex"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Votre dossier — CareerLift</title><meta name="description" content="Ce lien est privé : ne le partagez qu&#x27;avec les personnes autorisées."><link rel="canonical" href="https://warrior360cmd.github.io/atlas-studio/careerlift/dossier.html">
-<link rel="alternate" hreflang="en" href="https://warrior360cmd.github.io/atlas-studio/careerlift/en/dossier.html"><meta name="theme-color" content="#ffffff">
+<link rel="alternate" hreflang="fr" href="https://warrior360cmd.github.io/atlas-studio/careerlift/dossier.html"><link rel="alternate" hreflang="en" href="https://warrior360cmd.github.io/atlas-studio/careerlift/en/dossier.html">
 <link rel="icon" href="../assets/brands/careerlift/favicon.ico" sizes="48x48"><link rel="icon" href="../assets/brands/careerlift/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="../assets/brands/careerlift/apple-touch-icon.png"><link rel="stylesheet" href="../assets/site.css">
+<link rel="apple-touch-icon" href="../assets/brands/careerlift/apple-touch-icon.png">
+<link rel="preload" href="../assets/fonts/sourceserif4.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/base.css"><link rel="stylesheet" href="../assets/careerlift.css">
 <meta property="og:title" content="Votre dossier — CareerLift"><meta property="og:description" content="Ce lien est privé : ne le partagez qu&#x27;avec les personnes autorisées."><meta property="og:image" content="https://warrior360cmd.github.io/atlas-studio/assets/brands/careerlift/icon-512.png">
 </head><body><a class="skip" href="#main">Aller au contenu</a>
-<header class="top"><div class="wrap"><a class="logo" href="../careerlift/index.html"><img src="../assets/brands/careerlift/careerlift-horizontal-color.svg" alt="CareerLift" width="180" height="34"></a>
-<nav class="top" aria-label="Navigation principale"><a href="../careerlift/brief.html">Envoyer un brief</a><a href="../careerlift/dossier.html">Suivre un dossier</a><a href="../support.html">Support</a><a href="../careerlift/en/dossier.html" lang="en">English</a></nav></div></header>
-<main id="main" class="wrap"><section class="hero" style="padding-bottom:10px"><h1>Votre dossier</h1><p class="lead">Ce lien est privé : ne le partagez qu'avec les personnes autorisées.</p></section>
+<header class="site-h"><div class="wrap"><a class="logo" href="../careerlift/index.html"><img src="../assets/brands/careerlift/careerlift-horizontal-white.svg" alt="CareerLift" width="200" height="36"></a>
+<nav aria-label="Navigation principale"><a href="index.html#exemple">Exemple</a><a href="index.html#prix">Prix</a><a href="../careerlift/dossier.html">Suivre un dossier</a><a href="../support.html">Support</a><a href="../careerlift/en/dossier.html" lang="en" hreflang="en">English</a><a class="btn nav-cta" href="../careerlift/brief.html">Envoyer un brief</a></nav></div></header>
+<main id="main"><div class="wrap"><section class="page-h"><h1>Votre dossier</h1><p class="lead">Ce lien est privé : ne le partagez qu'avec les personnes autorisées.</p></section>
 <div id="dossier-status" class="status" role="status" tabindex="-1"></div>
-<div id="dossier" hidden><dl class="note" style="display:grid;grid-template-columns:max-content 1fr;gap:8px 18px;margin:0">
-<dt>Référence</dt><dd id="d-ref" style="margin:0;font-family:var(--mono)"></dd><dt>État</dt><dd style="margin:0"><span class="state" id="d-state"></span></dd>
-<dt>Prochaine étape</dt><dd id="d-next" style="margin:0"></dd><dt>Montant</dt><dd id="d-amount" style="margin:0;font-variant-numeric:tabular-nums"></dd></dl>
-<p class="cta"><button class="btn primary" id="d-pay" type="button" disabled>Payer</button></p><p id="d-paynote" class="muted"></p>
+<div id="dossier" class="sheet" hidden><dl class="facts">
+<dt>Référence</dt><dd id="d-ref" class="mono"></dd><dt>État</dt><dd><span class="state" id="d-state"></span></dd>
+<dt>Prochaine étape</dt><dd id="d-next"></dd><dt>Montant</dt><dd id="d-amount" class="num"></dd></dl>
+<p class="cta"><button class="btn" id="d-pay" type="button" disabled>Payer</button></p><p id="d-paynote"></p>
 <h2>Fichiers</h2><ul class="files" id="d-files"></ul>
-<form id="d-up" class="card"><label for="file">Document (PDF, Word, Excel, CSV, TXT, image — 15 Mo max)</label><input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.odt,.txt,.csv,.xls,.xlsx,.ods,.json,.png,.jpg,.jpeg,.webp">
+<form id="d-up" class="form"><label for="file">Document (PDF, Word, Excel, CSV, TXT, image — 15 Mo max)</label><input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.odt,.txt,.csv,.xls,.xlsx,.ods,.json,.png,.jpg,.jpeg,.webp">
 <p class="cta"><button class="btn ghost" type="submit">Envoyer un document</button></p><div id="d-up-status" class="status" role="status"></div></form>
-<h2>Écrire à l'équipe</h2><form id="d-msg" class="card" novalidate><label class="radio"><input type="radio" name="kind" value="message" checked> Question / message</label>
+<h2>Écrire à l'équipe</h2><form id="d-msg" class="form" novalidate><label class="radio"><input type="radio" name="kind" value="message" checked> Question / message</label>
 <label class="radio"><input type="radio" name="kind" value="correction_request"> Demande de correction</label><label for="body">Votre message</label><textarea id="body" name="body" required></textarea>
-<p class="cta"><button class="btn primary" type="submit">Envoyer</button></p><div id="d-msg-status" class="status" role="status"></div></form>
-<h2>Historique</h2><ul class="timeline" id="d-events"></ul></div></main>
-<footer><div class="wrap"><div>ATLAS Studio — quatre services, une même exigence de preuves.<br><a href="../index.html">ATLAS Studio</a> · <a href="../signaldesk/index.html">SignalDesk</a> · <a href="../localoom/index.html">Localoom</a> · <a href="../flowpatch/index.html">FlowPatch</a></div>
-<div><a href="../legal/conditions.html">Conditions</a> · <a href="../legal/confidentialite.html">Confidentialité</a> · <a href="../support.html">Support</a></div></div></footer>
+<p class="cta"><button class="btn" type="submit">Envoyer</button></p><div id="d-msg-status" class="status" role="status"></div></form>
+<h2>Historique</h2><ul class="timeline" id="d-events"></ul></div></div></main>
+<footer class="site-f"><div class="wrap"><div><p>ATLAS Studio — quatre services, une même exigence de preuves.</p><p><a href="../index.html">ATLAS Studio</a> · <a href="../signaldesk/index.html">SignalDesk</a> · <a href="../localoom/index.html">Localoom</a> · <a href="../flowpatch/index.html">FlowPatch</a></p></div>
+<p><a href="../legal/conditions.html">Conditions</a> · <a href="../legal/confidentialite.html">Confidentialité</a> · <a href="../support.html">Support</a></p></div></footer>
 <script src="../assets/app.js" defer></script></body></html>

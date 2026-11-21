@@ -1,25 +1,27 @@
-<!doctype html><html lang="en" data-brand="signaldesk"><head><meta name="robots" content="noindex"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html><html lang="en" data-brand="signaldesk" class="k-inner"><head><meta name="robots" content="noindex"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Your project — SignalDesk</title><meta name="description" content="This link is private: share it only with authorised people."><link rel="canonical" href="https://warrior360cmd.github.io/atlas-studio/signaldesk/en/dossier.html">
-<link rel="alternate" hreflang="fr" href="https://warrior360cmd.github.io/atlas-studio/signaldesk/dossier.html"><meta name="theme-color" content="#ffffff">
+<link rel="alternate" hreflang="en" href="https://warrior360cmd.github.io/atlas-studio/signaldesk/en/dossier.html"><link rel="alternate" hreflang="fr" href="https://warrior360cmd.github.io/atlas-studio/signaldesk/dossier.html">
 <link rel="icon" href="../../assets/brands/signaldesk/favicon.ico" sizes="48x48"><link rel="icon" href="../../assets/brands/signaldesk/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="../../assets/brands/signaldesk/apple-touch-icon.png"><link rel="stylesheet" href="../../assets/site.css">
+<link rel="apple-touch-icon" href="../../assets/brands/signaldesk/apple-touch-icon.png">
+<link rel="preload" href="../../assets/fonts/sofiasansextracondensed.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/base.css"><link rel="stylesheet" href="../../assets/signaldesk.css">
 <meta property="og:title" content="Your project — SignalDesk"><meta property="og:description" content="This link is private: share it only with authorised people."><meta property="og:image" content="https://warrior360cmd.github.io/atlas-studio/assets/brands/signaldesk/icon-512.png">
 </head><body><a class="skip" href="#main">Skip to content</a>
-<header class="top"><div class="wrap"><a class="logo" href="../../signaldesk/en/index.html"><img src="../../assets/brands/signaldesk/signaldesk-horizontal-color.svg" alt="SignalDesk" width="180" height="34"></a>
-<nav class="top" aria-label="Navigation"><a href="../../signaldesk/en/brief.html">Send a brief</a><a href="../../signaldesk/en/dossier.html">Track a project</a><a href="../../en/support.html">Support</a><a href="../../signaldesk/dossier.html" lang="fr">Français</a></nav></div></header>
-<main id="main" class="wrap"><section class="hero" style="padding-bottom:10px"><h1>Your project</h1><p class="lead">This link is private: share it only with authorised people.</p></section>
+<header class="site-h"><div class="wrap"><a class="logo" href="../../signaldesk/en/index.html"><img src="../../assets/brands/signaldesk/signaldesk-horizontal-color.svg" alt="SignalDesk" width="200" height="36"></a>
+<nav aria-label="Main navigation"><a href="index.html#exemple">Sample</a><a href="index.html#prix">Price</a><a href="../../signaldesk/en/dossier.html">Track a project</a><a href="../../en/support.html">Support</a><a href="../../signaldesk/dossier.html" lang="fr" hreflang="fr">Français</a><a class="btn nav-cta" href="../../signaldesk/en/brief.html">Send a brief</a></nav></div></header>
+<main id="main"><div class="wrap"><section class="page-h"><h1>Your project</h1><p class="lead">This link is private: share it only with authorised people.</p></section>
 <div id="dossier-status" class="status" role="status" tabindex="-1"></div>
-<div id="dossier" hidden><dl class="note" style="display:grid;grid-template-columns:max-content 1fr;gap:8px 18px;margin:0">
-<dt>Reference</dt><dd id="d-ref" style="margin:0;font-family:var(--mono)"></dd><dt>Status</dt><dd style="margin:0"><span class="state" id="d-state"></span></dd>
-<dt>Next step</dt><dd id="d-next" style="margin:0"></dd><dt>Amount</dt><dd id="d-amount" style="margin:0;font-variant-numeric:tabular-nums"></dd></dl>
-<p class="cta"><button class="btn primary" id="d-pay" type="button" disabled>Pay</button></p><p id="d-paynote" class="muted"></p>
+<div id="dossier" class="sheet" hidden><dl class="facts">
+<dt>Reference</dt><dd id="d-ref" class="mono"></dd><dt>Status</dt><dd><span class="state" id="d-state"></span></dd>
+<dt>Next step</dt><dd id="d-next"></dd><dt>Amount</dt><dd id="d-amount" class="num"></dd></dl>
+<p class="cta"><button class="btn" id="d-pay" type="button" disabled>Pay</button></p><p id="d-paynote"></p>
 <h2>Files</h2><ul class="files" id="d-files"></ul>
-<form id="d-up" class="card"><label for="file">Document (PDF, Word, Excel, CSV, TXT, image — 15 MB max)</label><input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.odt,.txt,.csv,.xls,.xlsx,.ods,.json,.png,.jpg,.jpeg,.webp">
+<form id="d-up" class="form"><label for="file">Document (PDF, Word, Excel, CSV, TXT, image — 15 MB max)</label><input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.odt,.txt,.csv,.xls,.xlsx,.ods,.json,.png,.jpg,.jpeg,.webp">
 <p class="cta"><button class="btn ghost" type="submit">Upload a document</button></p><div id="d-up-status" class="status" role="status"></div></form>
-<h2>Write to the team</h2><form id="d-msg" class="card" novalidate><label class="radio"><input type="radio" name="kind" value="message" checked> Question / message</label>
+<h2>Write to the team</h2><form id="d-msg" class="form" novalidate><label class="radio"><input type="radio" name="kind" value="message" checked> Question / message</label>
 <label class="radio"><input type="radio" name="kind" value="correction_request"> Correction request</label><label for="body">Your message</label><textarea id="body" name="body" required></textarea>
-<p class="cta"><button class="btn primary" type="submit">Send</button></p><div id="d-msg-status" class="status" role="status"></div></form>
-<h2>History</h2><ul class="timeline" id="d-events"></ul></div></main>
-<footer><div class="wrap"><div>ATLAS Studio — four services, one standard of evidence.<br><a href="../../en/index.html">ATLAS Studio</a> · <a href="../../localoom/en/index.html">Localoom</a> · <a href="../../flowpatch/en/index.html">FlowPatch</a> · <a href="../../careerlift/en/index.html">CareerLift</a></div>
-<div><a href="../../en/legal/terms.html">Terms</a> · <a href="../../en/legal/privacy.html">Privacy</a> · <a href="../../en/support.html">Support</a></div></div></footer>
+<p class="cta"><button class="btn" type="submit">Send</button></p><div id="d-msg-status" class="status" role="status"></div></form>
+<h2>History</h2><ul class="timeline" id="d-events"></ul></div></div></main>
+<footer class="site-f"><div class="wrap"><div><p>ATLAS Studio — four services, one standard of evidence.</p><p><a href="../../en/index.html">ATLAS Studio</a> · <a href="../../localoom/en/index.html">Localoom</a> · <a href="../../flowpatch/en/index.html">FlowPatch</a> · <a href="../../careerlift/en/index.html">CareerLift</a></p></div>
+<p><a href="../../en/legal/terms.html">Terms</a> · <a href="../../en/legal/privacy.html">Privacy</a> · <a href="../../en/support.html">Support</a></p></div></footer>
 <script src="../../assets/app.js" defer></script></body></html>
