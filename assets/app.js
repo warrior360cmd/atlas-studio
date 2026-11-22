@@ -123,6 +123,13 @@ if (dos) {
     if (bl) { bl.hidden = !rows.length; $("#d-brief-list").innerHTML = rows.map(([k, v]) => `<dt>${esc(labels[k] || k)}</dt><dd>${esc(v)}</dd>`).join(""); }
     $("#d-files").innerHTML = d.files.length ? d.files.map((f) => `<li><span>${esc(f.label)} <span class=ext>v${f.version}</span></span>${f.url ? `<a href="${esc(f.url)}" rel=noopener>↓</a>` : ""}</li>`).join("") : `<li>${esc(T.none)}</li>`;
     dos.hidden = false;
+    // back from Stripe (?paid=1): the webhook may lag a few seconds; never offer a second payment meanwhile
+    if (h.get("paid") === "1" && d.status === "quoted") {
+      pay.disabled = true; pay.textContent = T.pay.replace(/ ·.*$/, "");
+      $("#d-paynote").textContent = L === "fr" ? "Paiement reçu par Stripe, confirmation en cours… cette page se met à jour toute seule." : "Payment received by Stripe, confirming… this page updates by itself.";
+      if ((load.tries = (load.tries || 0) + 1) <= 20) setTimeout(load, 3000);
+      else $("#d-paynote").textContent = L === "fr" ? "Confirmation plus longue que prévu : ne payez pas une seconde fois, écrivez-nous ci-dessous avec votre référence." : "Confirmation is taking longer than expected: do not pay again, write to us below with your reference.";
+    } else if (h.get("paid") === "1" && d.status !== "quoted") $("#d-paynote").textContent = "";
   }
   $("#d-pay")?.addEventListener("click", async () => {
     const b = $("#d-pay"); b.disabled = true; b.textContent = T.paying;
