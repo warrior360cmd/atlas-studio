@@ -205,3 +205,13 @@ html{scroll-padding-top:96px}
 @keyframes stick-in{from{transform:translateY(100%)}to{transform:none}}
 @media (max-width:640px){.stick p span{display:none}}
 @media (prefers-reduced-motion:reduce){.stick{animation:none}}
+/* v4 polish: neutral header glass (no colour bleed from dark bands), branded recommended plan, clean price row. */
+.site-h{background:color-mix(in srgb,var(--paper) 95%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.plan{position:relative;border-radius:max(14px,var(--radius,0px));transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
+.plan:hover{transform:translateY(-3px);box-shadow:0 30px 60px -36px rgba(0,0,0,.35)}
+.plan-tag{border:2px solid var(--band);box-shadow:0 0 0 6px color-mix(in srgb,var(--band) 8%,transparent),0 30px 60px -34px rgba(0,0,0,.4)}
+.plan-badge{background:var(--band);color:var(--on-band);padding:5px 14px;box-shadow:0 6px 14px -8px rgba(0,0,0,.5)}
+.plan-price .pre:empty{display:none}
+.plan-list li::marker{color:var(--accent)}
+@media (prefers-reduced-motion:reduce){.plan{transition:none}.plan:hover{transform:none}}
+.plans:has(>.plan:only-child){grid-template-columns:minmax(0,680px);justify-content:center}
