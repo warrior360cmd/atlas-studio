@@ -188,3 +188,5 @@ html{scroll-padding-top:96px}
 }
 @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @keyframes rise-o{from{opacity:0;transform:translateY(28px) scale(.985)}to{opacity:1;transform:none}}
+.hero-film .tool-film{margin:0 auto;max-width:640px}.hero-film .film-frame{border-radius:14px;overflow:hidden;box-shadow:0 50px 90px -40px rgba(0,0,0,.7),0 0 0 1px var(--band-line,rgba(255,255,255,.15))}
+.hero-film figcaption{color:var(--on-band-2,#ddd)}
