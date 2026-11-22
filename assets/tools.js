@@ -102,7 +102,31 @@ ${sig.length ? `<p class="t-sig"><strong>${tr("Signaux publics", "Public signals
 <p class="t-src">${tr("Source", "Source")} : <a href="${src}" rel="noopener" target="_blank">Annuaire des Entreprises (data.gouv.fr)</a> — ${tr("consulté le", "retrieved")} ${today}.</p>
 </article>`;
   }
+  function batch(root) {  // up to 20 names or SIRENs, one per line: registry status + prospecting opt-out, CSV export
+    const f = $(".t-batch", root); if (!f) return;
+    const out = $(".t-bres", root);
+    f.addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      const lines = f.list.value.split(/\n/).map((x) => x.trim()).filter((x) => x.length >= 3).slice(0, 20);
+      if (!lines.length) return; const rows = [];
+      for (const [i, q] of lines.entries()) {
+        out.innerHTML = `<p>${tr("Vérification", "Checking")} ${i + 1}/${lines.length}…</p>`;
+        try {
+          const r = await fetch(`https://recherche-entreprises.api.gouv.fr/search?q=${encodeURIComponent(q)}&per_page=1`); const c = (await r.json()).results?.[0];
+          rows.push(c ? [q, c.nom_complet, c.siren, c.etat_administratif === "A" ? tr("active", "active") : tr("fermée", "closed"), c.opposition_diffusion_commerciale ? tr("OUI — ne pas démarcher", "YES — do not contact") : tr("non", "no"), c.siege?.libelle_commune || ""] : [q, tr("introuvable", "not found"), "", "", "", ""]);
+        } catch { rows.push([q, tr("erreur registre", "register error"), "", "", "", ""]); }
+        await new Promise((r) => setTimeout(r, 180));
+      }
+      const head = [tr("Recherche", "Query"), tr("Entreprise trouvée", "Company found"), "SIREN", tr("État", "Status"), tr("Opposition prospection", "Prospecting opt-out"), tr("Commune", "Town")];
+      const opp = rows.filter((x) => /^(OUI|YES)/.test(x[4])).length;
+      out.innerHTML = `<p><strong class="num">${opp}</strong> ${tr("entreprise(s) à ne pas démarcher sur", "company(ies) not to contact out of")} ${rows.length}. ${tr("Vérifiez que l'entreprise trouvée est bien celle visée.", "Check the company found is the one you meant.")}</p>
+<p class="cta"><button class="btn ghost" type="button" data-bcsv>${tr("Exporter en CSV", "Export as CSV")}</button></p>
+<div class="t-scroll"><table class="t-table"><thead><tr>${head.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead><tbody>${rows.map((x) => `<tr${/^(OUI|YES)/.test(x[4]) ? ' class="t-optout"' : ""}>${x.map((v) => `<td>${esc(v)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+      $("[data-bcsv]", out).addEventListener("click", () => csvDownload("verification-registre.csv", [head, ...rows]));
+    });
+  }
   function signaldesk(root) {
+    batch(root);
     const form = $("form", root), list = $(".t-res", root), st = $(".t-status", root);
     form.addEventListener("submit", async (ev) => {
       ev.preventDefault(); const q = form.q.value.trim(); if (q.length < 3) { st.textContent = tr("Saisissez au moins 3 caractères.", "Type at least 3 characters."); return; }
