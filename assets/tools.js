@@ -142,10 +142,13 @@ ${sig.length ? `<p class="t-sig"><strong>${tr("Signaux publics", "Public signals
     "c d j l m n s t y ete etre avoir fait faire plus tres tout tous toute toutes ainsi afin chez entre sans sous dont cette cet " +
     "the and or of to in for with on at by from as is are be will an our your you we this that these those it its their they them who what which " +
     "poste profil mission missions candidat candidate job role team equipe entreprise company cdi cdd temps plein full time years ans experience").split(" "));
-  const RISKY = /\b(fluent|bilingual|native|expert|guru|ninja|rockstar|passionate|dynamic|motivated|hard-working|team player|perfectionist|dynamique|motivée?|passionnée?|rigoureuse?|autonome|bilingue|courant)\b/gi;
+  const RISKY = /(?<!\p{L})(fluent|bilingual|native|expert|guru|ninja|rockstar|passionate|dynamic|motivated|hard-working|team player|perfectionist|dynamique|motivée?|passionnée?|rigoureuse?|rigoureux|autonome|bilingue|courant)(?!\p{L})/giu;
   const PERSO = [[/\b(né|née|born)\b|\b\d{1,2}\/\d{1,2}\/(19|20)\d{2}\b/i, tr("date de naissance", "date of birth")], [/\b\d{2}\s?ans\b|\bage\s?:?\s?\d{2}\b/i, tr("âge", "age")],
     [/\b(marié|mariée|célibataire|married|single|divorcé)/i, tr("situation familiale", "marital status")], [/\bnationalit/i, tr("nationalité", "nationality")], [/\bphoto\b/i, "photo"]];
-  const words = (s) => fold(s).replace(/[^a-z0-9+#.\-\s]/g, " ").split(/\s+/).map((w) => w.replace(/^[.\-]+|[.\-]+$/g, "")).filter((w) => w.length > 2 && !STOP.has(w) && !/^\d+$/.test(w));
+  const stem = (w) => (w.length > 4 ? w.replace(/(es|s)$/, "") : w);
+  const lang = (s) => { const w = fold(s).split(/\W+/); const fr = w.filter((x) => ["le", "la", "les", "des", "et", "de", "du", "vous", "pour", "avec"].includes(x)).length;
+    const en = w.filter((x) => ["the", "and", "you", "with", "for", "will", "our", "your", "of", "to"].includes(x)).length; return fr > en ? "fr" : en > fr ? "en" : ""; };
+  const words = (s) => fold(s).replace(/[^a-z0-9+#.\-\s]/g, " ").split(/\s+/).map((w) => w.replace(/^[.\-]+|[.\-]+$/g, "")).filter((w) => w.length > 2 && !STOP.has(w) && !/^\d+$/.test(w)).map(stem);
   function careerlift(root) {
     const cv = $("[name=cv]", root), job = $("[name=job]", root), res = $(".t-res", root), score = $(".t-score", root);
     const run = () => {
@@ -159,7 +162,9 @@ ${sig.length ? `<p class="t-sig"><strong>${tr("Signaux publics", "Public signals
       const n = (cv.value.match(/\S+/g) || []).length;
       score.innerHTML = `<strong class="num">${cov} %</strong> ${tr("des mots-clés de l'offre présents dans le CV", "of the job's keywords found in the CV")}`;
       score.dataset.level = cov >= 70 ? "ok" : cov >= 45 ? "mid" : "bad";
+      const lc = lang(cv.value), lj = lang(job.value), mixed = lc && lj && lc !== lj;
       res.innerHTML = `<ul class="t-list">
+${mixed ? row(null, tr("Le CV et l'offre ne sont pas dans la même langue : comparez l'offre avec la version de votre CV écrite dans sa langue.", "The CV and the job are not in the same language: compare the job with the version of your CV written in its language.")) : ""}
 ${row(miss.length < 6, miss.length ? tr(`Mots de l'offre absents du CV : ${miss.map(esc).join(", ")}. Ajoutez-les seulement s'ils décrivent une expérience réelle.`, `Job words missing from the CV: ${miss.map(esc).join(", ")}. Add them only if they describe real experience.`) : tr("Les mots importants de l'offre sont couverts.", "The job's key words are covered."))}
 ${row(quant >= lines.length * 0.3, tr(`${quant} ligne(s) sur ${lines.length} contiennent un chiffre (volume, délai, budget). Chiffrez ce qui est réel et vérifiable.`, `${quant} of ${lines.length} line(s) contain a number (volume, time, budget). Quantify what is real and verifiable.`))}
 ${row(!risky.length, risky.length ? tr(`Mots à justifier ou retirer : ${risky.map(esc).join(", ")} — un recruteur les vérifiera en entretien.`, `Words to back up or remove: ${risky.map(esc).join(", ")} — a recruiter will test them in interview.`) : tr("Pas d'adjectif creux ni de niveau non prouvé.", "No empty adjectives or unproven levels."))}
