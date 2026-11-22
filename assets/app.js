@@ -6,14 +6,14 @@ const T = {
         required: "Champ requis.", email: "Adresse e-mail invalide.", consent: "Merci d'accepter le traitement de vos données pour ce brief.",
         saved: "Brief reçu. Référence", keep: "Conservez ce lien privé : c'est votre seul accès au dossier (nous ne l'envoyons pas par e-mail). Toute personne qui le possède peut lire le dossier.",
         copy: "Copier le lien", copied: "Copié", open: "Ouvrir mon dossier", support_ok: "Message reçu. Réponse sous 2 jours ouvrés à l'adresse indiquée.",
-        notfound: "Dossier introuvable ou lien incomplet. Vérifiez le lien reçu après l'envoi du brief.", none: "Aucun fichier pour l'instant.", pay: "Payer", paying: "Redirection vers Stripe…",
+        notfound: "Dossier introuvable ou lien incomplet. Vérifiez le lien reçu après l'envoi du brief.", nodos: "Aucun dossier ouvert sur cet appareil. Ouvrez le lien privé affiché après l'envoi de votre brief, ou commencez par un brief gratuit.", newbrief: "Envoyer un brief", help: "Lien perdu ? Écrire au support", none: "Aucun fichier pour l'instant.", pay: "Payer", paying: "Redirection vers Stripe…",
         paydis: "Le paiement s'ouvrira ici dès que le devis sera prêt.", payerr: "Paiement momentanément indisponible. Réessayez dans quelques minutes ; si le problème persiste, écrivez-nous ci-dessous.", quotenow: "Si vous avez choisi une formule à prix fixe, votre devis vous attend déjà dans le dossier.", indic: "(prix de la formule — devis à venir)", msgok: "Message envoyé.", up: "Envoyer", upok: "Fichier envoyé.", uperr: "Fichier refusé (formats : PDF, Word, Excel, CSV, TXT, images ; 15 Mo max).",
         states: { received: "Brief reçu", qualified: "Brief qualifié", quoted: "Devis disponible", paid: "Payé", in_production: "En production", in_review: "En relecture", delivered: "Livré", correction: "Correction en cours", closed: "Clos", rejected: "Non retenu", cancelled: "Annulé" } },
   en: { sending: "Sending…", fix: "Please fix the highlighted fields.", rate: "Too many requests from your connection. Please try again in an hour.", net: "Cannot connect. Your input is kept; please retry.",
         required: "Required.", email: "Invalid email address.", consent: "Please agree to the processing of your data for this brief.",
         saved: "Brief received. Reference", keep: "Keep this private link: it is your only access to the project (we do not email it). Anyone holding it can read the project.",
         copy: "Copy link", copied: "Copied", open: "Open my project", support_ok: "Message received. We reply within 2 business days to the address given.",
-        notfound: "Project not found or incomplete link. Check the link you received after sending the brief.", none: "No files yet.", pay: "Pay", paying: "Redirecting to Stripe…",
+        notfound: "Project not found or incomplete link. Check the link you received after sending the brief.", nodos: "No project open on this device. Open the private link shown after you sent your brief, or start with a free brief.", newbrief: "Send a brief", help: "Lost the link? Contact support", none: "No files yet.", pay: "Pay", paying: "Redirecting to Stripe…",
         paydis: "Payment opens here once the quote is ready.", payerr: "Payment is temporarily unavailable. Please try again in a few minutes; if it persists, write to us below.", quotenow: "If you chose a fixed-price option, your quote is already waiting in your project page.", indic: "(package price — quote to follow)", msgok: "Message sent.", up: "Upload", upok: "File uploaded.", uperr: "File rejected (PDF, Word, Excel, CSV, TXT, images; 15 MB max).",
         states: { received: "Brief received", qualified: "Brief qualified", quoted: "Quote ready", paid: "Paid", in_production: "In production", in_review: "In review", delivered: "Delivered", correction: "Correction in progress", closed: "Closed", rejected: "Not accepted", cancelled: "Cancelled" } },
 }[L];
@@ -96,7 +96,10 @@ if (dos) {
     return L === "fr" ? `${n} ${k}` : `${k} ${n}`;
   };
   async function load() {
-    if (!ref || !tok) return show($("#dossier-status"), "bad", esc(T.notfound));
+    if (!ref || !tok) {  // visitor without a dossier on this device: explain and offer a way forward
+      const sup = new URL((L === "en" ? "../../en/" : "../") + "support.html", location.href).href;
+      return show($("#dossier-status"), "info", `<p>${esc(T.nodos)}</p><p class=cta><a class="btn" href="brief.html">${esc(T.newbrief)}</a> <a class="btn ghost" href="${esc(sup)}">${esc(T.help)}</a></p>`);
+    }
     let r; try { r = await fetch(`${API}/dossier?ref=${encodeURIComponent(ref)}`, { headers: H }); } catch { return show($("#dossier-status"), "bad", esc(T.net)); }
     if (r.status !== 200) return show($("#dossier-status"), "bad", esc(T.notfound));
     const d = await r.json();
