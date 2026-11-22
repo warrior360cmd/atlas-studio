@@ -4,7 +4,7 @@
 <link rel="icon" href="../assets/brands/localoom/favicon.ico" sizes="48x48"><link rel="icon" href="../assets/brands/localoom/favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#f5f6f3"><link rel="apple-touch-icon" href="../assets/brands/localoom/apple-touch-icon.png">
 <link rel="preload" href="../assets/fonts/familjengrotesk.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/base.css?v=616f087c"><link rel="stylesheet" href="../assets/house.css?v=616f087c"><link rel="stylesheet" href="../assets/localoom.css?v=616f087c">
+<link rel="stylesheet" href="../assets/base.css?v=b53e6729"><link rel="stylesheet" href="../assets/house.css?v=b53e6729"><link rel="stylesheet" href="../assets/localoom.css?v=b53e6729">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Localoom"><meta property="og:locale" content="fr_FR"><meta property="og:url" content="https://localoom-catalogues.vercel.app/localoom/dossier.html"><meta property="og:title" content="Votre dossier — Localoom"><meta property="og:description" content="Ce lien est privé : ne le partagez qu&#x27;avec les personnes autorisées."><meta property="og:image" content="https://atlas-studio-orpin.vercel.app/assets/brands/localoom/og.png"><meta name="twitter:card" content="summary_large_image">
 
 </head><body><a class="skip" href="#main">Aller au contenu</a>
@@ -12,17 +12,20 @@
 <nav aria-label="Navigation principale"><a href="../localoom/index.html#exemple">Exemple</a><a href="../localoom/index.html#prix">Tarifs</a><a href="../localoom/dossier.html">Suivre un dossier</a><a href="../support.html">Support</a><a href="../localoom/en/dossier.html" lang="en" hreflang="en">English</a><a class="btn nav-cta" href="../localoom/brief.html">Envoyer un brief</a></nav></div></header>
 <main id="main"><div class="wrap"><section class="page-h"><h1>Votre dossier</h1><p class="lead">Ce lien est privé : ne le partagez qu’avec les personnes autorisées.</p></section>
 <div id="dossier-status" class="status" role="status" tabindex="-1"></div>
-<div id="dossier" class="sheet" hidden><dl class="facts">
+<div id="dossier" class="sheet" hidden><ol class="d-steps" id="d-steps" aria-label="Étapes"><li>Brief</li><li>Devis</li><li>Paiement</li><li>Production</li><li>Relecture</li><li>Livraison</li></ol><dl class="facts">
 <dt>Référence</dt><dd id="d-ref" class="mono"></dd><dt>État</dt><dd><span class="state" id="d-state"></span></dd>
 <dt>Prochaine étape</dt><dd id="d-next"></dd><dt>Montant</dt><dd id="d-amount" class="num"></dd></dl>
-<p class="cta"><button class="btn" id="d-pay" type="button" disabled>Payer</button></p><p id="d-paynote"></p>
-<h2>Fichiers</h2><ul class="files" id="d-files"></ul>
+<section class="d-scope" id="d-scope" hidden aria-labelledby="h-scope"><h2 id="h-scope">Ce que comprend votre devis</h2><div data-offer="pilot" hidden><h3>Pilote — <span class="num">180 USD</span></h3><p>3 produits représentatifs (variantes comprises) FR/EN + extrait du fichier d’import. Crédité sur le forfait sous 30 jours.</p><ul><li>3 produits représentatifs, variantes comprises</li><li>Fiches complètes en français et en anglais</li><li>Extrait du fichier d’import de votre plateforme</li><li>Contrôle automatique : mêmes chiffres FR = EN</li><li>Crédité sur le forfait sous 30 jours</li></ul><p><strong>Délai :</strong> 5 jours ouvrés après réception des données</p></div><div data-offer="full" hidden><h3>Forfait — <span class="num">1 500 USD</span></h3><p>30 produits parents FR/EN, jusqu’à 60 SKU, une plateforme, un modèle d’import.</p><ul><li>30 produits parents, jusqu’à 60 SKU</li><li>Audit de vos données avant rédaction</li><li>Glossaire FR/EN et charte de rédaction</li><li>Export complet au format de votre plateforme</li><li>Historique des corrections</li></ul><p><strong>Délai :</strong> 10 jours ouvrés après validation de 3 produits d’étalonnage</p></div></section>
+<p class="cta"><button class="btn" id="d-pay" type="button" disabled>Payer</button></p><p id="d-paynote" role="status"></p>
+<details class="d-brief" id="d-brief" data-labels='{&quot;platform&quot;: &quot;Plateforme (Shopify, WooCommerce, PrestaShop…)&quot;, &quot;products&quot;: &quot;Nombre de produits parents / variantes&quot;, &quot;languages&quot;: &quot;Langue source → langue cible&quot;, &quot;data&quot;: &quot;Données disponibles (export, fiches fournisseurs, photos)&quot;, &quot;tone&quot;: &quot;Ton de marque, mots à conserver&quot;, &quot;deadline&quot;: &quot;Échéance souhaitée&quot;}'><summary>Votre brief</summary><dl class="facts" id="d-brief-list"></dl></details>
+<h2>Ce dont nous avons besoin</h2><ul class="d-needs"><li>L’export CSV de votre catalogue : une ligne par produit, avec la référence (SKU) et la description en français. Sur Shopify : Produits → Exporter.</li><li>Facultatif : vos termes imposés (noms de collections, mots à ne pas traduire), en CSV ou TXT.</li></ul>
 <form id="d-up" class="form"><label for="file">Document (PDF, Word, Excel, CSV, TXT, image — 15 Mo max)</label><input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.odt,.txt,.csv,.xls,.xlsx,.ods,.json,.png,.jpg,.jpeg,.webp">
 <p class="cta"><button class="btn ghost" type="submit">Envoyer un document</button></p><div id="d-up-status" class="status" role="status"></div></form>
+<h2>Fichiers</h2><ul class="files" id="d-files"></ul>
 <h2>Écrire à l’équipe</h2><form id="d-msg" class="form" novalidate><label class="radio"><input type="radio" name="kind" value="message" checked> Question / message</label>
 <label class="radio"><input type="radio" name="kind" value="correction_request"> Demande de correction</label><label for="body">Votre message</label><textarea id="body" name="body" required></textarea>
 <p class="cta"><button class="btn" type="submit">Envoyer</button></p><div id="d-msg-status" class="status" role="status"></div></form>
 <h2>Historique</h2><ul class="timeline" id="d-events"></ul></div></div></main>
 <footer class="site-f"><div class="wrap"><div><p>Localoom est un service d’ATLAS Studio : Catalogues e-commerce FR/EN.</p><p><a href="https://atlas-studio-orpin.vercel.app/">ATLAS Studio</a> · <a href="https://signaldesk-b2b.vercel.app/signaldesk/">SignalDesk</a> · <a href="https://flowpatch-automation.vercel.app/flowpatch/">FlowPatch</a> · <a href="https://careerlift-cv.vercel.app/careerlift/">CareerLift</a></p></div>
 <p><a href="../localoom/guides/index.html">Guides</a> · <a href="../legal/conditions.html">Conditions</a> · <a href="../legal/confidentialite.html">Confidentialité</a> · <a href="../support.html">Support</a></p></div></footer>
-<script src="../assets/app.js?v=616f087c" defer></script></body></html>
+<script src="../assets/app.js?v=b53e6729" defer></script></body></html>

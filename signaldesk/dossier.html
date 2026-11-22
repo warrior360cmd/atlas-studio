@@ -4,7 +4,7 @@
 <link rel="icon" href="../assets/brands/signaldesk/favicon.ico" sizes="48x48"><link rel="icon" href="../assets/brands/signaldesk/favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#f6f7f9"><link rel="apple-touch-icon" href="../assets/brands/signaldesk/apple-touch-icon.png">
 <link rel="preload" href="../assets/fonts/sofiasansextracondensed.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../assets/base.css?v=616f087c"><link rel="stylesheet" href="../assets/house.css?v=616f087c"><link rel="stylesheet" href="../assets/signaldesk.css?v=616f087c">
+<link rel="stylesheet" href="../assets/base.css?v=b53e6729"><link rel="stylesheet" href="../assets/house.css?v=b53e6729"><link rel="stylesheet" href="../assets/signaldesk.css?v=b53e6729">
 <meta property="og:type" content="website"><meta property="og:site_name" content="SignalDesk"><meta property="og:locale" content="fr_FR"><meta property="og:url" content="https://signaldesk-b2b.vercel.app/signaldesk/dossier.html"><meta property="og:title" content="Votre dossier — SignalDesk"><meta property="og:description" content="Ce lien est privé : ne le partagez qu&#x27;avec les personnes autorisées."><meta property="og:image" content="https://atlas-studio-orpin.vercel.app/assets/brands/signaldesk/og.png"><meta name="twitter:card" content="summary_large_image">
 
 </head><body><a class="skip" href="#main">Aller au contenu</a>
@@ -12,17 +12,20 @@
 <nav aria-label="Navigation principale"><a href="../signaldesk/index.html#exemple">Exemple</a><a href="../signaldesk/index.html#prix">Tarifs</a><a href="../signaldesk/dossier.html">Suivre un dossier</a><a href="../support.html">Support</a><a href="../signaldesk/en/dossier.html" lang="en" hreflang="en">English</a><a class="btn nav-cta" href="../signaldesk/brief.html">Envoyer un brief</a></nav></div></header>
 <main id="main"><div class="wrap"><section class="page-h"><h1>Votre dossier</h1><p class="lead">Ce lien est privé : ne le partagez qu’avec les personnes autorisées.</p></section>
 <div id="dossier-status" class="status" role="status" tabindex="-1"></div>
-<div id="dossier" class="sheet" hidden><dl class="facts">
+<div id="dossier" class="sheet" hidden><ol class="d-steps" id="d-steps" aria-label="Étapes"><li>Brief</li><li>Devis</li><li>Paiement</li><li>Production</li><li>Relecture</li><li>Livraison</li></ol><dl class="facts">
 <dt>Référence</dt><dd id="d-ref" class="mono"></dd><dt>État</dt><dd><span class="state" id="d-state"></span></dd>
 <dt>Prochaine étape</dt><dd id="d-next"></dd><dt>Montant</dt><dd id="d-amount" class="num"></dd></dl>
-<p class="cta"><button class="btn" id="d-pay" type="button" disabled>Payer</button></p><p id="d-paynote"></p>
-<h2>Fichiers</h2><ul class="files" id="d-files"></ul>
+<section class="d-scope" id="d-scope" hidden aria-labelledby="h-scope"><h2 id="h-scope">Ce que comprend votre devis</h2><div data-offer="pilot" hidden><h3>Pilote — <span class="num">290 USD</span></h3><p>10 entreprises qualifiées + 2 briefs d’approche. Crédité à 100 % sur le forfait s’il est commandé sous 30 jours.</p><ul><li>10 entreprises qualifiées selon vos critères</li><li>2 briefs d’approche rédigés</li><li>Chaque fait avec sa source et sa date</li><li>Export CSV pour votre CRM</li><li>100 % crédité sur le forfait sous 30 jours</li></ul><p><strong>Délai :</strong> 5 jours ouvrés après validation du cadrage</p></div><div data-offer="full" hidden><h3>Forfait — <span class="num">1 450 USD</span></h3><p>50 entreprises qualifiées + 10 briefs, une verticale, une zone, une offre.</p><ul><li>50 entreprises qualifiées, une verticale, une zone</li><li>10 briefs d’approche personnalisés</li><li>Échantillon validé par vous avant le lot</li><li>CSV, dictionnaire et correspondance CRM</li><li>Écartées et journal des corrections</li></ul><p><strong>Délai :</strong> 10 jours ouvrés après validation d’un échantillon</p></div></section>
+<p class="cta"><button class="btn" id="d-pay" type="button" disabled>Payer</button></p><p id="d-paynote" role="status"></p>
+<details class="d-brief" id="d-brief" data-labels='{&quot;offer_text&quot;: &quot;Votre offre (ce que vous vendez, à qui, prix indicatif)&quot;, &quot;zone&quot;: &quot;Zone géographique&quot;, &quot;vertical&quot;: &quot;Verticale / type d’entreprise&quot;, &quot;criteria&quot;: &quot;Critères obligatoires&quot;, &quot;exclusions&quot;: &quot;Exclusions&quot;, &quot;examples&quot;: &quot;Exemples de clients idéaux (et refusés)&quot;, &quot;crm&quot;: &quot;CRM ou format d’export&quot;}'><summary>Votre brief</summary><dl class="facts" id="d-brief-list"></dl></details>
+<h2>Ce dont nous avons besoin</h2><ul class="d-needs"><li>Rien d’obligatoire : votre brief suffit pour commencer.</li><li>Facultatif : vos clients actuels ou les entreprises à exclure (CSV ou TXT).</li><li>Facultatif : un ou deux exemples de client idéal (nom ou site).</li></ul>
 <form id="d-up" class="form"><label for="file">Document (PDF, Word, Excel, CSV, TXT, image — 15 Mo max)</label><input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.odt,.txt,.csv,.xls,.xlsx,.ods,.json,.png,.jpg,.jpeg,.webp">
 <p class="cta"><button class="btn ghost" type="submit">Envoyer un document</button></p><div id="d-up-status" class="status" role="status"></div></form>
+<h2>Fichiers</h2><ul class="files" id="d-files"></ul>
 <h2>Écrire à l’équipe</h2><form id="d-msg" class="form" novalidate><label class="radio"><input type="radio" name="kind" value="message" checked> Question / message</label>
 <label class="radio"><input type="radio" name="kind" value="correction_request"> Demande de correction</label><label for="body">Votre message</label><textarea id="body" name="body" required></textarea>
 <p class="cta"><button class="btn" type="submit">Envoyer</button></p><div id="d-msg-status" class="status" role="status"></div></form>
 <h2>Historique</h2><ul class="timeline" id="d-events"></ul></div></div></main>
 <footer class="site-f"><div class="wrap"><div><p>SignalDesk est un service d’ATLAS Studio : Recherche commerciale qualifiée.</p><p><a href="https://atlas-studio-orpin.vercel.app/">ATLAS Studio</a> · <a href="https://localoom-catalogues.vercel.app/localoom/">Localoom</a> · <a href="https://flowpatch-automation.vercel.app/flowpatch/">FlowPatch</a> · <a href="https://careerlift-cv.vercel.app/careerlift/">CareerLift</a></p></div>
 <p><a href="../signaldesk/guides/index.html">Guides</a> · <a href="../legal/conditions.html">Conditions</a> · <a href="../legal/confidentialite.html">Confidentialité</a> · <a href="../support.html">Support</a></p></div></footer>
-<script src="../assets/app.js?v=616f087c" defer></script></body></html>
+<script src="../assets/app.js?v=b53e6729" defer></script></body></html>

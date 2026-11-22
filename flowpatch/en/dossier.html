@@ -4,7 +4,7 @@
 <link rel="icon" href="../../assets/brands/flowpatch/favicon.ico" sizes="48x48"><link rel="icon" href="../../assets/brands/flowpatch/favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#f4f7f5"><link rel="apple-touch-icon" href="../../assets/brands/flowpatch/apple-touch-icon.png">
 <link rel="preload" href="../../assets/fonts/barlowsemicondensed-bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/base.css?v=616f087c"><link rel="stylesheet" href="../../assets/house.css?v=616f087c"><link rel="stylesheet" href="../../assets/flowpatch.css?v=616f087c">
+<link rel="stylesheet" href="../../assets/base.css?v=b53e6729"><link rel="stylesheet" href="../../assets/house.css?v=b53e6729"><link rel="stylesheet" href="../../assets/flowpatch.css?v=b53e6729">
 <meta property="og:type" content="website"><meta property="og:site_name" content="FlowPatch"><meta property="og:locale" content="en_US"><meta property="og:url" content="https://flowpatch-automation.vercel.app/flowpatch/en/dossier.html"><meta property="og:title" content="Your project — FlowPatch"><meta property="og:description" content="This link is private: share it only with authorised people."><meta property="og:image" content="https://atlas-studio-orpin.vercel.app/assets/brands/flowpatch/og.png"><meta name="twitter:card" content="summary_large_image">
 
 </head><body><a class="skip" href="#main">Skip to content</a>
@@ -12,17 +12,20 @@
 <nav aria-label="Main navigation"><a href="../../flowpatch/en/index.html#exemple">Sample</a><a href="../../flowpatch/en/index.html#prix">Pricing</a><a href="../../flowpatch/en/dossier.html">Track a project</a><a href="../../en/support.html">Support</a><a href="../../flowpatch/dossier.html" lang="fr" hreflang="fr">Français</a><a class="btn nav-cta" href="../../flowpatch/en/brief.html">Send a brief</a></nav></div></header>
 <main id="main"><div class="wrap"><section class="page-h"><h1>Your project</h1><p class="lead">This link is private: share it only with authorised people.</p></section>
 <div id="dossier-status" class="status" role="status" tabindex="-1"></div>
-<div id="dossier" class="sheet" hidden><dl class="facts">
+<div id="dossier" class="sheet" hidden><ol class="d-steps" id="d-steps" aria-label="Steps"><li>Brief</li><li>Quote</li><li>Payment</li><li>Production</li><li>Review</li><li>Delivery</li></ol><dl class="facts">
 <dt>Reference</dt><dd id="d-ref" class="mono"></dd><dt>Status</dt><dd><span class="state" id="d-state"></span></dd>
 <dt>Next step</dt><dd id="d-next"></dd><dt>Amount</dt><dd id="d-amount" class="num"></dd></dl>
-<p class="cta"><button class="btn" id="d-pay" type="button" disabled>Pay</button></p><p id="d-paynote"></p>
-<h2>Files</h2><ul class="files" id="d-files"></ul>
+<section class="d-scope" id="d-scope" hidden aria-labelledby="h-scope"><h2 id="h-scope">What your quote includes</h2><div data-offer="pilot" hidden><h3>Diagnostic + prototype — <span class="num">USD 350</span></h3><p>Written process contract and a prototype run in a test environment, with its failure tests. Not a production install.</p><ul><li>Written processing contract: inputs, steps, outputs</li><li>Prototype in a test environment</li><li>Failure tests: duplicate, outage, lost response</li><li>Detailed build quote</li><li>No commitment to the build</li></ul><p><strong>Turnaround:</strong> 7 business days</p></div><div data-offer="full" hidden><h3>Build — <span class="num">USD 2,000</span></h3><p>One process, one trigger, two apps, at most five business steps — quoted after the diagnostic.</p><ul><li>1 trigger, 2 apps, up to 5 steps</li><li>Durable states, pause and resume</li><li>Exception queue and human review</li><li>Operating guide and short training</li><li>14 days of follow-up after go-live</li></ul><p><strong>Turnaround:</strong> Per quote (typically 3 weeks)</p></div></section>
+<p class="cta"><button class="btn" id="d-pay" type="button" disabled>Pay</button></p><p id="d-paynote" role="status"></p>
+<details class="d-brief" id="d-brief" data-labels='{&quot;task&quot;: &quot;The task to automate, as it is done today&quot;, &quot;trigger&quot;: &quot;What triggers the task&quot;, &quot;apps&quot;: &quot;The two apps involved&quot;, &quot;volume&quot;: &quot;Monthly volume&quot;, &quot;owner&quot;: &quot;Who will handle exceptions&quot;, &quot;hosting&quot;: &quot;Hosting / data constraints&quot;}'><summary>Your brief</summary><dl class="facts" id="d-brief-list"></dl></details>
+<h2>What we need from you</h2><ul class="d-needs"><li>A real example of the data involved (CSV export, sample file or screenshot), anonymised if needed.</li><li>The names of the two tools to connect. No passwords: we will ask for a dedicated access at the right time.</li></ul>
 <form id="d-up" class="form"><label for="file">Document (PDF, Word, Excel, CSV, TXT, image — 15 MB max)</label><input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.odt,.txt,.csv,.xls,.xlsx,.ods,.json,.png,.jpg,.jpeg,.webp">
 <p class="cta"><button class="btn ghost" type="submit">Upload a document</button></p><div id="d-up-status" class="status" role="status"></div></form>
+<h2>Files</h2><ul class="files" id="d-files"></ul>
 <h2>Write to the team</h2><form id="d-msg" class="form" novalidate><label class="radio"><input type="radio" name="kind" value="message" checked> Question / message</label>
 <label class="radio"><input type="radio" name="kind" value="correction_request"> Correction request</label><label for="body">Your message</label><textarea id="body" name="body" required></textarea>
 <p class="cta"><button class="btn" type="submit">Send</button></p><div id="d-msg-status" class="status" role="status"></div></form>
 <h2>History</h2><ul class="timeline" id="d-events"></ul></div></div></main>
 <footer class="site-f"><div class="wrap"><div><p>FlowPatch is an ATLAS Studio service: Reliable admin automations.</p><p><a href="https://atlas-studio-orpin.vercel.app/en/">ATLAS Studio</a> · <a href="https://signaldesk-b2b.vercel.app/signaldesk/en/">SignalDesk</a> · <a href="https://localoom-catalogues.vercel.app/localoom/en/">Localoom</a> · <a href="https://careerlift-cv.vercel.app/careerlift/en/">CareerLift</a></p></div>
 <p><a href="../../flowpatch/guides/index.html">Guides (FR)</a> · <a href="../../en/legal/terms.html">Terms</a> · <a href="../../en/legal/privacy.html">Privacy</a> · <a href="../../en/support.html">Support</a></p></div></footer>
-<script src="../../assets/app.js?v=616f087c" defer></script></body></html>
+<script src="../../assets/app.js?v=b53e6729" defer></script></body></html>

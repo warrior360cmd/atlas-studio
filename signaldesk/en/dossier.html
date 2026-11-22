@@ -4,7 +4,7 @@
 <link rel="icon" href="../../assets/brands/signaldesk/favicon.ico" sizes="48x48"><link rel="icon" href="../../assets/brands/signaldesk/favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#f6f7f9"><link rel="apple-touch-icon" href="../../assets/brands/signaldesk/apple-touch-icon.png">
 <link rel="preload" href="../../assets/fonts/sofiasansextracondensed.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="../../assets/base.css?v=616f087c"><link rel="stylesheet" href="../../assets/house.css?v=616f087c"><link rel="stylesheet" href="../../assets/signaldesk.css?v=616f087c">
+<link rel="stylesheet" href="../../assets/base.css?v=b53e6729"><link rel="stylesheet" href="../../assets/house.css?v=b53e6729"><link rel="stylesheet" href="../../assets/signaldesk.css?v=b53e6729">
 <meta property="og:type" content="website"><meta property="og:site_name" content="SignalDesk"><meta property="og:locale" content="en_US"><meta property="og:url" content="https://signaldesk-b2b.vercel.app/signaldesk/en/dossier.html"><meta property="og:title" content="Your project — SignalDesk"><meta property="og:description" content="This link is private: share it only with authorised people."><meta property="og:image" content="https://atlas-studio-orpin.vercel.app/assets/brands/signaldesk/og.png"><meta name="twitter:card" content="summary_large_image">
 
 </head><body><a class="skip" href="#main">Skip to content</a>
@@ -12,17 +12,20 @@
 <nav aria-label="Main navigation"><a href="../../signaldesk/en/index.html#exemple">Sample</a><a href="../../signaldesk/en/index.html#prix">Pricing</a><a href="../../signaldesk/en/dossier.html">Track a project</a><a href="../../en/support.html">Support</a><a href="../../signaldesk/dossier.html" lang="fr" hreflang="fr">Français</a><a class="btn nav-cta" href="../../signaldesk/en/brief.html">Send a brief</a></nav></div></header>
 <main id="main"><div class="wrap"><section class="page-h"><h1>Your project</h1><p class="lead">This link is private: share it only with authorised people.</p></section>
 <div id="dossier-status" class="status" role="status" tabindex="-1"></div>
-<div id="dossier" class="sheet" hidden><dl class="facts">
+<div id="dossier" class="sheet" hidden><ol class="d-steps" id="d-steps" aria-label="Steps"><li>Brief</li><li>Quote</li><li>Payment</li><li>Production</li><li>Review</li><li>Delivery</li></ol><dl class="facts">
 <dt>Reference</dt><dd id="d-ref" class="mono"></dd><dt>Status</dt><dd><span class="state" id="d-state"></span></dd>
 <dt>Next step</dt><dd id="d-next"></dd><dt>Amount</dt><dd id="d-amount" class="num"></dd></dl>
-<p class="cta"><button class="btn" id="d-pay" type="button" disabled>Pay</button></p><p id="d-paynote"></p>
-<h2>Files</h2><ul class="files" id="d-files"></ul>
+<section class="d-scope" id="d-scope" hidden aria-labelledby="h-scope"><h2 id="h-scope">What your quote includes</h2><div data-offer="pilot" hidden><h3>Pilot — <span class="num">USD 290</span></h3><p>10 qualified companies + 2 outreach briefs. 100% credited to the package if ordered within 30 days.</p><ul><li>10 companies qualified against your criteria</li><li>2 outreach briefs written</li><li>Every fact with its source and date</li><li>CSV export for your CRM</li><li>100% credited to the package within 30 days</li></ul><p><strong>Turnaround:</strong> 5 business days after the scope is approved</p></div><div data-offer="full" hidden><h3>Package — <span class="num">USD 1,450</span></h3><p>50 qualified companies + 10 briefs, one vertical, one region, one offer.</p><ul><li>50 qualified companies, one vertical, one region</li><li>10 personalised outreach briefs</li><li>Sample approved by you before the batch</li><li>CSV, data dictionary and CRM mapping</li><li>Rejected list and correction log</li></ul><p><strong>Turnaround:</strong> 10 business days after a sample is approved</p></div></section>
+<p class="cta"><button class="btn" id="d-pay" type="button" disabled>Pay</button></p><p id="d-paynote" role="status"></p>
+<details class="d-brief" id="d-brief" data-labels='{&quot;offer_text&quot;: &quot;Your offer (what you sell, to whom, indicative price)&quot;, &quot;zone&quot;: &quot;Region&quot;, &quot;vertical&quot;: &quot;Vertical / company type&quot;, &quot;criteria&quot;: &quot;Must-have criteria&quot;, &quot;exclusions&quot;: &quot;Exclusions&quot;, &quot;examples&quot;: &quot;Examples of ideal (and rejected) clients&quot;, &quot;crm&quot;: &quot;CRM or export format&quot;}'><summary>Your brief</summary><dl class="facts" id="d-brief-list"></dl></details>
+<h2>What we need from you</h2><ul class="d-needs"><li>Nothing required: your brief is enough to start.</li><li>Optional: your current clients or companies to exclude (CSV or TXT).</li><li>Optional: one or two examples of an ideal client (name or website).</li></ul>
 <form id="d-up" class="form"><label for="file">Document (PDF, Word, Excel, CSV, TXT, image — 15 MB max)</label><input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.odt,.txt,.csv,.xls,.xlsx,.ods,.json,.png,.jpg,.jpeg,.webp">
 <p class="cta"><button class="btn ghost" type="submit">Upload a document</button></p><div id="d-up-status" class="status" role="status"></div></form>
+<h2>Files</h2><ul class="files" id="d-files"></ul>
 <h2>Write to the team</h2><form id="d-msg" class="form" novalidate><label class="radio"><input type="radio" name="kind" value="message" checked> Question / message</label>
 <label class="radio"><input type="radio" name="kind" value="correction_request"> Correction request</label><label for="body">Your message</label><textarea id="body" name="body" required></textarea>
 <p class="cta"><button class="btn" type="submit">Send</button></p><div id="d-msg-status" class="status" role="status"></div></form>
 <h2>History</h2><ul class="timeline" id="d-events"></ul></div></div></main>
 <footer class="site-f"><div class="wrap"><div><p>SignalDesk is an ATLAS Studio service: Qualified B2B research.</p><p><a href="https://atlas-studio-orpin.vercel.app/en/">ATLAS Studio</a> · <a href="https://localoom-catalogues.vercel.app/localoom/en/">Localoom</a> · <a href="https://flowpatch-automation.vercel.app/flowpatch/en/">FlowPatch</a> · <a href="https://careerlift-cv.vercel.app/careerlift/en/">CareerLift</a></p></div>
 <p><a href="../../signaldesk/guides/index.html">Guides (FR)</a> · <a href="../../en/legal/terms.html">Terms</a> · <a href="../../en/legal/privacy.html">Privacy</a> · <a href="../../en/support.html">Support</a></p></div></footer>
-<script src="../../assets/app.js?v=616f087c" defer></script></body></html>
+<script src="../../assets/app.js?v=b53e6729" defer></script></body></html>

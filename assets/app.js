@@ -7,14 +7,14 @@ const T = {
         saved: "Brief reçu. Référence", keep: "Conservez ce lien privé : c'est votre seul accès au dossier (nous ne l'envoyons pas par e-mail). Toute personne qui le possède peut lire le dossier.",
         copy: "Copier le lien", copied: "Copié", open: "Ouvrir mon dossier", support_ok: "Message reçu. Réponse sous 2 jours ouvrés à l'adresse indiquée.",
         notfound: "Dossier introuvable ou lien incomplet. Vérifiez le lien reçu après l'envoi du brief.", none: "Aucun fichier pour l'instant.", pay: "Payer", paying: "Redirection vers Stripe…",
-        paydis: "Le paiement s'ouvrira ici dès que le devis sera prêt.", indic: "(prix de la formule — devis à venir)", msgok: "Message envoyé.", up: "Envoyer", upok: "Fichier envoyé.", uperr: "Fichier refusé (formats : PDF, Word, Excel, CSV, TXT, images ; 15 Mo max).",
+        paydis: "Le paiement s'ouvrira ici dès que le devis sera prêt.", payerr: "Paiement momentanément indisponible. Réessayez dans quelques minutes ; si le problème persiste, écrivez-nous ci-dessous.", quotenow: "Si vous avez choisi une formule à prix fixe, votre devis vous attend déjà dans le dossier.", indic: "(prix de la formule — devis à venir)", msgok: "Message envoyé.", up: "Envoyer", upok: "Fichier envoyé.", uperr: "Fichier refusé (formats : PDF, Word, Excel, CSV, TXT, images ; 15 Mo max).",
         states: { received: "Brief reçu", qualified: "Brief qualifié", quoted: "Devis disponible", paid: "Payé", in_production: "En production", in_review: "En relecture", delivered: "Livré", correction: "Correction en cours", closed: "Clos", rejected: "Non retenu", cancelled: "Annulé" } },
   en: { sending: "Sending…", fix: "Please fix the highlighted fields.", rate: "Too many requests from your connection. Please try again in an hour.", net: "Cannot connect. Your input is kept; please retry.",
         required: "Required.", email: "Invalid email address.", consent: "Please agree to the processing of your data for this brief.",
         saved: "Brief received. Reference", keep: "Keep this private link: it is your only access to the project (we do not email it). Anyone holding it can read the project.",
         copy: "Copy link", copied: "Copied", open: "Open my project", support_ok: "Message received. We reply within 2 business days to the address given.",
         notfound: "Project not found or incomplete link. Check the link you received after sending the brief.", none: "No files yet.", pay: "Pay", paying: "Redirecting to Stripe…",
-        paydis: "Payment opens here once the quote is ready.", indic: "(package price — quote to follow)", msgok: "Message sent.", up: "Upload", upok: "File uploaded.", uperr: "File rejected (PDF, Word, Excel, CSV, TXT, images; 15 MB max).",
+        paydis: "Payment opens here once the quote is ready.", payerr: "Payment is temporarily unavailable. Please try again in a few minutes; if it persists, write to us below.", quotenow: "If you chose a fixed-price option, your quote is already waiting in your project page.", indic: "(package price — quote to follow)", msgok: "Message sent.", up: "Upload", upok: "File uploaded.", uperr: "File rejected (PDF, Word, Excel, CSV, TXT, images; 15 MB max).",
         states: { received: "Brief received", qualified: "Brief qualified", quoted: "Quote ready", paid: "Paid", in_production: "In production", in_review: "In review", delivered: "Delivered", correction: "Correction in progress", closed: "Closed", rejected: "Not accepted", cancelled: "Cancelled" } },
 }[L];
 const $ = (s, r = document) => r.querySelector(s);
@@ -61,7 +61,7 @@ if (brief) {
         const link = new URL(brief.dataset.dossier, location.href).href + "#ref=" + encodeURIComponent(j.ref) + "&t=" + encodeURIComponent(j.token);
         try { localStorage.setItem("atlas-ref", j.ref); localStorage.setItem("atlas-t", j.token); } catch {}  // returning client finds the dossier without the link
         brief.hidden = true;
-        show(st, "ok", `<p><strong>${esc(T.saved)} ${esc(j.ref)}.</strong></p><p>${esc(T.keep)}</p><div class=secret id=lnk>${esc(link)}</div>
+        show(st, "ok", `<p><strong>${esc(T.saved)} ${esc(j.ref)}.</strong></p><p>${esc(T.quotenow)}</p><p>${esc(T.keep)}</p><div class=secret id=lnk>${esc(link)}</div>
           <p class=cta><button class="btn ghost" type=button id=cp>${esc(T.copy)}</button><a class="btn primary" href="${esc(link)}">${esc(T.open)}</a></p>`);
         $("#cp").onclick = async () => { await navigator.clipboard.writeText(link); $("#cp").textContent = T.copied; };
       } else if (s === 200 && j.duplicate) { show(st, "ok", `<p>${esc(T.saved)} ${esc(j.ref)}.</p>`); }
@@ -101,14 +101,27 @@ if (dos) {
     $("#d-next").textContent = d.next_step || "";
     $("#d-amount").textContent = d.amount_due ? fmt(d.amount_due.amount_cents, d.amount_due.currency) + (d.status === "quoted" || d.status === "paid" ? "" : " " + T.indic) : "—";
     const pay = $("#d-pay"); pay.disabled = !d.payable; $("#d-paynote").textContent = d.payable ? "" : T.paydis;
-    $("#d-events").innerHTML = d.events.map((e) => `<li><time>${esc(e.created_at.slice(0, 16).replace("T", " "))}</time>${esc(e.kind === "status" ? (T.states[e.body] || e.body) : e.body)}</li>`).join("");
+    const when = (iso) => new Intl.DateTimeFormat(L, { dateStyle: "medium", timeStyle: "short" }).format(new Date(iso));
+    $("#d-events").innerHTML = d.events.map((e) => `<li><time datetime="${esc(e.created_at)}">${esc(when(e.created_at))}</time>${esc(e.kind === "status" ? (T.states[e.body] || e.body) : e.body)}</li>`).join("");
+    const STEP = { received: 0, qualified: 0, quoted: 1, paid: 2, in_production: 3, in_review: 4, correction: 4, delivered: 5, closed: 5 };
+    const cur = STEP[d.status] ?? 0;
+    document.querySelectorAll("#d-steps li").forEach((li, i) => {
+      li.className = i < cur || d.status === "delivered" || d.status === "closed" ? "done" : i === cur ? "now" : "";
+      if (i === cur) li.setAttribute("aria-current", "step"); else li.removeAttribute("aria-current");
+    });
+    const sc = $(`#d-scope [data-offer="${CSS.escape(d.offer || "")}"]`);
+    if (sc) { sc.hidden = false; $("#d-scope").hidden = false; }
+    const bl = $("#d-brief"), labels = JSON.parse(bl?.dataset.labels || "{}");
+    const rows = Object.entries(d.brief || {}).filter(([, v]) => typeof v === "string" && v.trim());
+    if (bl) { bl.hidden = !rows.length; $("#d-brief-list").innerHTML = rows.map(([k, v]) => `<dt>${esc(labels[k] || k)}</dt><dd>${esc(v)}</dd>`).join(""); }
     $("#d-files").innerHTML = d.files.length ? d.files.map((f) => `<li><span>${esc(f.label)} <span class=ext>v${f.version}</span></span>${f.url ? `<a href="${esc(f.url)}" rel=noopener>↓</a>` : ""}</li>`).join("") : `<li>${esc(T.none)}</li>`;
     dos.hidden = false;
   }
   $("#d-pay")?.addEventListener("click", async () => {
     const b = $("#d-pay"); b.disabled = true; b.textContent = T.paying;
     const { s, j } = await post("/checkout", { ref }, H);
-    if (s === 200 && j.url) location.href = j.url; else { b.textContent = T.pay; $("#d-paynote").textContent = T.paydis; }
+    if (s === 200 && j.url) location.href = j.url;
+    else { b.textContent = T.pay; b.disabled = false; $("#d-paynote").textContent = s >= 500 || s === 0 ? T.payerr : T.paydis; }
   });
   $("#d-msg")?.addEventListener("submit", async (ev) => {
     ev.preventDefault(); const f = ev.target, st = $("#d-msg-status");
