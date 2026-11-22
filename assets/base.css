@@ -209,3 +209,10 @@ legend{font-weight:700;padding:0}
 .t-dl[data-level=bad]{background:#fdecea;color:#8a1c14}.t-dl[data-level=ok]{background:#eceeea;color:#4b5249}
 .t-tenders details{margin-top:6px}.t-tenders details p{font-size:.92rem;color:var(--muted);margin-top:4px}
 .tool [hidden]{display:none!important}
+/* Factelio: check list + verdict */
+.t-verdict{display:flex;gap:12px;align-items:center;margin:16px 0 8px;font-weight:600}.t-verdict strong{padding:6px 12px;border-radius:8px;background:#e8f4ec;color:#0f5d33}
+.t-verdict[data-level=mid] strong{background:#fdf1dc;color:#7a4a00}.t-verdict[data-level=bad] strong{background:#fdecea;color:#8a1c14}
+.t-checks{list-style:none;padding:0;margin:8px 0;display:grid;gap:8px}.t-checks li{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--sheet,#fff)}
+.t-mark{flex:0 0 26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:#e8f4ec;color:#0f5d33}
+.t-checks li[data-level=mid] .t-mark{background:#fdf1dc;color:#7a4a00}.t-checks li[data-level=bad] .t-mark{background:#fdecea;color:#8a1c14}
+.t-cal{margin-top:28px}.t-live{color:var(--muted);font-size:.95rem}

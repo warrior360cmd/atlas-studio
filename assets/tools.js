@@ -323,6 +323,124 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     });
   }
 
+  // ---------- Factelio: French e-invoicing checks (Factur-X/CII or UBL, read in the browser) ----------
+  const sirenOk = (s) => /^\d{9}$/.test(s) && [...s].reduce((a, c, i) => { let d = +c; if (i % 2) { d *= 2; if (d > 9) d -= 9; } return a + d; }, 0) % 10 === 0;
+  const vatFor = (siren) => `FR${String((12 + 3 * (Number(siren) % 97)) % 97).padStart(2, "0")}${siren}`;
+  const NS = "(?:[\\w-]+:)?";
+  const sect = (x, n) => (new RegExp(`<${NS}${n}[\\s>][\\s\\S]*?</${NS}${n}>`).exec(x) || [""])[0];
+  const sects = (x, n) => [...x.matchAll(new RegExp(`<${NS}${n}[\\s>][\\s\\S]*?</${NS}${n}>`, "g"))].map((m) => m[0]);
+  const val = (x, n, attr = "") => ((new RegExp(`<${NS}${n}(?:\\s[^>]*${attr}[^>]*)?${attr ? "" : "(?:\\s[^>]*)?"}>([^<]*)</`).exec(x) || [])[1] || "").trim();
+  const num = (v) => (v === "" ? NaN : Number(v));
+  const digits = (v) => String(v || "").replace(/\D/g, "");
+  // Normalised fields from CII (Factur-X) or UBL. Pure: testable in node.
+  function invoiceFields(xml) {
+    if (/CrossIndustryInvoice/.test(xml)) {
+      const doc = sect(xml, "ExchangedDocument"), sum = sect(xml, "SpecifiedTradeSettlementHeaderMonetarySummation");
+      const party = (n) => { const p = sect(xml, n); return { name: val(p, "Name"), siren: digits(val(sect(p, "SpecifiedLegalOrganization"), "ID")), vat: val(sect(p, "SpecifiedTaxRegistration"), "ID", 'schemeID="VA"').replace(/\s/g, "") }; };
+      const d = val(sect(doc, "IssueDateTime"), "DateTimeString");
+      return { syntax: "CII", profile: val(sect(xml, "GuidelineSpecifiedDocumentContextParameter"), "ID"), number: val(doc, "ID"), date: d.replace(/^(\d{4})(\d{2})(\d{2})$/, "$1-$2-$3"),
+        seller: party("SellerTradeParty"), buyer: party("BuyerTradeParty"), currency: val(xml, "InvoiceCurrencyCode"),
+        lineTotal: num(val(sum, "LineTotalAmount")), base: num(val(sum, "TaxBasisTotalAmount")), tax: num(val(sum, "TaxTotalAmount")), total: num(val(sum, "GrandTotalAmount")), due: num(val(sum, "DuePayableAmount")),
+        lines: sects(xml, "IncludedSupplyChainTradeLineItem").map((l) => num(val(sect(l, "SpecifiedTradeSettlementLineMonetarySummation"), "LineTotalAmount"))),
+        terms: !!(sect(xml, "DueDateDateTime") || val(sect(xml, "SpecifiedTradePaymentTerms"), "Description")) };
+    }
+    if (/<(?:[\w-]+:)?Invoice[\s>]/.test(xml) && /ubl/i.test(xml)) {
+      const sum = sect(xml, "LegalMonetaryTotal");
+      const party = (n) => { const p = sect(xml, n); return { name: val(sect(p, "PartyLegalEntity"), "RegistrationName") || val(p, "Name"), siren: digits(val(sect(p, "PartyLegalEntity"), "CompanyID")).slice(0, 9), vat: val(sect(p, "PartyTaxScheme"), "CompanyID").replace(/\s/g, "") }; };
+      return { syntax: "UBL", profile: val(xml, "CustomizationID"), number: val(xml, "ID"), date: val(xml, "IssueDate"), seller: party("AccountingSupplierParty"), buyer: party("AccountingCustomerParty"),
+        currency: val(xml, "DocumentCurrencyCode"), lineTotal: num(val(sum, "LineExtensionAmount")), base: num(val(sum, "TaxExclusiveAmount")), tax: num(val(sect(xml, "TaxTotal"), "TaxAmount")),
+        total: num(val(sum, "TaxInclusiveAmount")), due: num(val(sum, "PayableAmount")), lines: sects(xml, "InvoiceLine").map((l) => num(val(l, "LineExtensionAmount"))), terms: !!(val(xml, "DueDate") || sect(xml, "PaymentTerms")) };
+    }
+    return null;
+  }
+  // Written rules, no AI. Each check: [level ok|mid|bad, label]
+  function invoiceChecks(f) {
+    const c = [], fr = (a, b) => tr(a, b), eq = (a, b) => Math.abs(a - b) < 0.011;
+    const p = f.profile.toLowerCase();
+    const prof = /minimum/.test(p) ? ["bad", "MINIMUM"] : /basicwl/.test(p) ? ["bad", "BASIC WL"] : /extended/.test(p) ? ["ok", "EXTENDED"] : /en16931|comfort|xrechnung|peppol|cen\.eu/.test(p) ? ["ok", "EN 16931"] : /basic/.test(p) ? ["ok", "BASIC"] : ["mid", f.profile || "?"];
+    c.push([prof[0], prof[0] === "bad" ? fr(`Profil ${prof[1]} : données incomplètes, ce n’est pas une facture complète`, `${prof[1]} profile: incomplete data, not a full invoice`) : fr(`Format ${f.syntax}, profil ${prof[1]}`, `${f.syntax} format, ${prof[1]} profile`)]);
+    c.push(f.number && /^\d{4}-\d{2}-\d{2}$/.test(f.date) ? ["ok", fr(`Facture n° ${f.number} du ${f.date.split("-").reverse().join("/")}`, `Invoice ${f.number} dated ${f.date}`)] : ["bad", fr("Numéro ou date de facture manquant", "Invoice number or date missing")]);
+    const s = f.seller;
+    c.push(!s.siren ? ["bad", fr("SIREN du vendeur absent", "Seller SIREN missing")] : sirenOk(s.siren) ? ["ok", fr(`SIREN du vendeur ${s.siren} valide`, `Seller SIREN ${s.siren} valid`)] : ["bad", fr(`SIREN du vendeur ${s.siren} invalide (clé de contrôle)`, `Seller SIREN ${s.siren} invalid (check digit)`)]);
+    if (!s.vat) c.push(["mid", fr("Numéro de TVA du vendeur absent (obligatoire sauf franchise en base)", "Seller VAT number missing (required unless VAT-exempt)")]);
+    else if (/^FR/i.test(s.vat) && sirenOk(s.siren)) c.push(s.vat.toUpperCase() === vatFor(s.siren) ? ["ok", fr(`TVA ${s.vat} : clé cohérente avec le SIREN`, `VAT ${s.vat}: key matches the SIREN`)] : ["bad", fr(`TVA ${s.vat} : la clé ne correspond pas au SIREN (attendu ${vatFor(s.siren)})`, `VAT ${s.vat}: key does not match the SIREN (expected ${vatFor(s.siren)})`)]);
+    else c.push(["ok", fr(`TVA du vendeur ${s.vat}`, `Seller VAT ${s.vat}`)]);
+    const b = f.buyer;
+    c.push(!b.siren ? ["mid", fr("SIREN du client absent : nouvelle mention obligatoire de la réforme", "Client SIREN missing: new mandatory mention under the reform")] : sirenOk(b.siren) ? ["ok", fr(`SIREN du client ${b.siren} valide`, `Client SIREN ${b.siren} valid`)] : ["bad", fr(`SIREN du client ${b.siren} invalide`, `Client SIREN ${b.siren} invalid`)]);
+    if ([f.base, f.tax, f.total].some(Number.isNaN)) c.push(["bad", fr("Totaux HT, TVA ou TTC manquants", "Net, VAT or gross total missing")]);
+    else c.push(eq(f.base + f.tax, f.total) ? ["ok", fr(`Totaux cohérents : ${f.base} + ${f.tax} = ${f.total} ${f.currency}`, `Totals add up: ${f.base} + ${f.tax} = ${f.total} ${f.currency}`)] : ["bad", fr(`Totaux incohérents : ${f.base} + ${f.tax} ≠ ${f.total}`, `Totals do not add up: ${f.base} + ${f.tax} ≠ ${f.total}`)]);
+    if (f.lines.length && !Number.isNaN(f.lineTotal)) { const t = Math.round(f.lines.reduce((a, x) => a + (x || 0), 0) * 100) / 100; c.push(eq(t, f.lineTotal) ? ["ok", fr(`${f.lines.length} ligne(s), somme ${t} conforme`, `${f.lines.length} line(s), sum ${t} matches`)] : ["bad", fr(`Somme des lignes ${t} ≠ total des lignes ${f.lineTotal}`, `Line sum ${t} ≠ line total ${f.lineTotal}`)]); }
+    c.push(f.terms ? ["ok", fr("Échéance ou conditions de paiement indiquées", "Due date or payment terms stated")] : ["mid", fr("Date d’échéance et conditions de paiement absentes (mention obligatoire)", "Due date and payment terms missing (mandatory mention)")]);
+    return c;
+  }
+  async function xmlFromPdf(bytes) {
+    const s = new TextDecoder("latin1").decode(bytes), inflate = async (u8) => new TextDecoder().decode(await new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream("deflate"))).arrayBuffer());
+    const found = []; let i = 0;
+    while ((i = s.indexOf("stream", i)) !== -1 && found.length < 400) {
+      if (s.slice(i - 3, i) === "end") { i += 6; continue; }
+      const st = i + 6 + (s[i + 6] === "\r" ? 2 : 1), en = s.indexOf("endstream", st), dict = s.slice(Math.max(0, i - 700), i), own = dict.slice(dict.lastIndexOf(" obj"));
+      const L = /\/Length\s+(\d+)(?!\s+\d+\s+R)/.exec(own);  // direct length, else trim the EOL before "endstream"
+      let end = L && st + +L[1] <= en ? st + +L[1] : en; if (!L) while (end > st && (bytes[end - 1] === 10 || bytes[end - 1] === 13)) end--;
+      if (en > st && en - st < 3e6) found.push({ st, en: end, emb: /EmbeddedFile/.test(own), flate: /FlateDecode/.test(own) });
+      i = en > 0 ? en + 9 : i + 6;
+    }
+    found.sort((a, b) => b.emb - a.emb);
+    for (const f of found) {
+      try { const raw = bytes.subarray(f.st, f.en), t = f.flate ? await inflate(raw) : new TextDecoder().decode(raw); if (/CrossIndustryInvoice|urn:oasis:names:specification:ubl/.test(t)) return t.trim(); } catch { /* not this stream */ }
+    }
+    return null;
+  }
+  const DEMO = `<?xml version="1.0" encoding="UTF-8"?><rsm:CrossIndustryInvoice xmlns:rsm="urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100" xmlns:ram="urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100" xmlns:udt="urn:un:unece:uncefact:data:standard:UnqualifiedDataType:100">
+<rsm:ExchangedDocumentContext><ram:GuidelineSpecifiedDocumentContextParameter><ram:ID>urn:factur-x.eu:1p0:basic</ram:ID></ram:GuidelineSpecifiedDocumentContextParameter></rsm:ExchangedDocumentContext>
+<rsm:ExchangedDocument><ram:ID>FA-2026-0413</ram:ID><ram:TypeCode>380</ram:TypeCode><ram:IssueDateTime><udt:DateTimeString format="102">20261115</udt:DateTimeString></ram:IssueDateTime></rsm:ExchangedDocument>
+<rsm:SupplyChainTradeTransaction><ram:IncludedSupplyChainTradeLineItem><ram:SpecifiedLineTradeSettlement><ram:SpecifiedTradeSettlementLineMonetarySummation><ram:LineTotalAmount>1200.00</ram:LineTotalAmount></ram:SpecifiedTradeSettlementLineMonetarySummation></ram:SpecifiedLineTradeSettlement></ram:IncludedSupplyChainTradeLineItem>
+<ram:IncludedSupplyChainTradeLineItem><ram:SpecifiedLineTradeSettlement><ram:SpecifiedTradeSettlementLineMonetarySummation><ram:LineTotalAmount>300.00</ram:LineTotalAmount></ram:SpecifiedTradeSettlementLineMonetarySummation></ram:SpecifiedLineTradeSettlement></ram:IncludedSupplyChainTradeLineItem>
+<ram:ApplicableHeaderTradeAgreement><ram:SellerTradeParty><ram:Name>Atelier Exemple SAS</ram:Name><ram:SpecifiedLegalOrganization><ram:ID schemeID="0002">000000000</ram:ID></ram:SpecifiedLegalOrganization><ram:SpecifiedTaxRegistration><ram:ID schemeID="VA">FR12000000000</ram:ID></ram:SpecifiedTaxRegistration></ram:SellerTradeParty>
+<ram:BuyerTradeParty><ram:Name>Client Fictif SARL</ram:Name></ram:BuyerTradeParty></ram:ApplicableHeaderTradeAgreement>
+<ram:ApplicableHeaderTradeSettlement><ram:InvoiceCurrencyCode>EUR</ram:InvoiceCurrencyCode><ram:SpecifiedTradeSettlementHeaderMonetarySummation><ram:LineTotalAmount>1500.00</ram:LineTotalAmount><ram:TaxBasisTotalAmount>1500.00</ram:TaxBasisTotalAmount><ram:TaxTotalAmount currencyID="EUR">300.00</ram:TaxTotalAmount><ram:GrandTotalAmount>1800.00</ram:GrandTotalAmount><ram:DuePayableAmount>1800.00</ram:DuePayableAmount></ram:SpecifiedTradeSettlementHeaderMonetarySummation></ram:ApplicableHeaderTradeSettlement></rsm:SupplyChainTradeTransaction></rsm:CrossIndustryInvoice>`;
+  const fdate = (iso) => new Date(iso + "T00:00:00Z").toLocaleDateString(FR ? "fr-FR" : "en-GB", { timeZone: "UTC" });
+  function factelio(root) {
+    const inp = $("input[name=inv]", root), st = $(".t-status", root), res = $(".t-res", root), cal = $(".t-cal", root), calres = $(".t-calres", root);
+    const show = async (xml, label, demo) => {
+      const f = xml && invoiceFields(xml);
+      if (!f) { st.textContent = ""; res.innerHTML = `<ul class="t-tenders"><li><span class="t-due" data-level="bad"><strong>${tr("Bloquant", "Blocking")}</strong></span><span class="t-tbody"><strong>${esc(label)}</strong><em>${tr("Aucun XML Factur-X, CII ou UBL trouvé : c’est un document PDF simple, pas une facture électronique au sens de la réforme.", "No Factur-X, CII or UBL XML found: this is a plain PDF, not an e-invoice under the reform.")}</em></span></li></ul>`; return; }
+      const checks = invoiceChecks(f), n = (l) => checks.filter((x) => x[0] === l).length;
+      const verdict = n("bad") ? ["bad", tr("Bloquant", "Blocking")] : n("mid") ? ["mid", tr("À corriger", "To fix")] : ["ok", tr("Conforme", "Compliant")];
+      st.textContent = tr(`${label} — ${checks.length} contrôles : ${n("ok")} conformes, ${n("mid")} à corriger, ${n("bad")} bloquants. Lu dans votre navigateur.`, `${label} — ${checks.length} checks: ${n("ok")} pass, ${n("mid")} to fix, ${n("bad")} blocking. Read in your browser.`);
+      res.innerHTML = `<p class="t-verdict" data-level="${verdict[0]}"><strong>${verdict[1]}</strong> ${esc(f.seller.name)} → ${esc(f.buyer.name)}</p><ul class="t-checks">${checks.map(([l, t]) => `<li data-level="${l}"><span class="t-mark" aria-hidden="true">${l === "ok" ? "✓" : l === "mid" ? "!" : "✕"}</span><span class="sr">${l === "ok" ? tr("Conforme", "Pass") : l === "mid" ? tr("À corriger", "To fix") : tr("Bloquant", "Blocking")} : </span>${esc(t)}</li>`).join("")}</ul><p class="t-live"></p>`;
+      if (demo || !sirenOk(f.seller.siren) || /^0+$/.test(f.seller.siren)) return;
+      try {
+        const c = (await (await fetch(`https://recherche-entreprises.api.gouv.fr/search?q=${f.seller.siren}&per_page=1`)).json()).results?.find((x) => x.siren === f.seller.siren);
+        $(".t-live", res).textContent = c ? tr(`Registre : ${c.nom_complet}, ${c.etat_administratif === "A" ? "active" : "fermée"}.`, `Register: ${c.nom_complet}, ${c.etat_administratif === "A" ? "active" : "closed"}.`) : tr("Registre : SIREN du vendeur introuvable.", "Register: seller SIREN not found.");
+      } catch { /* register optional */ }
+    };
+    inp.addEventListener("change", async () => {
+      const file = inp.files[0]; if (!file) return;
+      if (file.size > 15e6) { st.textContent = tr("Fichier trop lourd (15 Mo max).", "File too large (15 MB max)."); return; }
+      st.textContent = tr("Lecture de la facture…", "Reading the invoice…"); res.innerHTML = "";
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      const isPdf = new TextDecoder("latin1").decode(bytes.subarray(0, 5)) === "%PDF-";
+      try { await show(isPdf ? await xmlFromPdf(bytes) : new TextDecoder().decode(bytes), file.name, false); }
+      catch { st.textContent = tr("Fichier illisible. Essayez le PDF d’origine ou le XML.", "Unreadable file. Try the original PDF or the XML."); }
+    });
+    $("[data-demo]", root).addEventListener("click", () => show(DEMO, tr("Facture d’exemple (fictive)", "Sample invoice (fictional)"), true));
+    cal.addEventListener("submit", async (ev) => {
+      ev.preventDefault(); const s = digits(cal.siren.value);
+      if (!sirenOk(s)) { calres.textContent = tr("SIREN invalide : 9 chiffres avec une clé de contrôle correcte.", "Invalid SIREN: 9 digits with a correct check digit."); return; }
+      calres.textContent = tr("Recherche dans le registre…", "Searching the register…");
+      try {
+        const c = (await (await fetch(`https://recherche-entreprises.api.gouv.fr/search?q=${s}&per_page=1`)).json()).results?.find((x) => x.siren === s);
+        if (!c) { calres.textContent = tr("SIREN introuvable dans le registre.", "SIREN not found in the register."); return; }
+        const big = ["GE", "ETI"].includes(c.categorie_entreprise), emit = big ? "2026-09-01" : "2027-09-01";
+        const left = (iso) => Math.ceil((Date.parse(iso) - Date.now()) / 864e5);
+        const when = (iso) => left(iso) <= 0 ? tr(`depuis le ${fdate(iso)}`, `since ${fdate(iso)}`) : tr(`le ${fdate(iso)}, dans ${left(iso)} jours`, `on ${fdate(iso)}, in ${left(iso)} days`);
+        calres.innerHTML = `<ul class="t-checks"><li data-level="ok"><span class="t-mark" aria-hidden="true">i</span>${esc(c.nom_complet)} — ${tr("catégorie", "category")} ${esc(c.categorie_entreprise || tr("non publiée", "not published"))} ${tr("(indicatif, source registre)", "(indicative, register source)")}</li>
+<li data-level="${left("2026-09-01") <= 0 ? "bad" : "mid"}"><span class="t-mark" aria-hidden="true">!</span>${tr("Réception des factures électroniques obligatoire", "Receiving e-invoices mandatory")} ${when("2026-09-01")}</li>
+<li data-level="${left(emit) <= 0 ? "bad" : "mid"}"><span class="t-mark" aria-hidden="true">!</span>${tr("Émission obligatoire", "Issuing mandatory")} ${when(emit)}</li></ul>`;
+      } catch { calres.textContent = tr("Registre momentanément indisponible.", "Register temporarily unavailable."); }
+    });
+  }
+
   // ---------- Hub: which service fits ----------
   function hub(root) {
     const f = $("form", root), res = $(".t-res", root), map = JSON.parse(root.dataset.map || "{}");
@@ -332,6 +450,6 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     });
   }
 
-  if (DOC) { const RUN = { localoom, signaldesk, flowpatch, careerlift, soumissio, solvaro, hub }; document.querySelectorAll("[data-tool]").forEach((el) => RUN[el.dataset.tool]?.(el)); }
-  if (typeof module !== "undefined") module.exports = { checkPair, nums, csvParse, words, riskOf };  // node self-test only
+  if (DOC) { const RUN = { localoom, signaldesk, flowpatch, careerlift, soumissio, solvaro, factelio, hub }; document.querySelectorAll("[data-tool]").forEach((el) => RUN[el.dataset.tool]?.(el)); }
+  if (typeof module !== "undefined") module.exports = { checkPair, nums, csvParse, words, riskOf, invoiceFields, invoiceChecks, xmlFromPdf, sirenOk, vatFor, DEMO };  // node self-test only
 })();

@@ -1,6 +1,6 @@
 # ATLAS Studio
 
-> ATLAS Studio runs six fixed-price B2B services. Every service publishes its prices, its limits and a complete sample deliverable; a person reviews every deliverable before delivery, and facts, numbers and files are checked by deterministic scripts, not by AI alone.
+> ATLAS Studio runs seven fixed-price B2B services. Every service publishes its prices, its limits and a complete sample deliverable; a person reviews every deliverable before delivery, and facts, numbers and files are checked by deterministic scripts, not by AI alone.
 
 ## Services
 
@@ -10,6 +10,7 @@
 - [CareerLift](https://careerlift-cv.vercel.app/careerlift/en/): FR/EN job applications. For one person, one job family and one target posting: French and English CVs, a professional profile and an application, every line traced to your documents or statements. From 340 USD. French page: https://careerlift-cv.vercel.app/careerlift/
 - [Soumissio](https://soumissio-marches.vercel.app/soumissio/en/): French public tenders: watch and bids. For small businesses and freelancers who want public-sector work in France: we find the tenders that match you, tell you which are worth a bid, then prepare the response file with you. From 190 USD. French page: https://soumissio-marches.vercel.app/soumissio/
 - [Solvaro](https://solvaro-risque.vercel.app/solvaro/en/): French client credit risk and claims. For businesses that invoice French clients at 30 or 60 days: we check your clients in the official BODACC, flag every insolvency proceeding, and prepare your proof of claim before the two-month deadline passes. From 190 USD. French page: https://solvaro-risque.vercel.app/solvaro/
+- [Factelio](https://factelio-factures.vercel.app/factelio/en/): French e-invoicing compliance. Since 1 September 2026 every VAT-registered business in France must be able to receive electronic invoices; issuing them becomes mandatory for SMEs and micro-businesses on 1 September 2027. We check your real invoices, line by line, and tell you exactly what to fix. From 190 USD. French page: https://factelio-factures.vercel.app/factelio/
 
 ## Guides (French)
 
