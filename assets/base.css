@@ -138,3 +138,56 @@ legend{font-weight:700;padding:0}
 .d-brief{margin-top:24px}.d-brief summary{cursor:pointer;font-weight:700}.d-brief .facts{margin-top:12px}
 .d-brief dd{white-space:pre-wrap;overflow-wrap:anywhere}
 @media (max-width:560px){.d-steps{flex-wrap:wrap;row-gap:12px}.d-steps li{flex:1 1 30%;min-width:0;font-size:.8rem}.facts{grid-template-columns:1fr;gap:2px 0}.facts dd{margin-bottom:10px}}
+/* ---------- free tools: a working instrument on a brand band ---------- */
+.tool{background:var(--band,#14213a);color:var(--on-band,#f4f6fa);padding:clamp(64px,9vw,128px) 0;position:relative;overflow:hidden;isolation:isolate}
+.tool::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.5;
+  background:radial-gradient(60% 80% at 85% 0%,color-mix(in oklab,var(--accent-on-band,#fff) 22%,transparent),transparent 70%),
+             radial-gradient(50% 60% at 0% 100%,color-mix(in oklab,var(--on-band,#fff) 10%,transparent),transparent 70%)}
+.tool-h{max-width:760px}
+.tool-h h1,.tool-h h2{font-size:clamp(2rem,4.6vw,3.6rem);line-height:1.02;letter-spacing:var(--h1t,-.03em);color:inherit}
+.tool-h .lead{margin-top:16px;color:var(--on-band-2,#c5cddc);font-size:1.12rem;max-width:62ch}
+.t-badge{display:inline-block;margin-bottom:18px;padding:6px 12px;border:1px solid var(--band-line,rgba(255,255,255,.25));border-radius:999px;font-size:.85rem;color:var(--accent-on-band,#fff)}
+.tool-box{margin-top:36px;background:var(--sheet,#fff);color:var(--ink,#111);border-radius:calc(var(--radius,4px) + 10px);padding:clamp(18px,3vw,36px);
+  box-shadow:0 1px 0 rgba(255,255,255,.08) inset,0 40px 80px -40px rgba(0,0,0,.65),0 0 0 1px var(--band-line,rgba(255,255,255,.12))}
+.tool-box label{display:block;font-weight:700;font-size:.95rem}
+.tool-box textarea,.tool-box input[type=search],.tool-box input[type=number]{display:block;width:100%;margin-top:8px;padding:12px 14px;border:1.5px solid var(--line);border-radius:var(--radius,4px);
+  background:var(--paper,#fafafa);color:inherit;font:400 1rem/1.5 var(--fu,inherit);resize:vertical;transition:border-color .15s,box-shadow .15s}
+.tool-box textarea:focus,.tool-box input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in oklab,var(--accent) 22%,transparent)}
+.t-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:18px}
+.t-grid.t-4{grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr))}
+.t-score{margin:22px 0 6px;font-size:1.05rem}.t-score .num{font-size:2.4rem;line-height:1;margin-right:8px;vertical-align:-4px}
+.t-score[data-level=ok] .num,.t-verdict[data-level=ok] strong{color:#137a43}.t-score[data-level=mid] .num,.t-verdict[data-level=mid] strong{color:#a56300}.t-score[data-level=bad] .num,.t-verdict[data-level=bad] strong{color:#b3261e}
+.t-list{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:8px}
+.t-list li{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border-radius:var(--radius,4px);background:var(--paper,#f6f6f6);line-height:1.45;animation:t-in .35s ease both}
+.t-list li:nth-child(2){animation-delay:.04s}.t-list li:nth-child(3){animation-delay:.08s}.t-list li:nth-child(4){animation-delay:.12s}.t-list li:nth-child(5){animation-delay:.16s}.t-list li:nth-child(6){animation-delay:.2s}
+.t-ic{flex:0 0 26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.85rem;color:#fff;background:#137a43}
+.t-bad .t-ic{background:#b3261e}.t-info .t-ic{background:#5b6475}.t-bad{box-shadow:inset 3px 0 0 #b3261e}
+@keyframes t-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.t-file{margin-top:22px;padding:16px;border:1.5px dashed var(--line);border-radius:var(--radius,4px);font-weight:600}
+.t-file input{display:block;margin-top:10px}
+.t-scroll{max-height:360px;overflow:auto;margin-top:12px;border:1px solid var(--line);border-radius:var(--radius,4px)}
+.t-table{width:100%;border-collapse:collapse;font-size:.92rem}.t-table th,.t-table td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.t-table th{position:sticky;top:0;background:var(--sheet,#fff)}
+.t-row{display:flex;gap:10px;margin-top:8px}.t-row input{margin-top:0!important;flex:1}
+.t-status{margin-top:14px;color:var(--muted)}
+.t-hit{border:1px solid var(--line);border-radius:var(--radius,4px);padding:0;margin-top:10px;background:var(--paper,#fafafa)}
+.t-hit summary{padding:14px 16px;cursor:pointer}.t-hit[open] summary{border-bottom:1px solid var(--line)}
+.t-card{padding:18px 18px 8px}.t-card header h3{font-size:1.3rem}.t-card header p{margin:2px 0 14px;color:var(--muted)}
+.t-warn{padding:12px 14px;border-radius:var(--radius,4px);background:#fdecea;color:#8a1c14;font-weight:700;margin:0 0 14px}
+.t-sig{margin-top:14px;padding:10px 12px;border-left:3px solid var(--accent);background:color-mix(in oklab,var(--accent) 7%,transparent)}
+.t-src{font-size:.88rem;color:var(--muted);margin-top:12px}.t-mute{color:var(--muted);font-weight:400}
+.t-qs{border:0;padding:0;margin:22px 0 0}.t-qs legend{font-weight:700;margin-bottom:8px}
+.t-check{display:flex!important;gap:10px;align-items:flex-start;font-weight:400!important;padding:8px 0}.t-check input{width:20px;height:20px;accent-color:var(--accent);flex:0 0 auto;margin-top:2px}
+.t-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:14px;margin-top:22px}
+.t-kpis div{padding:18px;border-radius:var(--radius,4px);background:var(--paper,#f6f6f6)}
+.t-kpis .num{display:block;font-size:clamp(1.6rem,3vw,2.3rem);line-height:1.05;font-weight:800}.t-kpis small{display:block;margin-top:6px;color:var(--muted)}
+.t-verdict{margin-top:16px;font-size:1.05rem}
+.t-cta{margin-top:28px}.t-cta .btn{--btn-bg:var(--accent-on-band,#fff);--btn-ink:var(--band,#111);background:var(--accent-on-band,#fff);color:var(--band,#111);border-color:transparent;white-space:normal;text-align:left}
+.t-more{margin-top:14px}.t-more a{color:var(--on-band,#fff);text-underline-offset:4px}
+.t-opts fieldset{border:0;padding:0;margin:0}.t-opts legend{font-weight:700;margin-bottom:10px}
+.t-opt{display:flex!important;gap:12px;align-items:center;padding:14px 16px;margin-top:8px;border:1.5px solid var(--line);border-radius:var(--radius,4px);cursor:pointer;font-weight:600!important;transition:border-color .15s,background .15s}
+.t-opt:hover{border-color:var(--accent)}.t-opt:has(input:checked){border-color:var(--accent);background:color-mix(in oklab,var(--accent) 8%,transparent)}
+.t-opt input{width:20px;height:20px;accent-color:var(--accent)}
+.t-pick{margin-top:18px;font-size:1.1rem}.tool-box .cta .btn.ghost{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){.t-list li{animation:none}}
+@media (max-width:560px){.t-row{flex-direction:column}.t-row .btn{width:100%}}
