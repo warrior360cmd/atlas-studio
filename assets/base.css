@@ -117,3 +117,12 @@ legend{font-weight:700;padding:0}
 .film figcaption{margin-top:12px;font-size:.95rem;color:var(--muted,inherit);max-width:70ch}
 .house-film{margin-bottom:clamp(32px,4vw,56px)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+.crumbs{font-size:.9rem;padding-top:24px;opacity:.8}.crumbs a{text-decoration:underline;text-underline-offset:3px}
+.guide{max-width:760px}.guide h1{font-size:clamp(1.9rem,4.2vw,2.8rem);line-height:1.1}.guide .lead{margin:14px 0 8px;font-size:1.1rem}
+.guide p,.guide li{line-height:1.65}.guide p{margin-top:1em}.guide ul,.guide ol{padding-left:1.25em;margin:12px 0}.guide li+li{margin-top:6px}
+.guide a{text-decoration:underline;text-underline-offset:3px}.guide .btn{text-decoration:none}
+.guide-cta{margin-top:40px;padding-top:20px;border-top:1px solid currentColor}.guide-rel h2{font-size:1.15rem;margin-top:28px}
+.guide-list{list-style:none;padding:0;margin:24px 0 72px;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr))}
+.guide-list a{display:block;height:100%;padding:18px 20px;background:var(--sheet,#fff);color:var(--sheet-ink,#111);border-radius:var(--radius,0);box-shadow:var(--sheet-shadow,0 18px 40px -28px rgba(0,0,0,.45));text-decoration:none}
+.guide-list strong{display:block;font-size:1.05rem;margin-bottom:6px}.guide-list span{font-size:.95rem;opacity:.85}
+.guide-list a:hover strong,.guide-list a:focus-visible strong{text-decoration:underline}
