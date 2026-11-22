@@ -59,6 +59,7 @@ if (brief) {
       if (s === 201 && j.token) {
         sessionStorage.removeItem(key);
         const link = new URL(brief.dataset.dossier, location.href).href + "#ref=" + encodeURIComponent(j.ref) + "&t=" + encodeURIComponent(j.token);
+        try { localStorage.setItem("atlas-ref", j.ref); localStorage.setItem("atlas-t", j.token); } catch {}  // returning client finds the dossier without the link
         brief.hidden = true;
         show(st, "ok", `<p><strong>${esc(T.saved)} ${esc(j.ref)}.</strong></p><p>${esc(T.keep)}</p><div class=secret id=lnk>${esc(link)}</div>
           <p class=cta><button class="btn ghost" type=button id=cp>${esc(T.copy)}</button><a class="btn primary" href="${esc(link)}">${esc(T.open)}</a></p>`);
@@ -86,7 +87,8 @@ if (sup) sup.addEventListener("submit", async (ev) => {
 const dos = $("#dossier");
 if (dos) {
   const h = new URLSearchParams(location.hash.slice(1));
-  const ref = h.get("ref") || sessionStorage.getItem("atlas-ref"), tok = h.get("t") || sessionStorage.getItem("atlas-t");
+  const ls = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
+  const ref = h.get("ref") || sessionStorage.getItem("atlas-ref") || ls("atlas-ref"), tok = h.get("t") || sessionStorage.getItem("atlas-t") || ls("atlas-t");
   if (h.get("ref")) { sessionStorage.setItem("atlas-ref", ref); sessionStorage.setItem("atlas-t", tok); }
   const H = { "x-dossier-token": tok || "" };
   const fmt = (c, cur) => new Intl.NumberFormat(L, { style: "currency", currency: (cur || "usd").toUpperCase() }).format(c / 100);
