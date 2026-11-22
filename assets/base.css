@@ -192,3 +192,14 @@ legend{font-weight:700;padding:0}
 @media (prefers-reduced-motion:reduce){.t-list li{animation:none}}
 @media (max-width:560px){.t-row{flex-direction:column}.t-row .btn{width:100%}}
 @media (prefers-reduced-motion:no-preference){.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}.js .reveal.in{opacity:1;transform:none}}
+/* tenders list (Soumissio tool + digest) */
+.t-tenders{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px}
+.t-tenders li{display:flex;gap:16px;align-items:flex-start;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius,6px);background:var(--paper,#fafafa)}
+.t-due{flex:0 0 74px;text-align:center;padding:8px 6px;border-radius:8px;background:#e8f4ec;color:#0f5d33}
+.t-due strong{display:block;font-size:1.15rem}.t-due small{display:block;font-size:.72rem;opacity:.85}
+.t-due[data-level=mid]{background:#fdf1dc;color:#7a4a00}.t-due[data-level=bad]{background:#fdecea;color:#8a1c14}
+.t-tbody{min-width:0}.t-tbody a{font-weight:700;text-underline-offset:3px;overflow-wrap:anywhere}.t-tbody small{display:block;margin-top:4px;color:var(--muted)}
+.t-rank{padding-left:1.4em;display:grid;gap:6px;margin:10px 0}.t-rank li{display:flex;justify-content:space-between;gap:14px;padding:8px 12px;background:var(--paper,#f6f6f6);border-radius:6px}
+.t-h3{margin-top:22px;font-size:1.15rem}.t-modes{border:0;padding:0;margin:14px 0 0;display:flex;gap:10px;flex-wrap:wrap}.t-modes .t-opt{margin-top:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.tool-film{margin-top:48px;max-width:900px}.tool-film figcaption{color:var(--on-band-2,#ddd);margin-top:10px;font-size:.92rem}

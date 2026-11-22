@@ -175,6 +175,53 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     cv.addEventListener("input", debounce(run, 350)); job.addEventListener("input", debounce(run, 350)); run();
   }
 
+  // ---------- Soumissio: public tenders (BOAMP open data, live) ----------
+  const BOAMP = "https://boamp-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/boamp/records";
+  const qstr = (s) => String(s).replace(/["\\]/g, " ").trim();
+  function csvDownload(name, rows) {
+    const c = rows.map((r) => r.map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`).join(";")).join("\n");
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["\ufeff" + c], { type: "text/csv;charset=utf-8" }));
+    a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+  function soumissio(root) {
+    const form = $("form", root), list = $(".t-res", root), st = $(".t-status", root);
+    let last = [];
+    form.addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      const q = qstr(form.q.value), dep = form.dep.value.trim().toUpperCase(), mode = form.mode.value;
+      if (q.length < 3) { st.textContent = tr("Saisissez au moins 3 caractères.", "Type at least 3 characters."); return; }
+      if (dep && !/^(\d{1,3}|2A|2B)$/.test(dep)) { st.textContent = tr("Département : un numéro comme 69, 2A ou 974.", "Département: a number like 69, 2A or 974."); return; }
+      const where = [`search(objet, "${q}")`]; if (dep) where.push(`code_departement="${dep.replace(/^0(?=\d$)/, "")}"`);
+      if (mode === "open") where.push("datelimitereponse>now()"); else where.push("titulaire is not null", "dateparution>=now(months=-12)");
+      const p = new URLSearchParams({ limit: mode === "open" ? "50" : "100", where: where.join(" and "), order_by: mode === "open" ? "datelimitereponse asc" : "dateparution desc" });
+      st.textContent = tr("Recherche dans le BOAMP…", "Searching BOAMP…"); list.innerHTML = "";
+      try {
+        const r = await fetch(`${BOAMP}?${p}`); if (!r.ok) throw new Error(String(r.status));
+        const d = await r.json(); last = d.results || [];
+        const today = new Date().toLocaleDateString(FR ? "fr-FR" : "en-GB");
+        if (!last.length) { st.textContent = tr("Aucune annonce trouvée. Essayez un mot plus général.", "No notice found. Try a broader word."); return; }
+        const csvBtn = `<p class="cta"><button class="btn ghost" type="button" data-csv>${tr("Exporter en CSV", "Export as CSV")}</button></p>`;
+        if (mode === "open") {
+          st.textContent = tr(`${d.total_count} appel(s) d'offres ouvert(s) — source BOAMP, consulté le ${today}.`, `${d.total_count} open tender(s) — source BOAMP, retrieved ${today}.`);
+          list.innerHTML = csvBtn + `<ul class="t-tenders">${last.map((x) => {
+            const days = Math.ceil((new Date(x.datelimitereponse) - Date.now()) / 864e5);
+            const lvl = days <= 7 ? "bad" : days <= 14 ? "mid" : "ok";
+            return `<li><span class="t-due" data-level="${lvl}"><strong class="num">J-${days}</strong><small>${esc(new Date(x.datelimitereponse).toLocaleDateString(FR ? "fr-FR" : "en-GB"))}</small></span>
+<span class="t-tbody"><a href="${esc(x.url_avis)}" rel="noopener" target="_blank">${esc(x.objet)}</a><small>${esc(x.nomacheteur)} · ${tr("dép.", "dept")} ${esc((x.code_departement || []).join(", "))} · ${esc(x.procedure_libelle || x.type_procedure || "")} · ${esc((x.type_marche || []).join(", "))}</small></span></li>`; }).join("")}</ul>`;
+        } else {
+          const count = {}; last.forEach((x) => [...new Set(x.titulaire || [])].forEach((t) => { const k = t.trim().toUpperCase(); if (k) count[k] = (count[k] || 0) + 1; }));
+          const top = Object.entries(count).sort((a, b) => b[1] - a[1]).slice(0, 12);
+          st.textContent = tr(`${d.total_count} marché(s) attribué(s) sur 12 mois — analyse des ${last.length} plus récents, source BOAMP, consulté le ${today}.`, `${d.total_count} awarded contract(s) over 12 months — the latest ${last.length} analysed, source BOAMP, retrieved ${today}.`);
+          list.innerHTML = csvBtn + `<h3 class="t-h3">${tr("Qui remporte ces marchés", "Who wins these contracts")}</h3><ol class="t-rank">${top.map(([n, c]) => `<li><span>${esc(n)}</span><strong class="num">${c}</strong></li>`).join("")}</ol>
+<h3 class="t-h3">${tr("Derniers résultats", "Latest awards")}</h3><ul class="t-tenders">${last.slice(0, 15).map((x) => `<li><span class="t-tbody"><a href="${esc(x.url_avis)}" rel="noopener" target="_blank">${esc(x.objet)}</a><small>${esc(x.nomacheteur)} · ${esc(x.dateparution)} · ${tr("titulaire(s)", "winner(s)")} : ${esc([...new Set(x.titulaire || [])].join(", "))}</small></span></li>`).join("")}</ul>`;
+        }
+        $("[data-csv]", list).addEventListener("click", () => csvDownload(`boamp-${mode}-${q.slice(0, 20).replace(/\W+/g, "-")}.csv`,
+          [["idweb", "objet", "acheteur", "departements", "parution", "date_limite", "procedure", "titulaires", "lien"],
+           ...last.map((x) => [x.idweb, x.objet, x.nomacheteur, (x.code_departement || []).join(" "), x.dateparution, x.datelimitereponse || "", x.procedure_libelle || "", [...new Set(x.titulaire || [])].join(" | "), x.url_avis])]));
+      } catch { st.textContent = tr("BOAMP momentanément indisponible. Réessayez dans un instant.", "BOAMP temporarily unavailable. Please retry in a moment."); }
+    });
+  }
+
   // ---------- Hub: which service fits ----------
   function hub(root) {
     const f = $("form", root), res = $(".t-res", root), map = JSON.parse(root.dataset.map || "{}");
@@ -184,6 +231,6 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     });
   }
 
-  if (DOC) { const RUN = { localoom, signaldesk, flowpatch, careerlift, hub }; document.querySelectorAll("[data-tool]").forEach((el) => RUN[el.dataset.tool]?.(el)); }
+  if (DOC) { const RUN = { localoom, signaldesk, flowpatch, careerlift, soumissio, hub }; document.querySelectorAll("[data-tool]").forEach((el) => RUN[el.dataset.tool]?.(el)); }
   if (typeof module !== "undefined") module.exports = { checkPair, nums, csvParse, words };  // node self-test only
 })();
