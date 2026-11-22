@@ -91,7 +91,10 @@ if (dos) {
   const ref = h.get("ref") || sessionStorage.getItem("atlas-ref") || ls("atlas-ref"), tok = h.get("t") || sessionStorage.getItem("atlas-t") || ls("atlas-t");
   if (h.get("ref")) { sessionStorage.setItem("atlas-ref", ref); sessionStorage.setItem("atlas-t", tok); }
   const H = { "x-dossier-token": tok || "" };
-  const fmt = (c, cur) => new Intl.NumberFormat(L, { style: "currency", currency: (cur || "usd").toUpperCase() }).format(c / 100);
+  const fmt = (c, cur) => {  // same style as the published prices: "180 USD" (fr) / "USD 180" (en)
+    const n = new Intl.NumberFormat(L, { minimumFractionDigits: c % 100 ? 2 : 0, maximumFractionDigits: 2 }).format(c / 100), k = (cur || "usd").toUpperCase();
+    return L === "fr" ? `${n} ${k}` : `${k} ${n}`;
+  };
   async function load() {
     if (!ref || !tok) return show($("#dossier-status"), "bad", esc(T.notfound));
     let r; try { r = await fetch(`${API}/dossier?ref=${encodeURIComponent(ref)}`, { headers: H }); } catch { return show($("#dossier-status"), "bad", esc(T.net)); }
