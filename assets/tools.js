@@ -441,6 +441,19 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     });
   }
 
+  // ---------- Hub: live pulse from official open data ----------
+  function pulse(root) {
+    const fmt = new Intl.NumberFormat(FR ? "fr-FR" : "en-GB"), still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const set = (k, v) => { const el = $(`[data-k=${k}]`, root); if (!el) return; if (v == null) { el.textContent = "—"; return; }
+      if (still) { el.textContent = fmt.format(v); return; } const t0 = performance.now();
+      const step = (t) => { const p = Math.min(1, (t - t0) / 900); el.textContent = fmt.format(Math.round(v * (1 - Math.pow(1 - p, 3)))); if (p < 1) requestAnimationFrame(step); }; requestAnimationFrame(step); };
+    const count = async (url) => { try { const r = await fetch(url); return r.ok ? (await r.json()).total_count : null; } catch { return null; } };
+    const since = new Date(Date.now() - 7 * 864e5).toISOString().slice(0, 10);
+    count(`${BOAMP}?limit=0&where=${encodeURIComponent("datelimitereponse>now()")}`).then((v) => set("tenders", v));
+    count(`${BODACC}?limit=0&where=${encodeURIComponent(`familleavis="collective" and dateparution>=date'${since}'`)}`).then((v) => set("judg", v));
+    set("einv", Math.max(0, Math.ceil((Date.parse("2027-09-01") - Date.now()) / 864e5)));
+  }
+
   // ---------- Hub: which service fits ----------
   function hub(root) {
     const f = $("form", root), res = $(".t-res", root), map = JSON.parse(root.dataset.map || "{}");
@@ -450,6 +463,6 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     });
   }
 
-  if (DOC) { const RUN = { localoom, signaldesk, flowpatch, careerlift, soumissio, solvaro, factelio, hub }; document.querySelectorAll("[data-tool]").forEach((el) => RUN[el.dataset.tool]?.(el)); }
+  if (DOC) { const RUN = { localoom, signaldesk, flowpatch, careerlift, soumissio, solvaro, factelio, pulse, hub }; document.querySelectorAll("[data-tool]").forEach((el) => RUN[el.dataset.tool]?.(el)); }
   if (typeof module !== "undefined") module.exports = { checkPair, nums, csvParse, words, riskOf, invoiceFields, invoiceChecks, xmlFromPdf, sirenOk, vatFor, DEMO };  // node self-test only
 })();
