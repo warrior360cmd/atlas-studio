@@ -107,6 +107,7 @@ if (dos) {
     $("#d-next").textContent = d.next_step || "";
     $("#d-amount").textContent = d.amount_due ? fmt(d.amount_due.amount_cents, d.amount_due.currency) + (d.status === "quoted" || d.status === "paid" ? "" : " " + T.indic) : "—";
     const pay = $("#d-pay"); pay.disabled = !d.payable; $("#d-paynote").textContent = d.payable ? "" : T.paydis;
+    if (d.payable && d.amount_due) { T.pay = `${T.pay.replace(/ ·.*$/, "")} · ${fmt(d.amount_due.amount_cents, d.amount_due.currency)}`; pay.textContent = T.pay; }  // the main action states its amount
     const when = (iso) => new Intl.DateTimeFormat(L, { dateStyle: "medium", timeStyle: "short" }).format(new Date(iso));
     $("#d-events").innerHTML = d.events.map((e) => `<li><time datetime="${esc(e.created_at)}">${esc(when(e.created_at))}</time>${esc(e.kind === "status" ? (T.states[e.body] || e.body) : e.body)}</li>`).join("");
     const STEP = { received: 0, qualified: 0, quoted: 1, paid: 2, in_production: 3, in_review: 4, correction: 4, delivered: 5, closed: 5 };

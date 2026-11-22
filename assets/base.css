@@ -320,3 +320,10 @@ summary:focus-visible{outline:3px solid var(--focus,#2556c4);outline-offset:4px;
 .status{border:1px solid var(--line);border-radius:max(16px,var(--radius,0px));padding:clamp(22px,3vw,32px);box-shadow:0 1px 2px rgba(0,0,0,.04),0 24px 48px -32px rgba(0,0,0,.3);margin-bottom:clamp(48px,6vw,88px)}
 .status .cta{margin-top:20px}
 .sheet{border-radius:max(16px,var(--radius,0px))}
+/* the pay button is the main action of the dossier */
+#d-pay{--h:58px;min-width:min(100%,320px);font-size:1.06rem;padding:0 30px}
+#d-pay:not([disabled])::before{content:"";flex:0 0 18px;height:18px;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Crect x='3.5' y='8' width='11' height='7.5' rx='1.8' fill='none' stroke='black' stroke-width='1.7'/%3E%3Cpath d='M6 8V6a3 3 0 0 1 6 0v2' fill='none' stroke='black' stroke-width='1.7'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Crect x='3.5' y='8' width='11' height='7.5' rx='1.8' fill='none' stroke='black' stroke-width='1.7'/%3E%3Cpath d='M6 8V6a3 3 0 0 1 6 0v2' fill='none' stroke='black' stroke-width='1.7'/%3E%3C/svg%3E") center/contain no-repeat}
+#d-paynote{margin-top:10px;font-size:.92rem;color:var(--muted)}
+.k-inner .sheet{max-width:880px}
