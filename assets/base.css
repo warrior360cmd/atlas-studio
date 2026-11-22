@@ -255,3 +255,68 @@ a.btn:hover::after{transform:translateX(3px)}
 @media (prefers-reduced-motion:reduce){.site-h nav a:not(.btn){transition:none}}
 .t-due{flex:0 0 auto;min-width:74px;padding:8px 12px;white-space:nowrap}
 @media (max-width:640px){.site-h nav a:not(.btn):not([hreflang]){display:none}.site-h nav a{white-space:nowrap}.site-h nav{gap:14px;align-items:center}}
+/* ===== Controls v5 (22/11/2026): every field, choice, file picker and disclosure on every site ===== */
+:root{--ctl-line:color-mix(in srgb,var(--ink,#111) 22%,transparent);--ctl-line-h:color-mix(in srgb,var(--ink,#111) 42%,transparent);--ctl-on:var(--band,var(--ink,#111));--ctl-r:max(10px,var(--radius,0px))}
+/* text fields */
+:is(.form,.tool-box,.t-search,.t-cal) :is(input[type=text],input[type=email],input[type=search],input[type=number],input[type=tel],input[type=url],input:not([type]),textarea,select){
+  display:block;width:100%;min-height:52px;margin:0;padding:13px 16px;border:1px solid var(--ctl-line);border-radius:var(--ctl-r);background:var(--field,#fff);color:var(--field-ink,var(--ink));
+  font:400 1rem/1.45 var(--fu);box-shadow:inset 0 1px 2px rgba(0,0,0,.05);transition:border-color .15s,box-shadow .15s,background-color .15s;-webkit-appearance:none;appearance:none}
+:is(.form,.tool-box,.t-search,.t-cal) :is(input,textarea,select):hover{border-color:var(--ctl-line-h)}
+:is(.form,.tool-box,.t-search,.t-cal) :is(input,textarea,select):focus{outline:none;border-color:var(--ctl-on);box-shadow:0 0 0 4px color-mix(in srgb,var(--ctl-on) 20%,transparent)}
+:is(.form,.tool-box,.t-search,.t-cal) textarea{min-height:132px;resize:vertical}
+:is(.form,.tool-box) ::placeholder{color:color-mix(in srgb,var(--ink,#111) 42%,transparent)}
+:is(.form,.tool-box,.t-search,.t-cal) select:not([multiple]){padding-right:46px;cursor:pointer;background-repeat:no-repeat;background-position:right 16px center;background-size:14px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M3 5l4 4 4-4' fill='none' stroke='%23555' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.form [aria-invalid=true]{border-color:#b3261e!important;box-shadow:0 0 0 4px rgba(179,38,30,.14)!important}
+/* labels: air between fields */
+.form{gap:0}
+.form label:not(.pick):not(.radio):not(.t-check):not(.t-opt){display:block;margin:22px 0 8px;font:650 .95rem/1.35 var(--fu)}
+.form .req-note{font-size:.9rem;color:var(--muted)}
+.form .btn[type=submit]{margin-top:30px;min-width:min(100%,260px)}
+/* checkboxes + radios */
+:is(input[type=checkbox],input[type=radio]){-webkit-appearance:none;appearance:none;flex:0 0 22px;width:22px!important;height:22px!important;margin:0;display:inline-grid;place-content:center;
+  border:1.5px solid var(--ctl-line-h);background:var(--field,#fff);cursor:pointer;vertical-align:-5px;transition:background-color .15s,border-color .15s,box-shadow .15s}
+input[type=checkbox]{border-radius:6px}input[type=radio]{border-radius:50%}
+input[type=checkbox]::before{content:"";width:13px;height:13px;background:#fff;transform:scale(0);transition:transform .15s cubic-bezier(.2,.8,.2,1);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2.5 7.5l3 3 6-7' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M2.5 7.5l3 3 6-7' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+input[type=radio]::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--ctl-on);transform:scale(0);transition:transform .15s cubic-bezier(.2,.8,.2,1)}
+input[type=checkbox]:checked{background:var(--ctl-on);border-color:var(--ctl-on)}input[type=radio]:checked{border-color:var(--ctl-on);border-width:2px}
+:is(input[type=checkbox],input[type=radio]):checked::before{transform:scale(1)}
+:is(input[type=checkbox],input[type=radio]):hover{border-color:var(--ctl-on)}
+:is(input[type=checkbox],input[type=radio]):focus-visible{outline:none;box-shadow:0 0 0 4px color-mix(in srgb,var(--ctl-on) 25%,transparent)}
+.radio,.t-check{display:flex!important;gap:12px;align-items:flex-start;cursor:pointer}.radio input,.t-check input{margin-top:1px}
+/* option cards: offers in the brief, tool modes, hub chooser */
+.form .pick,.tool-box .t-opt{border:1.5px solid var(--ctl-line);border-radius:max(12px,var(--radius,0px));background:var(--field,#fff);box-shadow:0 1px 2px rgba(0,0,0,.04);
+  transition:border-color .15s,box-shadow .2s,transform .2s cubic-bezier(.2,.8,.2,1),background-color .15s}
+.form .pick:hover,.tool-box .t-opt:hover{border-color:var(--ctl-line-h);transform:translateY(-1px);box-shadow:0 10px 24px -16px rgba(0,0,0,.35)}
+.form .pick:has(input:checked),.tool-box .t-opt:has(input:checked){border-color:var(--ctl-on);background:color-mix(in srgb,var(--ctl-on) 6%,var(--field,#fff));
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--ctl-on) 16%,transparent),0 12px 28px -18px rgba(0,0,0,.4)}
+.form .pick .pk-p{color:var(--ink)}
+/* file pickers: dropzone + real button */
+input[type=file]{font:500 .95rem/1.4 var(--fu);color:var(--muted);max-width:100%}
+input[type=file]::file-selector-button{margin-right:14px;min-height:44px;padding:0 18px;border:0;border-radius:max(10px,var(--radius,0px));background:var(--btn-bg,var(--ink));color:var(--btn-ink,#fff);
+  font:650 .92rem/1 var(--fu);cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 6px 14px -10px rgba(0,0,0,.5);transition:filter .15s}
+input[type=file]::file-selector-button:hover{filter:brightness(1.12)}
+.form input[type=file]{width:100%;min-height:0;padding:18px;border:1.5px dashed var(--ctl-line-h);border-radius:var(--ctl-r);background:color-mix(in srgb,var(--ink,#111) 3%,var(--field,#fff))}
+.t-file{border:1.5px dashed var(--ctl-line-h);border-radius:var(--ctl-r);padding:20px;background:color-mix(in srgb,var(--ink,#111) 3%,var(--field,#fff));transition:border-color .15s,background-color .15s}
+.t-file:hover,.t-file:focus-within{border-color:var(--ctl-on);background:color-mix(in srgb,var(--ctl-on) 5%,var(--field,#fff))}
+.t-file input{margin-top:12px}
+/* disclosures (FAQ, judgment excerpts, brief recap) */
+details>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:"";flex:0 0 14px;height:14px;background:currentColor;opacity:.7;transition:transform .25s cubic-bezier(.2,.8,.2,1);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M7 1.5v11M1.5 7h11' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat;
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M7 1.5v11M1.5 7h11' stroke='black' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") center/contain no-repeat}
+details[open]>summary::after{transform:rotate(45deg)}
+.blk details,.hub-faq details,.closing details{border-bottom:1px solid var(--line);padding:2px 0}
+.blk details>summary,.hub-faq details>summary{padding:18px 0;font:650 1.05rem/1.35 var(--fu)}
+.blk details>summary:hover{color:var(--ctl-on)}
+.blk details[open]>p{padding:0 0 18px;color:var(--muted);max-width:68ch}
+summary:focus-visible{outline:3px solid var(--focus,#2556c4);outline-offset:4px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){:is(input[type=checkbox],input[type=radio])::before,details>summary::after,.form .pick,.tool-box .t-opt{transition:none}}
+@media (forced-colors:active){:is(input[type=checkbox],input[type=radio]){appearance:auto;-webkit-appearance:auto}}
+/* dossier / status boxes: soft card instead of hard 2px frame */
+.status{border:1px solid var(--line);border-radius:max(16px,var(--radius,0px));padding:clamp(22px,3vw,32px);box-shadow:0 1px 2px rgba(0,0,0,.04),0 24px 48px -32px rgba(0,0,0,.3);margin-bottom:clamp(48px,6vw,88px)}
+.status .cta{margin-top:20px}
+.sheet{border-radius:max(16px,var(--radius,0px))}
