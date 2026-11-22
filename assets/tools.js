@@ -246,6 +246,82 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     });
   }
 
+  // ---------- Solvaro: client credit risk (BODACC open data + company register, live) ----------
+  const BODACC = "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records";
+  const jparse = (v) => { if (!v) return {}; if (typeof v === "object") return v; try { return JSON.parse(v); } catch { return {}; } };
+  const addMonths = (iso, n) => { const [y, m, d] = iso.split("-").map(Number); return new Date(Date.UTC(y, m - 1 + n, d)); };
+  const dfmt = (dt) => new Date(dt).toLocaleDateString(FR ? "fr-FR" : "en-GB", { timeZone: "UTC" });
+  // Written rules, no AI: the newest official notice wins. Returns {level: bad|mid|ok, why, deadline?, days?, url?}
+  const U = (u) => (/^https:\/\/www\.bodacc\.fr\//.test(u || "") ? u : "");  // only official links reach href
+  function riskOf(recs, now = Date.now(), closed = false) {
+    const by = (f) => recs.filter((r) => r.familleavis === f).sort((a, b) => (a.dateparution < b.dateparution ? 1 : -1));
+    const col = by("collective")[0], rad = by("radiation")[0], dpc = by("dpc")[0];
+    const age = (r) => (now - Date.parse(r.dateparution)) / 864e5;
+    if (rad && (!col || rad.dateparution >= col.dateparution)) return { level: "bad", why: tr(`Radiée du registre (BODACC du ${dfmt(rad.dateparution)})`, `Deregistered (BODACC ${dfmt(rad.dateparution)})`), url: U(rad.url_complete) };
+    if (col && age(col) < 3 * 365) {
+      const j = jparse(col.jugement), nat = j.nature || j.famille || col.familleavis_lib || "";
+      const out = { level: /sauvegarde/i.test(nat) && !/liquidation|redressement/i.test(nat) ? "mid" : "bad", why: nat, url: U(col.url_complete), detail: String(j.complementJugement || "").slice(0, 260), court: col.tribunal };
+      if (/ouverture/i.test(`${j.famille} ${nat}`)) { const dl = addMonths(col.dateparution, 2); out.deadline = dl; out.days = Math.ceil((dl - now) / 864e5); }
+      return out;
+    }
+    if (closed) return { level: "bad", why: tr("Fermée au registre des entreprises", "Closed in the company register") };
+    if (col) return { level: "mid", why: tr(`Procédure collective ancienne (${col.dateparution.slice(0, 4)})`, `Older insolvency proceeding (${col.dateparution.slice(0, 4)})`), url: U(col.url_complete) };
+    if (dpc && age(dpc) > 2 * 365) return { level: "mid", why: tr(`Aucuns comptes publiés depuis le ${dfmt(dpc.dateparution)}`, `No accounts published since ${dfmt(dpc.dateparution)}`), url: U(dpc.url_complete) };
+    const cl = dpc && jparse(dpc.depot).dateCloture;
+    return { level: "ok", why: dpc ? tr(`Aucune procédure · comptes${cl ? ` clos le ${dfmt(cl)}` : ""} publiés`, `No proceeding · accounts${cl ? ` closed ${dfmt(cl)}` : ""} published`) : tr("Aucune procédure publiée au BODACC", "No proceeding published in BODACC") };
+  }
+  const LV = { bad: tr("Rouge", "Red"), mid: tr("Orange", "Amber"), ok: tr("Vert", "Green") };
+  function solvaro(root) {
+    const form = $("form", root), list = $(".t-res", root), st = $(".t-status", root), mine = $(".t-mine", root), depL = $(".t-dep", root);
+    form.addEventListener("change", () => { const d = form.mode.value === "dep"; mine.hidden = d; depL.hidden = !d; });
+    const bod = async (where, limit) => {
+      const p = new URLSearchParams({ where, limit: String(limit), order_by: "dateparution desc", select: "dateparution,familleavis,familleavis_lib,jugement,tribunal,commercant,registre,ville,depot,url_complete" });
+      const r = await fetch(`${BODACC}?${p}`); if (!r.ok) throw new Error(String(r.status)); return (await r.json()).results || [];
+    };
+    const csvBtn = `<p class="cta"><button class="btn ghost" type="button" data-csv>${tr("Exporter en CSV", "Export as CSV")}</button></p>`;
+    const dl = (x) => x.deadline ? `<small class="t-dl" data-level="${x.days < 0 ? "ok" : x.days <= 15 ? "bad" : "mid"}">${x.days < 0 ? tr(`Délai de déclaration de créance dépassé le ${dfmt(x.deadline)}`, `Claim deadline passed on ${dfmt(x.deadline)}`) : tr(`Déclarer votre créance avant le ${dfmt(x.deadline)} — J-${x.days}`, `File your claim by ${dfmt(x.deadline)} — D-${x.days}`)}</small>` : "";
+    form.addEventListener("submit", async (ev) => {
+      ev.preventDefault(); list.innerHTML = ""; const today = dfmt(Date.now());
+      try {
+        if (form.mode.value === "dep") {
+          const dep = form.dep.value.trim().toUpperCase();
+          if (!/^(\d{2,3}|2A|2B)$/.test(dep)) { st.textContent = tr("Département : un numéro comme 69, 2A ou 974.", "Département: a number like 69, 2A or 974."); return; }
+          st.textContent = tr("Recherche dans le BODACC…", "Searching BODACC…");
+          const since = new Date(Date.now() - 30 * 864e5).toISOString().slice(0, 10);
+          const rows = await bod(`familleavis="collective" and numerodepartement="${dep}" and dateparution>=date'${since}'`, 60);
+          // Sole traders are people: their names are masked even though BODACC is public.
+          const items = rows.map((r) => {
+            const x = riskOf([r]); const ei = !r.registre || /\(EI\)|EIRL|entrepreneur individuel/i.test(r.commercant || "");
+            return { ...x, name: ei ? tr("Entrepreneur individuel (nom masqué)", "Sole trader (name hidden)") : r.commercant, siren: ei ? "" : String((r.registre || [""])[0]).replace(/\s/g, ""), city: r.ville, date: r.dateparution };
+          });
+          st.textContent = tr(`${items.length} jugement(s) publié(s) en 30 jours dans le ${dep} — source BODACC, consulté le ${today}.`, `${items.length} judgment(s) published in 30 days in ${dep} — source BODACC, retrieved ${today}.`);
+          if (!items.length) return;
+          list.innerHTML = csvBtn + `<ul class="t-tenders">${items.map((x) => `<li><span class="t-due" data-level="${x.level}"><strong>${esc(dfmt(x.date))}</strong></span><span class="t-tbody"><a href="${esc(x.url)}" rel="noopener" target="_blank">${esc(x.name)}</a><small>${esc(x.city || "")}${x.siren ? ` · SIREN ${esc(x.siren)}` : ""} · ${esc(x.why)}</small>${dl(x)}</span></li>`).join("")}</ul>`;
+          $("[data-csv]", list).addEventListener("click", () => csvDownload(`bodacc-${dep}.csv`, [["date", "entreprise", "siren", "ville", "jugement", "date_limite_creance", "lien"], ...items.map((x) => [x.date, x.name, x.siren, x.city, x.why, x.deadline ? x.deadline.toISOString().slice(0, 10) : "", x.url])]));
+          return;
+        }
+        const lines = form.list.value.split(/\n/).map((x) => x.trim()).filter((x) => x.length >= 3).slice(0, 20);
+        if (!lines.length) { st.textContent = tr("Collez au moins un nom ou un SIREN.", "Paste at least one name or SIREN."); return; }
+        const out = [];
+        for (const [i, q] of lines.entries()) {
+          st.textContent = tr(`Vérification ${i + 1}/${lines.length}…`, `Checking ${i + 1}/${lines.length}…`);
+          try {
+            const r = await fetch(`https://recherche-entreprises.api.gouv.fr/search?q=${encodeURIComponent(q)}&per_page=1`); const c = (await r.json()).results?.[0];
+            if (!c) { out.push({ q, name: tr("Introuvable au registre", "Not found in the register"), level: "mid", why: tr("Vérifiez le nom ou donnez le SIREN", "Check the name or give the SIREN") }); continue; }
+            const x = riskOf(await bod(`registre="${c.siren}"`, 40), Date.now(), c.etat_administratif !== "A");
+            out.push({ q, name: c.nom_complet, siren: c.siren, city: c.siege?.libelle_commune || "", ...x });
+          } catch { out.push({ q, name: q, level: "mid", why: tr("Source momentanément indisponible", "Source temporarily unavailable") }); }
+          await new Promise((r) => setTimeout(r, 160));
+        }
+        const n = (l) => out.filter((x) => x.level === l).length;
+        st.textContent = tr(`${out.length} client(s) : ${n("bad")} rouge, ${n("mid")} orange, ${n("ok")} vert — sources BODACC et registre, consulté le ${today}.`, `${out.length} client(s): ${n("bad")} red, ${n("mid")} amber, ${n("ok")} green — sources BODACC and register, retrieved ${today}.`);
+        out.sort((a, b) => "bad mid ok".indexOf(a.level) - "bad mid ok".indexOf(b.level));
+        list.innerHTML = csvBtn + `<ul class="t-tenders">${out.map((x) => `<li><span class="t-due" data-level="${x.level}"><strong>${LV[x.level]}</strong></span><span class="t-tbody">${x.url ? `<a href="${esc(x.url)}" rel="noopener" target="_blank">${esc(x.name)}</a>` : `<strong>${esc(x.name)}</strong>`}<small>${x.siren ? `SIREN ${esc(x.siren)} · ` : ""}${esc(x.city || "")}${x.court ? ` · ${esc(x.court)}` : ""}</small><em>${esc(x.why)}</em>${dl(x)}${x.detail ? `<details><summary>${tr("Extrait du jugement", "Judgment excerpt")}</summary><p>${esc(x.detail)}…</p></details>` : ""}</span></li>`).join("")}</ul>`;
+        $("[data-csv]", list).addEventListener("click", () => csvDownload("solvaro-controle-clients.csv", [["saisie", "entreprise", "siren", "niveau", "signal", "date_limite_creance", "lien"], ...out.map((x) => [x.q, x.name, x.siren || "", LV[x.level], x.why, x.deadline ? x.deadline.toISOString().slice(0, 10) : "", x.url || ""])]));
+      } catch { st.textContent = tr("BODACC momentanément indisponible. Réessayez dans un instant.", "BODACC temporarily unavailable. Please retry in a moment."); }
+    });
+  }
+
   // ---------- Hub: which service fits ----------
   function hub(root) {
     const f = $("form", root), res = $(".t-res", root), map = JSON.parse(root.dataset.map || "{}");
@@ -255,6 +331,6 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     });
   }
 
-  if (DOC) { const RUN = { localoom, signaldesk, flowpatch, careerlift, soumissio, hub }; document.querySelectorAll("[data-tool]").forEach((el) => RUN[el.dataset.tool]?.(el)); }
-  if (typeof module !== "undefined") module.exports = { checkPair, nums, csvParse, words };  // node self-test only
+  if (DOC) { const RUN = { localoom, signaldesk, flowpatch, careerlift, soumissio, solvaro, hub }; document.querySelectorAll("[data-tool]").forEach((el) => RUN[el.dataset.tool]?.(el)); }
+  if (typeof module !== "undefined") module.exports = { checkPair, nums, csvParse, words, riskOf };  // node self-test only
 })();

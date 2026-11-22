@@ -204,3 +204,7 @@ legend{font-weight:700;padding:0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .tool-film{margin-top:48px;max-width:900px}.tool-film figcaption{color:var(--on-band-2,#ddd);margin-top:10px;font-size:.92rem}
 .t-batch{margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}.t-bres{margin-top:12px}.t-optout td{background:#fdecea;color:#8a1c14;font-weight:600}
+/* Solvaro: claim deadline chip + judgment excerpt */
+.t-dl{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;font-weight:700;font-variant-numeric:tabular-nums;background:#fdf1dc;color:#7a4a00}
+.t-dl[data-level=bad]{background:#fdecea;color:#8a1c14}.t-dl[data-level=ok]{background:#eceeea;color:#4b5249}
+.t-tenders details{margin-top:6px}.t-tenders details p{font-size:.92rem;color:var(--muted);margin-top:4px}
