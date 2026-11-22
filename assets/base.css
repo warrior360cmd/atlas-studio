@@ -191,3 +191,4 @@ legend{font-weight:700;padding:0}
 .t-pick{margin-top:18px;font-size:1.1rem}.tool-box .cta .btn.ghost{color:var(--ink)}
 @media (prefers-reduced-motion:reduce){.t-list li{animation:none}}
 @media (max-width:560px){.t-row{flex-direction:column}.t-row .btn{width:100%}}
+@media (prefers-reduced-motion:no-preference){.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}.js .reveal.in{opacity:1;transform:none}}

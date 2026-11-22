@@ -162,3 +162,15 @@ document.querySelectorAll(".film").forEach((fig) => {
     else if (!v.paused) v.pause();
   }, { threshold: [0, 0.5] }).observe(fig);
 });
+
+// ---- premium layer: header depth on scroll + quiet reveals (skipped under reduced motion; content visible without JS) ----
+(() => {
+  const h = document.querySelector(".site-h");
+  if (h) { const on = () => h.classList.toggle("scrolled", scrollY > 8); addEventListener("scroll", on, { passive: true }); on(); }
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
+  const els = document.querySelectorAll(".sec-h, .tool-h, .plans, .seq, .trust li, .guide-list, .brands > li");
+  if (!els.length) return;
+  document.documentElement.classList.add("js");
+  const io = new IntersectionObserver((es) => es.forEach((x) => { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }), { rootMargin: "0px 0px -8% 0px" });
+  els.forEach((el, i) => { if (el.getBoundingClientRect().top > innerHeight) { el.classList.add("reveal"); el.style.transitionDelay = el.matches(".trust li, .brands > li") ? `${(i % 4) * 60}ms` : ""; io.observe(el); } });
+})();

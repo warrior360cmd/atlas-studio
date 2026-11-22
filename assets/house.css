@@ -160,3 +160,31 @@ html{scroll-padding-top:96px}
 .row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:0 18px}
 @media (max-width:860px){.brief-g{grid-template-columns:1fr}.brief-aside{position:static;padding:0}}
 @media (max-width:640px){.hero .cta,.closing .cta{display:grid;gap:12px}.hero .cta .btn,.closing .cta .btn{width:100%}}
+/* ---------- premium layer: trust strip, entrance, reveals, depth ---------- */
+.trust{background:var(--sheet,#fff);border-block:1px solid var(--line)}
+.trust ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.trust li{display:flex;gap:14px;align-items:flex-start;padding:26px clamp(12px,2vw,28px)}
+.trust li+li{border-left:1px solid var(--line)}
+.trust svg{flex:0 0 auto;color:var(--accent);margin-top:2px}
+.trust strong{display:block;font:var(--h2w,700) 1.02rem/1.25 var(--fd);color:var(--ink)}
+.trust small{display:block;margin-top:4px;color:var(--muted);font-size:.9rem;line-height:1.4}
+@media (max-width:900px){.trust ul{grid-template-columns:1fr 1fr}.trust li:nth-child(3){border-left:0}.trust li:nth-child(n+3){border-top:1px solid var(--line)}}
+@media (max-width:520px){.trust ul{grid-template-columns:1fr}.trust li+li{border-left:0;border-top:1px solid var(--line)}}
+.hero-o::after{content:"";position:absolute;inset:-20% -10% -20% 0;z-index:-1;pointer-events:none;opacity:.35;
+  background-image:linear-gradient(var(--band-line,rgba(255,255,255,.12)) 1px,transparent 1px),linear-gradient(90deg,var(--band-line,rgba(255,255,255,.12)) 1px,transparent 1px);
+  background-size:44px 44px;-webkit-mask-image:radial-gradient(70% 60% at 60% 45%,#000,transparent);mask-image:radial-gradient(70% 60% at 60% 45%,#000,transparent)}
+.hero-o{isolation:isolate}
+.plan{transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s,border-color .25s}
+.plan:hover{transform:translateY(-4px);box-shadow:0 28px 50px -30px rgba(0,0,0,.45);border-color:color-mix(in oklab,var(--accent) 45%,var(--line))}
+.btn{transition:transform .15s ease,box-shadow .15s ease,background-color .15s}.btn:active{transform:scale(.97)}
+.site-h{transition:box-shadow .25s}.site-h.scrolled{box-shadow:0 10px 30px -18px rgba(0,0,0,.35)}
+/* one orchestrated entrance (hero) + quiet section reveals; content stays visible without JS */
+@media (prefers-reduced-motion:no-preference){
+  .hero h1,.hero .lead,.hero .cta,.hero-price{animation:rise .55s cubic-bezier(.2,.7,.2,1) both}
+  .hero .lead{animation-delay:.06s}.hero .cta{animation-delay:.12s}.hero-price{animation-delay:.18s}
+  .hero-o{animation:rise-o .8s .08s cubic-bezier(.2,.7,.2,1) both}
+  .js .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+  .js .reveal.in{opacity:1;transform:none}
+}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes rise-o{from{opacity:0;transform:translateY(28px) scale(.985)}to{opacity:1;transform:none}}
