@@ -1,4 +1,5 @@
-// ATLAS free tools. Everything runs in the visitor's browser: nothing typed or dropped here is sent to ATLAS.
+// Qalvo free tools. Everything runs in the visitor's browser: nothing typed or dropped here is sent to Qalvo.
+// Saved watches live in this browser's localStorage only; they are never sent anywhere.
 // Only the Ciblari tool calls an outside service: the French State's public company register API.
 (() => {
   const DOC = typeof document !== "undefined";
@@ -199,6 +200,34 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     cv.addEventListener("input", debounce(run, 350)); job.addEventListener("input", debounce(run, 350)); run();
   }
 
+  // ---------- Saved watches (this browser only) and calendar reminders ----------
+  const store = {
+    get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? d; } catch { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch { return false; } },
+  };
+  const ymd = (d) => { const x = new Date(d); return `${x.getFullYear()}${String(x.getMonth() + 1).padStart(2, "0")}${String(x.getDate()).padStart(2, "0")}`; };
+  const icsEsc = (s) => String(s ?? "").replace(/[\;,]/g, (c) => "\\" + c).replace(/\r?\n/g, "\\n").slice(0, 900);
+  // All-day event on the deadline, with reminders 7 days and 2 days before. Returns the .ics text.
+  function icsText(title, date, url, note) {
+    const d = new Date(date), next = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+    const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, "");
+    const alarm = (n) => ["BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${icsEsc(title)}`, `TRIGGER:-P${n}D`, "END:VALARM"];
+    return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Qalvo//Outils gratuits//FR", "CALSCALE:GREGORIAN", "BEGIN:VEVENT",
+      `UID:${stamp}-${Math.random().toString(36).slice(2)}@qalvo`, `DTSTAMP:${stamp}`, `DTSTART;VALUE=DATE:${ymd(d)}`, `DTEND;VALUE=DATE:${ymd(next)}`,
+      `SUMMARY:${icsEsc(title)}`, `DESCRIPTION:${icsEsc([note, url].filter(Boolean).join("\n"))}`, ...(url ? [`URL:${url}`] : []),
+      ...alarm(7), ...alarm(2), "END:VEVENT", "END:VCALENDAR"].join("\r\n");
+  }
+  function icsDownload(name, title, date, url, note) {
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([icsText(title, date, url, note)], { type: "text/calendar;charset=utf-8" }));
+    a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+  const calBtn = (i) => `<button class="t-link" type="button" data-ics="${i}">${tr("+ Ajouter au calendrier", "+ Add to calendar")}</button>`;
+  const NEW = `<span class="t-new">${tr("Nouveau", "New")}</span>`;
+  async function copyLink(btn) {
+    try { await navigator.clipboard.writeText(location.href); btn.textContent = tr("Lien copié", "Link copied"); }
+    catch { btn.textContent = tr("Copiez l'adresse de la page", "Copy the page address"); }
+  }
+
   // ---------- Achaleo: public tenders (BOAMP open data, live) ----------
   const BOAMP = "https://boamp-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/boamp/records";
   const qstr = (s) => String(s).replace(/["\\]/g, " ").trim();
@@ -207,9 +236,22 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["\ufeff" + c], { type: "text/csv;charset=utf-8" }));
     a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
   }
+  const WK = "qalvo.achaleo.watches";  // [{q, dep, mode, seen:[idweb], at}]
   function soumissio(root) {
     const form = $("form", root), list = $(".t-res", root), st = $(".t-status", root);
+    const panel = document.createElement("div"); panel.className = "t-watch"; form.after(panel);
     let last = [];
+    const keyOf = (w) => `${w.q.toLowerCase()}|${w.dep}|${w.mode}`;
+    const drawPanel = () => {
+      const ws = store.get(WK, []);
+      panel.innerHTML = ws.length ? `<p class="t-wh">${tr("Vos veilles enregistrées dans ce navigateur", "Your watches saved in this browser")}</p><ul class="t-chips">${ws.map((w, i) =>
+        `<li><button type="button" class="t-chip" data-run="${i}">${esc(w.q)}${w.dep ? ` · ${esc(w.dep)}` : ""}${w.mode === "won" ? ` · ${tr("gagnants", "winners")}` : ""}</button><button type="button" class="t-x" data-del="${i}" aria-label="${tr("Supprimer la veille", "Delete watch")} ${esc(w.q)}">×</button></li>`).join("")}</ul>` : "";
+    };
+    panel.addEventListener("click", (ev) => {
+      const ws = store.get(WK, []), run = ev.target.closest("[data-run]"), del = ev.target.closest("[data-del]");
+      if (run) { const w = ws[+run.dataset.run]; form.q.value = w.q; form.dep.value = w.dep; form.mode.value = w.mode; form.requestSubmit(); }
+      if (del) { ws.splice(+del.dataset.del, 1); store.set(WK, ws); drawPanel(); }
+    });
     form.addEventListener("submit", async (ev) => {
       ev.preventDefault();
       const q = qstr(form.q.value), dep = form.dep.value.trim().toUpperCase(), mode = form.mode.value;
@@ -223,27 +265,49 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
         const r = await fetch(`${BOAMP}?${p}`); if (!r.ok) throw new Error(String(r.status));
         const d = await r.json(); last = d.results || [];
         const today = new Date().toLocaleDateString(FR ? "fr-FR" : "en-GB");
+        try { history.replaceState(null, "", `?${new URLSearchParams({ q, ...(dep ? { dep } : {}), mode })}${location.hash}`); } catch { /* sandboxed preview */ }
         if (!last.length) { st.textContent = tr("Aucune annonce trouvée. Essayez un mot plus général.", "No notice found. Try a broader word."); return; }
-        const csvBtn = `<p class="cta"><button class="btn ghost" type="button" data-csv>${tr("Exporter en CSV", "Export as CSV")}</button></p>`;
+        const ws = store.get(WK, []), wi = ws.findIndex((w) => keyOf(w) === keyOf({ q, dep, mode })), watch = ws[wi];
+        const seen = new Set(watch ? watch.seen : []), fresh = (x) => watch && !seen.has(x.idweb);
+        const nNew = watch ? last.filter(fresh).length : 0, since = watch ? new Date(watch.at).toLocaleDateString(FR ? "fr-FR" : "en-GB") : "";
+        if (watch) { ws[wi] = { ...watch, seen: [...new Set([...last.map((x) => x.idweb), ...watch.seen])].slice(0, 400), at: Date.now() }; store.set(WK, ws); }
+        const csvBtn = `<p class="cta t-acts"><button class="btn ghost" type="button" data-csv>${tr("Exporter en CSV", "Export as CSV")}</button>`
+          + (watch ? "" : `<button class="btn ghost" type="button" data-save>${tr("Suivre cette recherche", "Watch this search")}</button>`)
+          + `<button class="btn ghost" type="button" data-copy>${tr("Copier le lien", "Copy link")}</button></p>`
+          + (watch ? `<p class="t-note">${nNew ? tr(`${nNew} nouvelle(s) annonce(s) depuis votre dernière visite du ${since}.`, `${nNew} new notice(s) since your last visit on ${since}.`) : tr(`Rien de nouveau depuis votre dernière visite du ${since}.`, `Nothing new since your last visit on ${since}.`)}</p>` : "");
         if (mode === "open") {
           st.textContent = tr(`${d.total_count} appel(s) d'offres ouvert(s) — source BOAMP, consulté le ${today}.`, `${d.total_count} open tender(s) — source BOAMP, retrieved ${today}.`);
-          list.innerHTML = csvBtn + `<ul class="t-tenders">${last.map((x) => {
+          list.innerHTML = csvBtn + `<ul class="t-tenders">${last.map((x, i) => {
             const days = Math.ceil((new Date(x.datelimitereponse) - Date.now()) / 864e5);
             const lvl = days <= 7 ? "bad" : days <= 14 ? "mid" : "ok";
             return `<li><span class="t-due" data-level="${lvl}"><strong class="num">J-${days}</strong><small>${esc(new Date(x.datelimitereponse).toLocaleDateString(FR ? "fr-FR" : "en-GB"))}</small></span>
-<span class="t-tbody"><a href="${esc(x.url_avis)}" rel="noopener" target="_blank">${esc(x.objet)}</a><small>${esc(x.nomacheteur)} · ${tr("dép.", "dept")} ${esc((x.code_departement || []).join(", "))} · ${esc(x.procedure_libelle || x.type_procedure || "")} · ${esc((x.type_marche || []).join(", "))}</small></span></li>`; }).join("")}</ul>`;
+<span class="t-tbody">${fresh(x) ? NEW : ""}<a href="${esc(x.url_avis)}" rel="noopener" target="_blank">${esc(x.objet)}</a><small>${esc(x.nomacheteur)} · ${tr("dép.", "dept")} ${esc((x.code_departement || []).join(", "))} · ${esc(x.procedure_libelle || x.type_procedure || "")} · ${esc((x.type_marche || []).join(", "))}</small>${days >= 0 ? calBtn(i) : ""}</span></li>`; }).join("")}</ul>`;
         } else {
           const count = {}; last.forEach((x) => [...new Set(x.titulaire || [])].forEach((t) => { const k = t.trim().toUpperCase(); if (k) count[k] = (count[k] || 0) + 1; }));
           const top = Object.entries(count).sort((a, b) => b[1] - a[1]).slice(0, 12);
           st.textContent = tr(`${d.total_count} marché(s) attribué(s) sur 12 mois — analyse des ${last.length} plus récents, source BOAMP, consulté le ${today}.`, `${d.total_count} awarded contract(s) over 12 months — the latest ${last.length} analysed, source BOAMP, retrieved ${today}.`);
           list.innerHTML = csvBtn + `<h3 class="t-h3">${tr("Qui remporte ces marchés", "Who wins these contracts")}</h3><ol class="t-rank">${top.map(([n, c]) => `<li><span>${esc(n)}</span><strong class="num">${c}</strong></li>`).join("")}</ol>
-<h3 class="t-h3">${tr("Derniers résultats", "Latest awards")}</h3><ul class="t-tenders">${last.slice(0, 15).map((x) => `<li><span class="t-tbody"><a href="${esc(x.url_avis)}" rel="noopener" target="_blank">${esc(x.objet)}</a><small>${esc(x.nomacheteur)} · ${esc(x.dateparution)} · ${tr("titulaire(s)", "winner(s)")} : ${esc([...new Set(x.titulaire || [])].join(", "))}</small></span></li>`).join("")}</ul>`;
+<h3 class="t-h3">${tr("Derniers résultats", "Latest awards")}</h3><ul class="t-tenders">${last.slice(0, 15).map((x) => `<li><span class="t-tbody">${fresh(x) ? NEW : ""}<a href="${esc(x.url_avis)}" rel="noopener" target="_blank">${esc(x.objet)}</a><small>${esc(x.nomacheteur)} · ${esc(x.dateparution)} · ${tr("titulaire(s)", "winner(s)")} : ${esc([...new Set(x.titulaire || [])].join(", "))}</small></span></li>`).join("")}</ul>`;
         }
+        $("[data-copy]", list).addEventListener("click", (e) => copyLink(e.currentTarget));
+        $("[data-save]", list)?.addEventListener("click", (e) => {
+          const all = store.get(WK, []).filter((w) => keyOf(w) !== keyOf({ q, dep, mode }));
+          const ok = store.set(WK, [{ q, dep, mode, seen: last.map((x) => x.idweb), at: Date.now() }, ...all].slice(0, 8));
+          e.currentTarget.textContent = ok ? tr("Veille enregistrée dans ce navigateur", "Watch saved in this browser") : tr("Enregistrement impossible dans ce navigateur", "This browser blocks saving");
+          e.currentTarget.disabled = true; drawPanel();
+        });
         $("[data-csv]", list).addEventListener("click", () => csvDownload(`boamp-${mode}-${q.slice(0, 20).replace(/\W+/g, "-")}.csv`,
           [["idweb", "objet", "acheteur", "departements", "parution", "date_limite", "procedure", "titulaires", "lien"],
            ...last.map((x) => [x.idweb, x.objet, x.nomacheteur, (x.code_departement || []).join(" "), x.dateparution, x.datelimitereponse || "", x.procedure_libelle || "", [...new Set(x.titulaire || [])].join(" | "), x.url_avis])]));
       } catch { st.textContent = tr("BOAMP momentanément indisponible. Réessayez dans un instant.", "BOAMP temporarily unavailable. Please retry in a moment."); }
     });
+    list.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-ics]"); if (!b) return; const x = last[+b.dataset.ics];
+      icsDownload(`date-limite-${x.idweb}.ics`, tr(`Date limite : ${x.objet}`, `Deadline: ${x.objet}`).slice(0, 180), x.datelimitereponse, x.url_avis, `${x.nomacheteur} — BOAMP ${x.idweb}`);
+    });
+    drawPanel();
+    const u = new URLSearchParams(location.search);  // shared link: ?q=nettoyage&dep=38&mode=open
+    if (u.get("q")) { form.q.value = u.get("q").slice(0, 80); form.dep.value = (u.get("dep") || "").slice(0, 3); if (u.get("mode") === "won") form.mode.value = "won"; form.requestSubmit(); }
   }
 
   // ---------- Creanzo: client credit risk (BODACC open data + company register, live) ----------
@@ -271,14 +335,32 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     return { level: "ok", why: dpc ? tr(`Aucune procédure · comptes${cl ? ` clos le ${dfmt(cl)}` : ""} publiés`, `No proceeding · accounts${cl ? ` closed ${dfmt(cl)}` : ""} published`) : tr("Aucune procédure publiée au BODACC", "No proceeding published in BODACC") };
   }
   const LV = { bad: tr("Rouge", "Red"), mid: tr("Orange", "Amber"), ok: tr("Vert", "Green") };
+  const CK = "qalvo.creanzo.watch";  // {list, at, state: {siren_or_input: {level, why}}}
   function solvaro(root) {
     const form = $("form", root), list = $(".t-res", root), st = $(".t-status", root), mine = $(".t-mine", root), depL = $(".t-dep", root);
+    const panel = document.createElement("div"); panel.className = "t-watch"; form.after(panel);
+    let cur = [];
+    const drawPanel = () => {
+      const w = store.get(CK, null), n = w ? w.list.split("\n").filter((x) => x.trim().length >= 3).length : 0;
+      panel.innerHTML = w ? `<p class="t-wh">${tr(`Liste de ${n} client(s) suivie dans ce navigateur — dernière vérification le ${dfmt(w.at)}.`, `${n} client(s) watched in this browser — last checked ${dfmt(w.at)}.`)}</p>`
+        + `<p class="t-acts"><button type="button" class="t-chip" data-recheck>${tr("Revérifier maintenant", "Check again now")}</button><button type="button" class="t-chip" data-forget>${tr("Oublier cette liste", "Forget this list")}</button></p>` : "";
+    };
+    panel.addEventListener("click", (e) => {
+      if (e.target.closest("[data-recheck]")) { const w = store.get(CK, null); if (w) { form.mode.value = "mine"; form.dispatchEvent(new Event("change")); form.list.value = w.list; form.requestSubmit(); } }
+      if (e.target.closest("[data-forget]")) { try { localStorage.removeItem(CK); } catch { /* blocked storage */ } drawPanel(); }
+    });
+    list.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-ics]"); if (!b) return; const x = cur[+b.dataset.ics];
+      icsDownload(`creance-${x.siren || "client"}.ics`, tr(`Déclarer la créance : ${x.name}`, `File claim: ${x.name}`), x.deadline, x.url,
+        tr("Délai de deux mois après la publication du jugement d'ouverture au BODACC. Vérifiez sur l'annonce officielle.", "Two months after the opening judgment is published in BODACC. Check the official notice."));
+    });
     form.addEventListener("change", () => { const d = form.mode.value === "dep"; mine.hidden = d; depL.hidden = !d; });
     const bod = async (where, limit) => {
       const p = new URLSearchParams({ where, limit: String(limit), order_by: "dateparution desc", select: "dateparution,familleavis,familleavis_lib,jugement,tribunal,commercant,registre,ville,depot,url_complete" });
       const r = await fetch(`${BODACC}?${p}`); if (!r.ok) throw new Error(String(r.status)); return (await r.json()).results || [];
     };
     const csvBtn = `<p class="cta"><button class="btn ghost" type="button" data-csv>${tr("Exporter en CSV", "Export as CSV")}</button></p>`;
+    const cal = (x, i) => (x.deadline && x.days >= 0 ? calBtn(i) : "");
     const dl = (x) => x.deadline ? `<small class="t-dl" data-level="${x.days < 0 ? "ok" : x.days <= 15 ? "bad" : "mid"}">${x.days < 0 ? tr(`Délai de déclaration de créance dépassé le ${dfmt(x.deadline)}`, `Claim deadline passed on ${dfmt(x.deadline)}`) : tr(`Déclarer votre créance avant le ${dfmt(x.deadline)} — J-${x.days}`, `File your claim by ${dfmt(x.deadline)} — D-${x.days}`)}</small>` : "";
     form.addEventListener("submit", async (ev) => {
       ev.preventDefault(); list.innerHTML = ""; const today = dfmt(Date.now());
@@ -297,7 +379,8 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
           const nb = items.length >= 60 ? tr("Les 60 derniers", "The latest 60") : String(items.length);
           st.textContent = tr(`${nb} jugement(s) publié(s) en 30 jours dans le ${dep} — source BODACC, consulté le ${today}.`, `${nb} judgment(s) published in 30 days in ${dep} — source BODACC, retrieved ${today}.`);
           if (!items.length) return;
-          list.innerHTML = csvBtn + `<ul class="t-tenders">${items.map((x) => `<li><span class="t-due" data-level="${x.level}"><strong>${esc(dfmt(x.date))}</strong></span><span class="t-tbody"><a href="${esc(x.url)}" rel="noopener" target="_blank">${esc(x.name)}</a><small>${esc(x.city || "")}${x.siren ? ` · SIREN ${esc(x.siren)}` : ""} · ${esc(x.why)}</small>${dl(x)}</span></li>`).join("")}</ul>`;
+          cur = items;
+          list.innerHTML = csvBtn + `<ul class="t-tenders">${items.map((x, i) => `<li><span class="t-due" data-level="${x.level}"><strong>${esc(dfmt(x.date))}</strong></span><span class="t-tbody"><a href="${esc(x.url)}" rel="noopener" target="_blank">${esc(x.name)}</a><small>${esc(x.city || "")}${x.siren ? ` · SIREN ${esc(x.siren)}` : ""} · ${esc(x.why)}</small>${dl(x)}${cal(x, i)}</span></li>`).join("")}</ul>`;
           $("[data-csv]", list).addEventListener("click", () => csvDownload(`bodacc-${dep}.csv`, [["date", "entreprise", "siren", "ville", "jugement", "date_limite_creance", "lien"], ...items.map((x) => [x.date, x.name, x.siren, x.city, x.why, x.deadline ? x.deadline.toISOString().slice(0, 10) : "", x.url])]));
           return;
         }
@@ -317,10 +400,26 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
         const n = (l) => out.filter((x) => x.level === l).length;
         st.textContent = tr(`${out.length} client(s) : ${n("bad")} rouge, ${n("mid")} orange, ${n("ok")} vert — sources BODACC et registre, consulté le ${today}.`, `${out.length} client(s): ${n("bad")} red, ${n("mid")} amber, ${n("ok")} green — sources BODACC and register, retrieved ${today}.`);
         out.sort((a, b) => "bad mid ok".indexOf(a.level) - "bad mid ok".indexOf(b.level));
-        list.innerHTML = csvBtn + `<ul class="t-tenders">${out.map((x) => `<li><span class="t-due" data-level="${x.level}"><strong>${LV[x.level]}</strong></span><span class="t-tbody">${x.url ? `<a href="${esc(x.url)}" rel="noopener" target="_blank">${esc(x.name)}</a>` : `<strong>${esc(x.name)}</strong>`}<small>${x.siren ? `SIREN ${esc(x.siren)} · ` : ""}${esc(x.city || "")}${x.court ? ` · ${esc(x.court)}` : ""}</small><em>${esc(x.why)}</em>${dl(x)}${x.detail ? `<details><summary>${tr("Extrait du jugement", "Judgment excerpt")}</summary><p>${esc(x.detail)}…</p></details>` : ""}</span></li>`).join("")}</ul>`;
-        $("[data-csv]", list).addEventListener("click", () => csvDownload("solvaro-controle-clients.csv", [["saisie", "entreprise", "siren", "niveau", "signal", "date_limite_creance", "lien"], ...out.map((x) => [x.q, x.name, x.siren || "", LV[x.level], x.why, x.deadline ? x.deadline.toISOString().slice(0, 10) : "", x.url || ""])]));
+        const w = store.get(CK, null), prev = w ? w.state || {} : null, id = (x) => x.siren || fold(x.q);
+        out.forEach((x) => { const p = prev && prev[id(x)]; x.changed = !!p && (p.level !== x.level || p.why !== x.why); });
+        const nCh = out.filter((x) => x.changed).length, snap = () => Object.fromEntries(out.map((x) => [id(x), { level: x.level, why: x.why }]));
+        if (w) store.set(CK, { list: lines.join("\n"), at: Date.now(), state: snap() });
+        cur = out;
+        const acts = `<p class="cta t-acts"><button class="btn ghost" type="button" data-csv>${tr("Exporter en CSV", "Export as CSV")}</button>`
+          + (w ? "" : `<button class="btn ghost" type="button" data-save>${tr("Suivre ces clients dans ce navigateur", "Watch these clients in this browser")}</button>`) + `</p>`
+          + (w ? `<p class="t-note">${nCh ? tr(`${nCh} client(s) ont changé depuis la vérification du ${dfmt(w.at)}.`, `${nCh} client(s) changed since the check of ${dfmt(w.at)}.`) : tr(`Aucun changement depuis la vérification du ${dfmt(w.at)}.`, `No change since the check of ${dfmt(w.at)}.`)}</p>` : "");
+        list.innerHTML = acts + `<ul class="t-tenders">${out.map((x, i) => `<li><span class="t-due" data-level="${x.level}"><strong>${LV[x.level]}</strong></span><span class="t-tbody">${x.changed ? `<span class="t-new">${tr("Changement", "Changed")}</span>` : ""}${x.url ? `<a href="${esc(x.url)}" rel="noopener" target="_blank">${esc(x.name)}</a>` : `<strong>${esc(x.name)}</strong>`}<small>${x.siren ? `SIREN ${esc(x.siren)} · ` : ""}${esc(x.city || "")}${x.court ? ` · ${esc(x.court)}` : ""}</small><em>${esc(x.why)}</em>${dl(x)}${cal(x, i)}${x.detail ? `<details><summary>${tr("Extrait du jugement", "Judgment excerpt")}</summary><p>${esc(x.detail)}…</p></details>` : ""}</span></li>`).join("")}</ul>`;
+        $("[data-save]", list)?.addEventListener("click", (e) => {
+          const ok = store.set(CK, { list: lines.join("\n"), at: Date.now(), state: snap() });
+          e.currentTarget.textContent = ok ? tr("Liste suivie dans ce navigateur", "List watched in this browser") : tr("Enregistrement impossible dans ce navigateur", "This browser blocks saving");
+          e.currentTarget.disabled = true; drawPanel();
+        });
+        $("[data-csv]", list).addEventListener("click", () => csvDownload("creanzo-controle-clients.csv", [["saisie", "entreprise", "siren", "niveau", "signal", "date_limite_creance", "lien"], ...out.map((x) => [x.q, x.name, x.siren || "", LV[x.level], x.why, x.deadline ? x.deadline.toISOString().slice(0, 10) : "", x.url || ""])]));
       } catch { st.textContent = tr("BODACC momentanément indisponible. Réessayez dans un instant.", "BODACC temporarily unavailable. Please retry in a moment."); }
+      drawPanel();
     });
+    const w = store.get(CK, null); if (w && !form.list.value) form.list.value = w.list;
+    drawPanel();
   }
 
   // ---------- Docelyn: French e-invoicing checks (Factur-X/CII or UBL, read in the browser) ----------
@@ -436,7 +535,11 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
         const when = (iso) => left(iso) <= 0 ? tr(`depuis le ${fdate(iso)}`, `since ${fdate(iso)}`) : tr(`le ${fdate(iso)}, dans ${left(iso)} jours`, `on ${fdate(iso)}, in ${left(iso)} days`);
         calres.innerHTML = `<ul class="t-checks"><li data-level="ok"><span class="t-mark" aria-hidden="true">i</span>${esc(c.nom_complet)} — ${tr("catégorie", "category")} ${esc(c.categorie_entreprise || tr("non publiée", "not published"))} ${tr("(indicatif, source registre)", "(indicative, register source)")}</li>
 <li data-level="${left("2026-09-01") <= 0 ? "bad" : "mid"}"><span class="t-mark" aria-hidden="true">!</span>${tr("Réception des factures électroniques obligatoire", "Receiving e-invoices mandatory")} ${when("2026-09-01")}</li>
-<li data-level="${left(emit) <= 0 ? "bad" : "mid"}"><span class="t-mark" aria-hidden="true">!</span>${tr("Émission obligatoire", "Issuing mandatory")} ${when(emit)}</li></ul>`;
+<li data-level="${left(emit) <= 0 ? "bad" : "mid"}"><span class="t-mark" aria-hidden="true">!</span>${tr("Émission obligatoire", "Issuing mandatory")} ${when(emit)}</li></ul>`
+          + (left(emit) > 0 ? `<button class="t-link" type="button" data-emit>${tr("+ Ajouter l'échéance d'émission au calendrier", "+ Add the issuing deadline to your calendar")}</button>` : "");
+        $("[data-emit]", calres)?.addEventListener("click", () => icsDownload(`facturation-electronique-${s}.ics`,
+          tr(`Facturation électronique : émission obligatoire (${c.nom_complet})`, `E-invoicing: issuing mandatory (${c.nom_complet})`), emit, location.href.split("?")[0],
+          tr("Échéance indicative selon la catégorie publiée au registre. Vérifiez sur impots.gouv.fr.", "Indicative date based on the category published in the register. Check impots.gouv.fr.")));
       } catch { calres.textContent = tr("Registre momentanément indisponible.", "Register temporarily unavailable."); }
     });
   }
@@ -464,5 +567,5 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
   }
 
   if (DOC) { const RUN = { localoom, signaldesk, flowpatch, careerlift, soumissio, solvaro, factelio, pulse, hub }; document.querySelectorAll("[data-tool]").forEach((el) => RUN[el.dataset.tool]?.(el)); }
-  if (typeof module !== "undefined") module.exports = { checkPair, nums, csvParse, words, riskOf, invoiceFields, invoiceChecks, xmlFromPdf, sirenOk, vatFor, DEMO };  // node self-test only
+  if (typeof module !== "undefined") module.exports = { icsText, checkPair, nums, csvParse, words, riskOf, invoiceFields, invoiceChecks, xmlFromPdf, sirenOk, vatFor, DEMO };  // node self-test only
 })();
