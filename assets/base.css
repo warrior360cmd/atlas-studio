@@ -137,4 +137,4 @@ legend{font-weight:700;padding:0}
 .d-needs{padding-left:1.2em}.d-needs li+li{margin-top:6px}
 .d-brief{margin-top:24px}.d-brief summary{cursor:pointer;font-weight:700}.d-brief .facts{margin-top:12px}
 .d-brief dd{white-space:pre-wrap;overflow-wrap:anywhere}
-@media (max-width:560px){.d-steps li{min-width:72px;font-size:.8rem}.facts{grid-template-columns:1fr;gap:2px 0}.facts dd{margin-bottom:10px}}
+@media (max-width:560px){.d-steps{flex-wrap:wrap;row-gap:12px}.d-steps li{flex:1 1 30%;min-width:0;font-size:.8rem}.facts{grid-template-columns:1fr;gap:2px 0}.facts dd{margin-bottom:10px}}
