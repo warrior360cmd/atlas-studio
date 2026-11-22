@@ -190,3 +190,18 @@ html{scroll-padding-top:96px}
 @keyframes rise-o{from{opacity:0;transform:translateY(28px) scale(.985)}to{opacity:1;transform:none}}
 .hero-film .tool-film{margin:0 auto;max-width:640px}.hero-film .film-frame{border-radius:14px;overflow:hidden;box-shadow:0 50px 90px -40px rgba(0,0,0,.7),0 0 0 1px var(--band-line,rgba(255,255,255,.15))}
 .hero-film figcaption{color:var(--on-band-2,#ddd)}
+/* v3 (22/11/2026): hero film fills its column and is cropped to the tool card; sticky conversion bar. */
+.hero-film .tool-film{max-width:none;width:100%}
+.hero-film .film-frame{border-radius:18px;background:#fff}
+.hero-film .film-v{transform:scale(1.3);transform-origin:50% 50%}
+.hero-film figcaption{text-align:center;font-size:.9rem;opacity:.9}
+.stick{position:fixed;left:0;right:0;bottom:0;z-index:60;background:color-mix(in srgb,var(--band) 94%,transparent);color:var(--on-band);
+  backdrop-filter:blur(10px);border-top:1px solid var(--band-line,rgba(255,255,255,.18));animation:stick-in .3s cubic-bezier(.2,.8,.2,1)}
+.stick[hidden]{display:none}
+.stick-g{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:68px;padding-top:10px;padding-bottom:max(10px,env(safe-area-inset-bottom))}
+.stick p{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin:0}.stick p span{color:var(--on-band-2,#ddd);font-size:.95rem}
+.stick .btn{background:var(--on-band);color:var(--band);white-space:nowrap}
+.stick .btn:focus-visible{outline:3px solid var(--accent-on-band,#fff);outline-offset:3px}
+@keyframes stick-in{from{transform:translateY(100%)}to{transform:none}}
+@media (max-width:640px){.stick p span{display:none}}
+@media (prefers-reduced-motion:reduce){.stick{animation:none}}

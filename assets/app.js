@@ -167,6 +167,11 @@ document.querySelectorAll(".film").forEach((fig) => {
 (() => {
   const h = document.querySelector(".site-h");
   if (h) { const on = () => h.classList.toggle("scrolled", scrollY > 8); addEventListener("scroll", on, { passive: true }); on(); }
+  const bar = document.querySelector(".stick"), hero = document.querySelector(".hero"), foot = document.querySelector(".site-f");
+  if (bar && hero && "IntersectionObserver" in window) {  // visible between hero and footer only
+    const seen = new Set(), io = new IntersectionObserver((es) => { es.forEach((x) => (x.isIntersecting ? seen.add(x.target) : seen.delete(x.target))); bar.hidden = seen.size > 0; });
+    io.observe(hero); if (foot) io.observe(foot);
+  }
   if (matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) return;
   const els = document.querySelectorAll(".sec-h, .tool-h, .plans, .seq, .trust li, .guide-list, .brands > li");
   if (!els.length) return;
