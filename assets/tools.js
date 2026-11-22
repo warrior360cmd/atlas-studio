@@ -294,7 +294,8 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
             const x = riskOf([r]); const ei = !r.registre || /\(EI\)|EIRL|entrepreneur individuel/i.test(r.commercant || "");
             return { ...x, name: ei ? tr("Entrepreneur individuel (nom masqué)", "Sole trader (name hidden)") : r.commercant, siren: ei ? "" : String((r.registre || [""])[0]).replace(/\s/g, ""), city: r.ville, date: r.dateparution };
           });
-          st.textContent = tr(`${items.length} jugement(s) publié(s) en 30 jours dans le ${dep} — source BODACC, consulté le ${today}.`, `${items.length} judgment(s) published in 30 days in ${dep} — source BODACC, retrieved ${today}.`);
+          const nb = items.length >= 60 ? tr("Les 60 derniers", "The latest 60") : String(items.length);
+          st.textContent = tr(`${nb} jugement(s) publié(s) en 30 jours dans le ${dep} — source BODACC, consulté le ${today}.`, `${nb} judgment(s) published in 30 days in ${dep} — source BODACC, retrieved ${today}.`);
           if (!items.length) return;
           list.innerHTML = csvBtn + `<ul class="t-tenders">${items.map((x) => `<li><span class="t-due" data-level="${x.level}"><strong>${esc(dfmt(x.date))}</strong></span><span class="t-tbody"><a href="${esc(x.url)}" rel="noopener" target="_blank">${esc(x.name)}</a><small>${esc(x.city || "")}${x.siren ? ` · SIREN ${esc(x.siren)}` : ""} · ${esc(x.why)}</small>${dl(x)}</span></li>`).join("")}</ul>`;
           $("[data-csv]", list).addEventListener("click", () => csvDownload(`bodacc-${dep}.csv`, [["date", "entreprise", "siren", "ville", "jugement", "date_limite_creance", "lien"], ...items.map((x) => [x.date, x.name, x.siren, x.city, x.why, x.deadline ? x.deadline.toISOString().slice(0, 10) : "", x.url])]));

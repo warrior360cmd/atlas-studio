@@ -208,3 +208,4 @@ legend{font-weight:700;padding:0}
 .t-dl{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;font-weight:700;font-variant-numeric:tabular-nums;background:#fdf1dc;color:#7a4a00}
 .t-dl[data-level=bad]{background:#fdecea;color:#8a1c14}.t-dl[data-level=ok]{background:#eceeea;color:#4b5249}
 .t-tenders details{margin-top:6px}.t-tenders details p{font-size:.92rem;color:var(--muted);margin-top:4px}
+.tool [hidden]{display:none!important}
