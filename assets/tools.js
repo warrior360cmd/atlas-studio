@@ -1,5 +1,5 @@
 // ATLAS free tools. Everything runs in the visitor's browser: nothing typed or dropped here is sent to ATLAS.
-// Only the SignalDesk tool calls an outside service: the French State's public company register API.
+// Only the Ciblari tool calls an outside service: the French State's public company register API.
 (() => {
   const DOC = typeof document !== "undefined";
   const FR = !DOC || document.documentElement.lang !== "en";
@@ -10,7 +10,7 @@
   const row = (ok, text) => `<li class="t-${ok === null ? "info" : ok ? "ok" : "bad"}"><span class="t-ic" aria-hidden="true">${ok === null ? "i" : ok ? "✓" : "!"}</span><span>${text}</span></li>`;
   const debounce = (fn, ms = 250) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; };
 
-  // ---------- Localoom: French/English listing checker ----------
+  // ---------- Duofiche: French/English listing checker ----------
   const GLOSS = [["faïence", "earthenware"], ["grès", "stoneware"], ["porcelaine", "porcelain"], ["terre cuite", "terracotta"], ["lin", "linen"],
     ["laine", "wool"], ["mérinos", "merino"], ["coton", "cotton"], ["soie", "silk"], ["cachemire", "cashmere"], ["cuir pleine fleur", "full-grain"],
     ["acier inoxydable", "stainless steel"], ["inox", "stainless"], ["laiton", "brass"], ["cuivre", "copper"], ["chêne", "oak"], ["noyer", "walnut"],
@@ -73,7 +73,7 @@
     });
   }
 
-  // ---------- SignalDesk: official company card (French State register, live) ----------
+  // ---------- Ciblari: official company card (French State register, live) ----------
   const TRANCHE = { "00": "0", "01": "1–2", "02": "3–5", "03": "6–9", "11": "10–19", "12": "20–49", "21": "50–99", "22": "100–199", "31": "200–249", "32": "250–499", "41": "500–999", "42": "1 000–1 999", "51": "2 000–4 999", "52": "5 000–9 999", "53": "10 000+" };
   const eur = (v) => new Intl.NumberFormat(FR ? "fr-FR" : "en-GB", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(v);
   function card(c) {
@@ -141,7 +141,7 @@ ${sig.length ? `<p class="t-sig"><strong>${tr("Signaux publics", "Public signals
     });
   }
 
-  // ---------- FlowPatch: payback calculator + automation readiness ----------
+  // ---------- Rouagia: payback calculator + automation readiness ----------
   function flowpatch(root) {
     const f = $("form", root), res = $(".t-res", root);
     const run = () => {
@@ -161,7 +161,7 @@ ${sig.length ? `<p class="t-sig"><strong>${tr("Signaux publics", "Public signals
     f.addEventListener("input", run); f.addEventListener("submit", (ev) => ev.preventDefault()); run();
   }
 
-  // ---------- CareerLift: CV vs job offer analysis ----------
+  // ---------- Candiluma: CV vs job offer analysis ----------
   const STOP = new Set(("a au aux avec ce ces dans de des du elle en et eux il je la le les leur lui ma mais me même mes moi mon ne nos notre nous on ou par pas pour qu que qui sa se ses son sur ta te tes toi ton tu un une vos votre vous " +
     "c d j l m n s t y ete etre avoir fait faire plus tres tout tous toute toutes ainsi afin chez entre sans sous dont cette cet " +
     "the and or of to in for with on at by from as is are be will an our your you we this that these those it its their they them who what which " +
@@ -199,7 +199,7 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     cv.addEventListener("input", debounce(run, 350)); job.addEventListener("input", debounce(run, 350)); run();
   }
 
-  // ---------- Soumissio: public tenders (BOAMP open data, live) ----------
+  // ---------- Achaleo: public tenders (BOAMP open data, live) ----------
   const BOAMP = "https://boamp-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/boamp/records";
   const qstr = (s) => String(s).replace(/["\\]/g, " ").trim();
   function csvDownload(name, rows) {
@@ -246,7 +246,7 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     });
   }
 
-  // ---------- Solvaro: client credit risk (BODACC open data + company register, live) ----------
+  // ---------- Creanzo: client credit risk (BODACC open data + company register, live) ----------
   const BODACC = "https://bodacc-datadila.opendatasoft.com/api/explore/v2.1/catalog/datasets/annonces-commerciales/records";
   const jparse = (v) => { if (!v) return {}; if (typeof v === "object") return v; try { return JSON.parse(v); } catch { return {}; } };
   const addMonths = (iso, n) => { const [y, m, d] = iso.split("-").map(Number); return new Date(Date.UTC(y, m - 1 + n, d)); };
@@ -323,7 +323,7 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     });
   }
 
-  // ---------- Factelio: French e-invoicing checks (Factur-X/CII or UBL, read in the browser) ----------
+  // ---------- Docelyn: French e-invoicing checks (Factur-X/CII or UBL, read in the browser) ----------
   const sirenOk = (s) => /^\d{9}$/.test(s) && [...s].reduce((a, c, i) => { let d = +c; if (i % 2) { d *= 2; if (d > 9) d -= 9; } return a + d; }, 0) % 10 === 0;
   const vatFor = (siren) => `FR${String((12 + 3 * (Number(siren) % 97)) % 97).padStart(2, "0")}${siren}`;
   const NS = "(?:[\\w-]+:)?";

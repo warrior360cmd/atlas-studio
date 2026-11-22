@@ -192,7 +192,7 @@ legend{font-weight:700;padding:0}
 @media (prefers-reduced-motion:reduce){.t-list li{animation:none}}
 @media (max-width:560px){.t-row{flex-direction:column}.t-row .btn{width:100%}}
 @media (prefers-reduced-motion:no-preference){.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}.js .reveal.in{opacity:1;transform:none}}
-/* tenders list (Soumissio tool + digest) */
+/* tenders list (Achaleo tool + digest) */
 .t-tenders{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px}
 .t-tenders li{display:flex;gap:16px;align-items:flex-start;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius,6px);background:var(--paper,#fafafa)}
 .t-due{flex:0 0 74px;text-align:center;padding:8px 6px;border-radius:8px;background:#e8f4ec;color:#0f5d33}
@@ -204,12 +204,12 @@ legend{font-weight:700;padding:0}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .tool-film{margin-top:48px;max-width:900px}.tool-film figcaption{color:var(--on-band-2,#ddd);margin-top:10px;font-size:.92rem}
 .t-batch{margin-top:28px;padding-top:22px;border-top:1px solid var(--line)}.t-bres{margin-top:12px}.t-optout td{background:#fdecea;color:#8a1c14;font-weight:600}
-/* Solvaro: claim deadline chip + judgment excerpt */
+/* Creanzo: claim deadline chip + judgment excerpt */
 .t-dl{display:inline-block;margin-top:8px;padding:4px 10px;border-radius:999px;font-weight:700;font-variant-numeric:tabular-nums;background:#fdf1dc;color:#7a4a00}
 .t-dl[data-level=bad]{background:#fdecea;color:#8a1c14}.t-dl[data-level=ok]{background:#eceeea;color:#4b5249}
 .t-tenders details{margin-top:6px}.t-tenders details p{font-size:.92rem;color:var(--muted);margin-top:4px}
 .tool [hidden]{display:none!important}
-/* Factelio: check list + verdict */
+/* Docelyn: check list + verdict */
 .t-verdict{display:flex;gap:12px;align-items:center;margin:16px 0 8px;font-weight:600}.t-verdict strong{padding:6px 12px;border-radius:8px;background:#e8f4ec;color:#0f5d33}
 .t-verdict[data-level=mid] strong{background:#fdf1dc;color:#7a4a00}.t-verdict[data-level=bad] strong{background:#fdecea;color:#8a1c14}
 .t-checks{list-style:none;padding:0;margin:8px 0;display:grid;gap:8px}.t-checks li{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--sheet,#fff)}
