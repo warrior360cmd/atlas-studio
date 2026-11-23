@@ -58,4 +58,4 @@ User-agent: *
 Allow: /
 Disallow: /*/dossier.html
 
-Sitemap: https://kaldevo.vercel.app/sitemap.xml
+Sitemap: https://kaldevo.fr/sitemap.xml
