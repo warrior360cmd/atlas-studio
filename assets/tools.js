@@ -1,4 +1,4 @@
-// Qalvo free tools. Everything runs in the visitor's browser: nothing typed or dropped here is sent to Qalvo.
+// Kaldevo free tools. Everything runs in the visitor's browser: nothing typed or dropped here is sent to Kaldevo.
 // Saved watches live in this browser's localStorage only; they are never sent anywhere.
 // Only the Ciblari tool calls an outside service: the French State's public company register API.
 (() => {
@@ -212,8 +212,8 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     const d = new Date(date), next = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
     const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, "");
     const alarm = (n) => ["BEGIN:VALARM", "ACTION:DISPLAY", `DESCRIPTION:${icsEsc(title)}`, `TRIGGER:-P${n}D`, "END:VALARM"];
-    return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Qalvo//Outils gratuits//FR", "CALSCALE:GREGORIAN", "BEGIN:VEVENT",
-      `UID:${stamp}-${Math.random().toString(36).slice(2)}@qalvo`, `DTSTAMP:${stamp}`, `DTSTART;VALUE=DATE:${ymd(d)}`, `DTEND;VALUE=DATE:${ymd(next)}`,
+    return ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Kaldevo//Outils gratuits//FR", "CALSCALE:GREGORIAN", "BEGIN:VEVENT",
+      `UID:${stamp}-${Math.random().toString(36).slice(2)}@kaldevo`, `DTSTAMP:${stamp}`, `DTSTART;VALUE=DATE:${ymd(d)}`, `DTEND;VALUE=DATE:${ymd(next)}`,
       `SUMMARY:${icsEsc(title)}`, `DESCRIPTION:${icsEsc([note, url].filter(Boolean).join("\n"))}`, ...(url ? [`URL:${url}`] : []),
       ...alarm(7), ...alarm(2), "END:VEVENT", "END:VCALENDAR"].join("\r\n");
   }
@@ -236,7 +236,7 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["\ufeff" + c], { type: "text/csv;charset=utf-8" }));
     a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
   }
-  const WK = "qalvo.achaleo.watches";  // [{q, dep, mode, seen:[idweb], at}]
+  const WK = "kaldevo.achaleo.watches";  // [{q, dep, mode, seen:[idweb], at}]
   function soumissio(root) {
     const form = $("form", root), list = $(".t-res", root), st = $(".t-status", root);
     const panel = document.createElement("div"); panel.className = "t-watch"; form.after(panel);
@@ -335,7 +335,7 @@ ${row(n >= 250 && n <= 900, tr(`${n} mots : ${n < 250 ? "un peu court, détaille
     return { level: "ok", why: dpc ? tr(`Aucune procédure · comptes${cl ? ` clos le ${dfmt(cl)}` : ""} publiés`, `No proceeding · accounts${cl ? ` closed ${dfmt(cl)}` : ""} published`) : tr("Aucune procédure publiée au BODACC", "No proceeding published in BODACC") };
   }
   const LV = { bad: tr("Rouge", "Red"), mid: tr("Orange", "Amber"), ok: tr("Vert", "Green") };
-  const CK = "qalvo.creanzo.watch";  // {list, at, state: {siren_or_input: {level, why}}}
+  const CK = "kaldevo.creanzo.watch";  // {list, at, state: {siren_or_input: {level, why}}}
   function solvaro(root) {
     const form = $("form", root), list = $(".t-res", root), st = $(".t-status", root), mine = $(".t-mine", root), depL = $(".t-dep", root);
     const panel = document.createElement("div"); panel.className = "t-watch"; form.after(panel);

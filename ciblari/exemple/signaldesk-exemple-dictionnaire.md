@@ -9,7 +9,7 @@ EXEMPLE DE DÉMONSTRATION — données fictives (domaines .example réservés). 
 | `fait_n` | Observation reformulée, vérifiable à la source |
 | `source_n` | URL exacte consultée |
 | `date_publication_n` | Date affichée par la source, sinon « non indiquée » (jamais déduite) |
-| `date_consultation_n` | Date à laquelle Qalvo a consulté la source |
+| `date_consultation_n` | Date à laquelle Kaldevo a consulté la source |
 | `hypothese` | Interprétation commerciale — NON vérifiée |
 | `inconnues` | Ce que nous ne savons pas et qui peut invalider l'approche |
 | `question_a_poser` | Question à vérifier avec le prospect |

@@ -1,6 +1,6 @@
-# Qalvo
+# Kaldevo
 
-> Qalvo runs seven fixed-price B2B services. Every service publishes its prices, its limits and a complete sample deliverable; a person reviews every deliverable before delivery, and facts, numbers and files are checked by deterministic scripts, not by AI alone.
+> Kaldevo runs seven fixed-price B2B services. Every service publishes its prices, its limits and a complete sample deliverable; a person reviews every deliverable before delivery, and facts, numbers and files are checked by deterministic scripts, not by AI alone.
 
 ## Services
 
@@ -14,29 +14,29 @@
 
 ## Guides (French)
 
-- [Comment choisir un prestataire B2B fiable](https://qalvo.vercel.app/guides/choisir-prestataire-b2b.html): Les critères pour choisir un prestataire B2B : exemples concrets, prix publiés, limites écrites, méthode de contrôle, conditions de correction et de remboursement.
-- [Prestation au prix fixe ou en régie : que choisir](https://qalvo.vercel.app/guides/prix-fixe-ou-regie.html): Prix fixe ou facturation au temps passé (régie) : avantages, risques et cas d'usage de chaque modèle pour une petite entreprise qui achète une prestation.
-- [IA et relecture humaine : pourquoi les deux](https://qalvo.vercel.app/guides/ia-et-relecture-humaine.html): Ce que l'IA générative fait bien dans une prestation, ce qu'elle fait mal, et pourquoi une relecture humaine et des contrôles automatiques restent nécessaires.
-- [Rédiger un bon brief pour un prestataire](https://qalvo.vercel.app/guides/rediger-brief-prestataire.html): Les rubriques d'un brief clair pour une prestation : objectif, contexte, livrable attendu, contraintes, exemples, critères de réussite et calendrier.
-- [Comment vérifier un livrable avant de l'accepter](https://qalvo.vercel.app/guides/verifier-un-livrable.html): Méthode pour vérifier un livrable de prestation avant de l'accepter : relire contre le brief, contrôler un échantillon, vérifier les sources et signaler les écarts.
-- [Quelles tâches une PME peut-elle externaliser ?](https://qalvo.vercel.app/guides/externaliser-taches-pme.html): Recherche commerciale, traduction, automatisation, rédaction : quelles tâches une petite entreprise peut externaliser utilement, et lesquelles garder en interne.
-- [Payer une prestation en ligne en toute sécurité](https://qalvo.vercel.app/guides/paiement-en-ligne-prestation-securite.html): Les bonnes pratiques pour payer une prestation en ligne : devis accepté avant paiement, plateforme reconnue, authentification forte, facture et traces.
-- [RGPD : quand votre prestataire est sous-traitant](https://qalvo.vercel.app/guides/rgpd-sous-traitant-prestataire.html): Quand un prestataire traite des données personnelles pour vous, il est sous-traitant au sens du RGPD. Ce que cela implique : contrat, sécurité, sous-traitants ultérieurs.
-- [Délais de prestation : fixer des attentes réalistes](https://qalvo.vercel.app/guides/delais-realistes-prestation.html): Comment estimer et négocier un délai réaliste pour une prestation : ce qui le compose, les dépendances côté client, les marges et les signes d'un délai irréaliste.
-- [Données fiables : sources, dates et traçabilité](https://qalvo.vercel.app/guides/donnees-fiables-entreprise.html): Ce qui rend une donnée d'entreprise fiable : une source citée, une date de vérification, la distinction fait / déduction et la possibilité de la revérifier.
-- [Comparer des devis de prestataires](https://qalvo.vercel.app/guides/comparer-devis-prestataires.html): Comment comparer plusieurs devis pour une même prestation : périmètre, livrables, contrôles, délais, conditions de correction et coûts cachés.
-- [Les limites de l'IA générative en entreprise](https://qalvo.vercel.app/guides/limites-ia-generative-entreprise.html): Ce que l'IA générative ne fait pas bien en entreprise : exactitude des faits, calculs, données récentes, confidentialité, responsabilité. Et comment s'en protéger.
-- [Hallucinations de l'IA : les détecter et les éviter](https://qalvo.vercel.app/guides/hallucinations-ia-les-eviter.html): Pourquoi un modèle d'IA invente des faits, comment repérer ces hallucinations et les méthodes pour les empêcher d'atteindre un document livré.
-- [Contrôle qualité déterministe : définition et usages](https://qalvo.vercel.app/guides/controle-qualite-deterministe.html): Qu'est-ce qu'un contrôle qualité déterministe, pourquoi il complète la relecture humaine et l'IA, et des exemples de règles pour traductions, listes et documents.
-- [Un cahier des charges simple pour une petite prestation](https://qalvo.vercel.app/guides/cahier-des-charges-simple.html): Rédiger un cahier des charges court pour une petite prestation : besoin, livrable, critères d'acceptation et contraintes, sans jargon ni document de cinquante pages.
-- [Retours et corrections après une prestation](https://qalvo.vercel.app/guides/retours-corrections-prestation.html): Comment demander des corrections après une livraison : fenêtre de retours, retour précis, distinction correction / nouvelle demande, et cas de remboursement.
-- [Confier des données à un prestataire : précautions](https://qalvo.vercel.app/guides/confidentialite-donnees-prestataire.html): Les précautions pour confier des données clients ou internes à un prestataire : minimisation, transmission sécurisée, accès, conservation et suppression.
-- [Petite entreprise : se lancer à l'international en anglais](https://qalvo.vercel.app/guides/petite-entreprise-international-anglais.html): Les chantiers concrets pour une petite entreprise française qui veut vendre à des clients anglophones : site, catalogue, prospection, documents et équipe.
-- [Mesurer le retour sur investissement d'une prestation](https://qalvo.vercel.app/guides/mesurer-retour-investissement-prestation.html): Comment mesurer honnêtement ce qu'apporte une prestation : situation de départ, indicateurs simples, durée d'observation et coûts complets à prendre en compte.
-- [Pourquoi demander un exemple de livrable avant d'acheter](https://qalvo.vercel.app/guides/exemple-livrable-avant-achat.html): Un exemple complet de livrable en dit plus qu'une promesse : ce qu'il faut y regarder, comment le lire et ce qu'un prestataire qui refuse d'en montrer révèle.
+- [Comment choisir un prestataire B2B fiable](https://kaldevo.vercel.app/guides/choisir-prestataire-b2b.html): Les critères pour choisir un prestataire B2B : exemples concrets, prix publiés, limites écrites, méthode de contrôle, conditions de correction et de remboursement.
+- [Prestation au prix fixe ou en régie : que choisir](https://kaldevo.vercel.app/guides/prix-fixe-ou-regie.html): Prix fixe ou facturation au temps passé (régie) : avantages, risques et cas d'usage de chaque modèle pour une petite entreprise qui achète une prestation.
+- [IA et relecture humaine : pourquoi les deux](https://kaldevo.vercel.app/guides/ia-et-relecture-humaine.html): Ce que l'IA générative fait bien dans une prestation, ce qu'elle fait mal, et pourquoi une relecture humaine et des contrôles automatiques restent nécessaires.
+- [Rédiger un bon brief pour un prestataire](https://kaldevo.vercel.app/guides/rediger-brief-prestataire.html): Les rubriques d'un brief clair pour une prestation : objectif, contexte, livrable attendu, contraintes, exemples, critères de réussite et calendrier.
+- [Comment vérifier un livrable avant de l'accepter](https://kaldevo.vercel.app/guides/verifier-un-livrable.html): Méthode pour vérifier un livrable de prestation avant de l'accepter : relire contre le brief, contrôler un échantillon, vérifier les sources et signaler les écarts.
+- [Quelles tâches une PME peut-elle externaliser ?](https://kaldevo.vercel.app/guides/externaliser-taches-pme.html): Recherche commerciale, traduction, automatisation, rédaction : quelles tâches une petite entreprise peut externaliser utilement, et lesquelles garder en interne.
+- [Payer une prestation en ligne en toute sécurité](https://kaldevo.vercel.app/guides/paiement-en-ligne-prestation-securite.html): Les bonnes pratiques pour payer une prestation en ligne : devis accepté avant paiement, plateforme reconnue, authentification forte, facture et traces.
+- [RGPD : quand votre prestataire est sous-traitant](https://kaldevo.vercel.app/guides/rgpd-sous-traitant-prestataire.html): Quand un prestataire traite des données personnelles pour vous, il est sous-traitant au sens du RGPD. Ce que cela implique : contrat, sécurité, sous-traitants ultérieurs.
+- [Délais de prestation : fixer des attentes réalistes](https://kaldevo.vercel.app/guides/delais-realistes-prestation.html): Comment estimer et négocier un délai réaliste pour une prestation : ce qui le compose, les dépendances côté client, les marges et les signes d'un délai irréaliste.
+- [Données fiables : sources, dates et traçabilité](https://kaldevo.vercel.app/guides/donnees-fiables-entreprise.html): Ce qui rend une donnée d'entreprise fiable : une source citée, une date de vérification, la distinction fait / déduction et la possibilité de la revérifier.
+- [Comparer des devis de prestataires](https://kaldevo.vercel.app/guides/comparer-devis-prestataires.html): Comment comparer plusieurs devis pour une même prestation : périmètre, livrables, contrôles, délais, conditions de correction et coûts cachés.
+- [Les limites de l'IA générative en entreprise](https://kaldevo.vercel.app/guides/limites-ia-generative-entreprise.html): Ce que l'IA générative ne fait pas bien en entreprise : exactitude des faits, calculs, données récentes, confidentialité, responsabilité. Et comment s'en protéger.
+- [Hallucinations de l'IA : les détecter et les éviter](https://kaldevo.vercel.app/guides/hallucinations-ia-les-eviter.html): Pourquoi un modèle d'IA invente des faits, comment repérer ces hallucinations et les méthodes pour les empêcher d'atteindre un document livré.
+- [Contrôle qualité déterministe : définition et usages](https://kaldevo.vercel.app/guides/controle-qualite-deterministe.html): Qu'est-ce qu'un contrôle qualité déterministe, pourquoi il complète la relecture humaine et l'IA, et des exemples de règles pour traductions, listes et documents.
+- [Un cahier des charges simple pour une petite prestation](https://kaldevo.vercel.app/guides/cahier-des-charges-simple.html): Rédiger un cahier des charges court pour une petite prestation : besoin, livrable, critères d'acceptation et contraintes, sans jargon ni document de cinquante pages.
+- [Retours et corrections après une prestation](https://kaldevo.vercel.app/guides/retours-corrections-prestation.html): Comment demander des corrections après une livraison : fenêtre de retours, retour précis, distinction correction / nouvelle demande, et cas de remboursement.
+- [Confier des données à un prestataire : précautions](https://kaldevo.vercel.app/guides/confidentialite-donnees-prestataire.html): Les précautions pour confier des données clients ou internes à un prestataire : minimisation, transmission sécurisée, accès, conservation et suppression.
+- [Petite entreprise : se lancer à l'international en anglais](https://kaldevo.vercel.app/guides/petite-entreprise-international-anglais.html): Les chantiers concrets pour une petite entreprise française qui veut vendre à des clients anglophones : site, catalogue, prospection, documents et équipe.
+- [Mesurer le retour sur investissement d'une prestation](https://kaldevo.vercel.app/guides/mesurer-retour-investissement-prestation.html): Comment mesurer honnêtement ce qu'apporte une prestation : situation de départ, indicateurs simples, durée d'observation et coûts complets à prendre en compte.
+- [Pourquoi demander un exemple de livrable avant d'acheter](https://kaldevo.vercel.app/guides/exemple-livrable-avant-achat.html): Un exemple complet de livrable en dit plus qu'une promesse : ce qu'il faut y regarder, comment le lire et ce qu'un prestataire qui refuse d'en montrer révèle.
 
 ## Policies
 
-- [Terms](https://qalvo.vercel.app/en/legal/terms.html)
-- [Privacy](https://qalvo.vercel.app/en/legal/privacy.html)
-- [Support](https://qalvo.vercel.app/en/support.html)
+- [Terms](https://kaldevo.vercel.app/en/legal/terms.html)
+- [Privacy](https://kaldevo.vercel.app/en/legal/privacy.html)
+- [Support](https://kaldevo.vercel.app/en/support.html)

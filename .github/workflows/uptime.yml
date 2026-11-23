@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Public pages
         run: |
-          for u in https://qalvo.vercel.app/ https://qalvo.vercel.app/en/ \
+          for u in https://kaldevo.vercel.app/ https://kaldevo.vercel.app/en/ \
                    https://ciblari.vercel.app/ciblari/ https://duofiche.vercel.app/duofiche/ \
                    https://rouagia.vercel.app/rouagia/ https://candiluma.vercel.app/candiluma/en/; do
             code=$(curl -s -o /dev/null -w "%{http_code}" "$u"); echo "$u $code"; test "$code" = 200

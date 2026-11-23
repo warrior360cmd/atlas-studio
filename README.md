@@ -1,6 +1,6 @@
-# Qalvo
+# Kaldevo
 
-Public pages (French and English) of Qalvo and its four done-for-you services.
+Public pages (French and English) of Kaldevo and its four done-for-you services.
 Every delivery is reviewed by a person before it reaches the client.
 
 | Service | What it does | Site |
@@ -10,6 +10,6 @@ Every delivery is reviewed by a person before it reaches the client.
 | **Rouagia** | Reliable admin automations you can follow, stop and resume | [rouagia.vercel.app](https://rouagia.vercel.app/rouagia/) |
 | **Candiluma** | FR/EN job applications true to your career | [candiluma.vercel.app](https://candiluma.vercel.app/candiluma/) |
 
-Studio home: [qalvo.vercel.app](https://qalvo.vercel.app/) · English: [/en/](https://qalvo.vercel.app/en/)
+Studio home: [kaldevo.vercel.app](https://kaldevo.vercel.app/) · English: [/en/](https://kaldevo.vercel.app/en/)
 
 This repository is the static build of the site (generated, not edited by hand).
