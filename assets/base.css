@@ -115,6 +115,7 @@ legend{font-weight:700;padding:0}
 .film-bar{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--accent,#111);transform:scaleX(0);transform-origin:left;pointer-events:none}
 .film-btn:focus-visible{outline:3px solid var(--focus,#2556c4);outline-offset:3px}
 .film figcaption{margin-top:12px;font-size:.95rem;color:var(--muted,inherit);max-width:70ch}
+.pubfilm{margin:0}.pubfilm figcaption{margin-top:12px;font-size:.95rem;color:var(--muted,inherit);max-width:70ch}.pub{padding-block:clamp(28px,4vw,56px)}
 .house-film{margin-bottom:clamp(32px,4vw,56px)}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 .crumbs{font-size:.9rem;padding-top:24px;opacity:.8}.crumbs a{text-decoration:underline;text-underline-offset:3px}
