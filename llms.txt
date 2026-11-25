@@ -1,6 +1,6 @@
 # Kaldevo
 
-> Kaldevo runs seven fixed-price B2B services. Every service publishes its prices, its limits and a complete sample deliverable; a person reviews every deliverable before delivery, and facts, numbers and files are checked by deterministic scripts, not by AI alone.
+> Kaldevo runs seven fixed-price B2B services. Every service publishes its prices, its limits and a complete sample deliverable or a free tool; a person reviews every deliverable before delivery, and facts, numbers and files are checked by deterministic scripts, not by AI alone.
 
 ## Services
 

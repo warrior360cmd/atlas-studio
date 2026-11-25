@@ -1,58 +1,72 @@
 User-agent: GPTBot
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: OAI-SearchBot
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: ChatGPT-User
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: ClaudeBot
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: Claude-SearchBot
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: Claude-User
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: PerplexityBot
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: Perplexity-User
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: Google-Extended
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: Applebot-Extended
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: Bingbot
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: Googlebot
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: DuckAssistBot
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: MistralAI-User
 Allow: /
 Disallow: /*/dossier.html
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 
 User-agent: *
 Allow: /
