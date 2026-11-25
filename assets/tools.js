@@ -154,10 +154,10 @@ ${sig.length ? `<p class="t-sig"><strong>${tr("Signaux publics", "Public signals
         : yes >= 2 ? tr("Possible, mais commencez par le diagnostic pour lever les inconnues.", "Possible, but start with the diagnostic to clear the unknowns.")
         : tr("Pas encore prête : écrivez d'abord les règles et identifiez les données.", "Not ready yet: write the rules down and locate the data first.");
       res.innerHTML = `<div class="t-kpis"><div><span class="num">${Math.round(hours)} h</span><small>${tr("par an sur cette tâche", "per year on this task")}</small></div>
-<div><span class="num">${Math.round(cost).toLocaleString(FR ? "fr-FR" : "en-US")} USD</span><small>${tr("coût annuel estimé, reprises comprises", "estimated yearly cost, rework included")}</small></div>
-<div><span class="num">${isFinite(pay) ? (pay < 1 ? "< 1" : Math.ceil(pay)) : "—"} ${tr("mois", "months")}</span><small>${tr("pour rembourser diagnostic + réalisation (dès 2 350 USD)", "to pay back diagnostic + build (from USD 2,350)")}</small></div></div>
+<div><span class="num">${Math.round(cost).toLocaleString(FR ? "fr-FR" : "en-US")} €</span><small>${tr("coût annuel estimé, reprises comprises", "estimated yearly cost, rework included")}</small></div>
+<div><span class="num">${isFinite(pay) ? (pay < 1 ? "< 1" : Math.ceil(pay)) : "—"} ${tr("mois", "months")}</span><small>${tr("pour rembourser diagnostic + réalisation (dès 2 350 €)", "to pay back diagnostic + build (from €2,350)")}</small></div></div>
 <p class="t-verdict" data-level="${yes >= 4 ? "ok" : yes >= 2 ? "mid" : "bad"}"><strong>${yes}/5</strong> — ${verdict}</p>
-<p class="t-mute">${tr("Hypothèses : 47 semaines travaillées par an ; coût horaire chargé saisi en USD ; estimation indicative, pas une promesse de gain.", "Assumptions: 47 working weeks a year; loaded hourly cost entered in USD; an indicative estimate, not a promised saving.")}</p>`;
+<p class="t-mute">${tr("Hypothèses : 47 semaines travaillées par an ; coût horaire chargé saisi en euros ; estimation indicative, pas une promesse de gain.", "Assumptions: 47 working weeks a year; loaded hourly cost entered in euros; an indicative estimate, not a promised saving.")}</p>`;
     };
     f.addEventListener("input", run); f.addEventListener("submit", (ev) => ev.preventDefault()); run();
   }

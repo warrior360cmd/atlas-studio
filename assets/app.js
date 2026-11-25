@@ -91,8 +91,9 @@ if (dos) {
   const ref = h.get("ref") || sessionStorage.getItem("atlas-ref") || ls("atlas-ref"), tok = h.get("t") || sessionStorage.getItem("atlas-t") || ls("atlas-t");
   if (h.get("ref")) { sessionStorage.setItem("atlas-ref", ref); sessionStorage.setItem("atlas-t", tok); }
   const H = { "x-dossier-token": tok || "" };
-  const fmt = (c, cur) => {  // same style as the published prices: "180 USD" (fr) / "USD 180" (en)
-    const n = new Intl.NumberFormat(L, { minimumFractionDigits: c % 100 ? 2 : 0, maximumFractionDigits: 2 }).format(c / 100), k = (cur || "usd").toUpperCase();
+  const fmt = (c, cur) => {  // same style as the published prices: "180 €" (fr) / "€180" (en); other currencies keep their code
+    const n = new Intl.NumberFormat(L, { minimumFractionDigits: c % 100 ? 2 : 0, maximumFractionDigits: 2 }).format(c / 100), k = (cur || "eur").toUpperCase();
+    if (k === "EUR") return L === "fr" ? `${n} €` : `€${n}`;
     return L === "fr" ? `${n} ${k}` : `${k} ${n}`;
   };
   async function load() {
