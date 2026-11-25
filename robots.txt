@@ -58,4 +58,7 @@ User-agent: *
 Allow: /
 Disallow: /*/dossier.html
 
+# usage preference for AI systems (contentsignals.org); matches the open policy above
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+
 Sitemap: https://kaldevo.fr/sitemap.xml
