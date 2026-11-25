@@ -352,3 +352,5 @@ summary:focus-visible{outline:3px solid var(--focus,#2556c4);outline-offset:4px;
 
 /* touch: every text link and toggle gets a 44px hit area (WCAG 2.5.5 / audit 2026-11-25) */
 @media (pointer:coarse){.site-f a,.svc-tool,.t-more a,.blk p>a[href$="guides/index.html"],.t-modes label,.t-opt{display:inline-flex;align-items:center;min-height:44px}}
+
+.guide-src{margin-top:2rem;padding-top:1.25rem;border-top:1px solid var(--line,rgba(0,0,0,.12))}.guide-src h2{font-size:1.05rem;margin:0 0 .5rem}.guide-src ul{margin:0 0 .75rem}.guide-src li a{display:inline-flex;align-items:center;min-height:44px}.guide-date{font-size:.9rem;color:var(--muted,inherit)}
