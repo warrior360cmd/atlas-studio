@@ -1,0 +1,23 @@
+# Kaldevo + Revindo Spears: start the private Kaggle kernel raphaellokadjo/kaldevo-spears on Monday, Wednesday and Friday at 05:30 Paris time.
+# The kernel only measures and drafts (open-source model on Kaggle); it sends and publishes nothing. Its source stays private on Kaggle (pulled, not stored here).
+# Needs repository secret KAGGLE_API_TOKEN. This repository is public, so are its logs: print nothing but a status word.
+name: atlas-spears
+on:
+  schedule: [{ cron: "30 4 * * 1,3,5" }]
+  workflow_dispatch: {}
+concurrency: { group: atlas-spears, cancel-in-progress: false }
+permissions: { contents: read }
+jobs:
+  start:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Start Kaggle Spears kernel
+        env: { KAGGLE_API_TOKEN: "${{ secrets.KAGGLE_API_TOKEN }}" }
+        run: |
+          if [ -z "$KAGGLE_API_TOKEN" ]; then echo "KAGGLE_API_TOKEN not set"; exit 0; fi
+          pip install -q kaggle==2.2.5
+          st=$(kaggle kernels status raphaellokadjo/kaldevo-spears 2>&1 || true)
+          if echo "$st" | grep -qE "RUNNING|QUEUED"; then echo "spears busy"; exit 0; fi
+          kaggle kernels pull raphaellokadjo/kaldevo-spears -p k -m > /dev/null
+          kaggle kernels push -p k --accelerator NvidiaTeslaT4 > /dev/null && echo "spears started"
